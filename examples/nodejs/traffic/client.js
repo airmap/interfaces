@@ -26,6 +26,64 @@ source.on('error', function() {
   console.log('source connection to collector entered error state');
 });
 
+source.write({
+  source_id: {
+    as_string: "some.id"
+  },
+  traffic_id: {
+    as_string: "some.track.id"
+  },
+  submitted: {
+    seconds: 42,
+    nanos: 42
+  },
+  observed: {
+    seconds: 42,
+    nanos: 42
+  },
+  received: {
+    seconds: 42,
+    nanos: 42
+  },
+  ttl: {
+    seconds: 42,
+    nanos: 0
+  },
+  icao_description: {
+    address: {
+      as_string: "43A8F9"
+    },
+    type: {
+      as_string: "prop"
+    }
+  },
+  callsign: "some.callsign",
+  registration: "some.registration",
+  position: {
+    latitude: {
+      value: 42.42
+    },
+    longitude: {
+      value: 42.42
+    },
+    altitude: {
+      value: 42.42
+    },
+    reference: 'ellipsoid'
+  },
+  speed_over_ground: {
+    value: 42.42
+  },
+  vertical_speed: {
+    value: 42.42
+  },
+  course: {
+    value: 42.42
+  },
+  velocity: {
+    value: 42.42
+  }
+});
 // We have successfully registered as a source of traffic data now.
 // Call source.write(...) for all the incoming observations you 
 // want to dispatch to the collector.
