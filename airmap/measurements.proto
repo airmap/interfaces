@@ -17,10 +17,10 @@ message Position {
     EXTERNAL          = 4;  // References an external measurement or estimate.
   }
 
-  Degrees latitude    = 1;                      // The latitude component of this coordinate.
-  Degrees longitude   = 2;                      // The longitude component of this coordinate.
-  Meters altitude     = 3;                      // The altitude component of this coordinate.
-  Reference reference = 4;                      // The reference for the altitude of this coordinate.
+  Degrees latitude    = 1 [(min_degrees).value = -90., (max_degrees).value = 90.];    // The latitude component of this coordinate.
+  Degrees longitude   = 2 [(min_degrees).value = -180., (max_degrees).value = 180.];  // The longitude component of this coordinate.
+  Meters altitude     = 3;                         // The altitude component of this coordinate.
+  Reference reference = 4;                         // The reference for the altitude of this coordinate.
   Error error         = 1001 [(nullable) = true];  // The error of the coordinate measurement.
 
   // Error models the error inherent in the position measurement.
@@ -33,8 +33,8 @@ message Position {
 
 // Course models a course measurement.
 message Course {
-  Degrees angle  = 1;                        // The angle of the course relative to true north.
-  Error error    = 1001 [(nullable) = true]; // The error of the course measurement.
+  Degrees angle  = 1 [(min_degrees).value = 0., (max_degrees).value = 360.];  // The angle of the course relative to true north.
+  Error error    = 1001 [(nullable) = true];  // The error of the course measurement.
 
   // Error models the error inherent in the velocity measurement.
   message Error {
