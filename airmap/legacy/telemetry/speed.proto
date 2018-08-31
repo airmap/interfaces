@@ -1,5 +1,6 @@
 syntax = "proto3";
-package airmap.protobuf.telemetry;
+package airmap.telemetry;
+option go_package="legacy";
 
 
 message Speed {

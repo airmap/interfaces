@@ -1,6 +1,8 @@
+// Copyright 2018 AirMap, Inc.  All rights reserved.
+
 syntax = "proto3";
 
-package grpc;
+package airmap;
 
 // Degrees models a quantity in [°].
 message Degrees {
@@ -9,11 +11,6 @@ message Degrees {
 
 // DegreesCelsius models a quantity in [°C].
 message DegreesCelsius {
-  double value = 1;  // The value of the quantity.
-}
-
-// DegreesPerSecond models a quantity in [°/s].
-message DegreesPerSecond {
   double value = 1;  // The value of the quantity.
 }
 
@@ -40,11 +37,4 @@ message Pascal {
 // Percent models a quantity in [%].
 message Percent {
   double value = 1;  // The value of the quantity.
-}
-
-// Velocity models a vectorial velocity.
-message Velocity {
-  MetersPerSecond x = 1; // The velocity along the X axis.
-  MetersPerSecond y = 2; // The velocity along the Y axis.
-  MetersPerSecond z = 3; // The velocity along the Z axis.
 }
