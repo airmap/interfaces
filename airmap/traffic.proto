@@ -1,0 +1,143 @@
+// Copyright 2018 AirMap, Inc.  All rights reserved.
+
+syntax = "proto3";
+
+import "google/protobuf/duration.proto";
+import "google/protobuf/timestamp.proto";
+import "measurements.proto";
+
+package airmap;
+
+// TrafficCollectorService exposes services that enable the exchange of traffic updates with a traffic collector.
+service TrafficCollectorService {
+  rpc RegisterSource(stream Traffic.Update.FromSource) returns (stream Traffic.Update.ToSource);
+}
+
+// Traffic bundles all types used in the exchange of traffic observations among traffic sources, collectors, and processors.
+message Traffic {
+  // Observation describes an individual observation of an (aerial) vehicle.
+  message Observation {
+    Source source                          = 1;                       // Describes the source of the observation.
+    repeated Identity identities           = 2;                       // All known identities for the target.
+    google.protobuf.Timestamp observed     = 3;                       // The time when the observation was observed.
+    google.protobuf.Duration ttl           = 4 [(nullable) = true];   // Time-to-live for this track.
+    Position position                      = 5;                       // Position of the vehicle.
+    Course course                          = 6 [(nullable) = true];   // Course over ground relative to True North, 0-359.
+    Velocity velocity                      = 7 [(nullable) = true];   // Velocity of the vehicle expressed as XYZ (NED) vectors.
+    Attitude attitude                      = 8 [(nullable) = true];   // Orientation of the vehicle expressed as yaw, pitch, roll.
+    repeated google.protobuf.Any details   = 1024;                    // Vendor-specific details.
+  }
+
+  // Source models a source from which traffic observations originate.
+  message Source {
+    // details provides information that classifies a source.
+    oneof details {
+      Fused fused                    = 1;  // Marks multiple sources fused together.
+      PrimaryRadar primary_radar     = 2;  // Marks a primary radar source.
+      SecondaryRadar secondary_radar = 3;  // Marks a secondary radar source.
+      RF rf                          = 4;  // Marks an RF (radio frequency) source.
+    }
+    
+    // Fused models multiple fused data sources.
+    message Fused {
+      repeated Source sources = 1;
+    }
+
+    // PrimaryRadar models a primary radar source.
+    message PrimaryRadar {
+      // Empty for future extensibility
+    }
+
+    // SecondaryRadar models a secondary radar source.
+    message SecondaryRadar {
+      // Empty for future extensibility
+    }
+
+    // RF models a Radio Frequency source.
+    message RF {
+      // Empty for future extensibility
+    }
+  }
+
+  // Identity models a uniquely-identifying data point for a traffic source or target.
+  message Identity {
+    // details is a discriminated union of all identity types.
+    oneof details {
+      SourceId sourceId          = 1;
+      TrackId trackId            = 2;
+      Callsign callsign          = 3;
+      Registration registration  = 4;
+      ICAO icao                  = 5;
+      Manufacturer manufacturer  = 6; 
+      Network network            = 7;
+    }
+
+    // SourceId models the unique identifier of a source of traffic observations.
+    message SourceId {
+      string as_string  = 1;
+    }
+
+    // Track models a unique identifier for a track assembled from multiple different observations.
+    message TrackId {
+      string as_string  = 1;
+    }
+
+    // Callsign models the callsign assigned to a vehicle.
+    message Callsign {
+      string as_string  = 1 [(format) = "%c%c%c%c%c%c%c%c"];
+    }
+
+    // Registration models the registration of an aircraft.
+    message Registration {
+      string as_string  = 1;
+    }
+
+    // ICAO bundles up information that describes an aircraft in the ICAO context.
+    message ICAO {
+      Address24 address           = 1 [(nullable) = true];  // The ICAO-assigned address of an aircraft.
+      AircraftType aircraft_type  = 2 [(nullable) = true];  // The ICAO-assigned type of an aircraft.
+
+      // Address24 models the unique address of an aircraft assigned by ICAO.
+      message Address24 {
+        string as_string = 1 [(format) = "%02X%02X%02X"];
+      }
+
+      // AircraftType models an ICAO-registered aircraft type.
+      message AircraftType {
+        string as_string = 1;
+      }
+    }
+
+    // Manufacturer identifies a make, model, and serial number of an aircraft or a reporting device.
+    message Manufacturer {
+      string make          = 1 [(nullable) = true];  // The name of the manufacturer of the vehicle.
+      string model         = 2 [(nullable) = true];  // The name of the model of the vehicle.
+      string serial_number = 3 [(nullable) = true];  // The serial number of the vehicle.
+    }
+
+    // Network identifies a vehicle by its network interfaces.
+    message Network {
+      string mac_address  = 1;  // The hardware address of the network interface.
+    }
+  }
+
+  // Update bundles types used in the exchange of traffic observations.
+  message Update {
+    // FromSource models a batch of data observed by a traffic source and sent to a traffic collector.
+    message FromSource {
+      repeated Traffic.Observation observations  = 1;  // Observations as recorded by a source.
+      google.protobuf.Timestamp submitted        = 2;  // The time when the update was submitted by the source.
+      google.protobuf.Timestamp received         = 3  [(nullable) = true];  // The time when the update was received by the traffic collector.
+    }
+
+    // ToSource models information communicated back to a traffic source.
+    message ToSource {
+      // Ack describes an acknowledgement of observations received from a traffic source.
+      message Ack {
+        uint64 count                         = 1;  // Number of messages received.
+        google.protobuf.Timestamp submitted  = 2;  // The time when the message was sent to a traffic source.
+      }
+      Ack ack = 1;  // Ack for received update.
+    }
+  }
+}

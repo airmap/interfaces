@@ -1,0 +1,84 @@
+// Copyright 2018 AirMap, Inc.  All rights reserved.
+
+syntax = "proto3";
+
+import "units.proto";
+
+package airmap;
+
+// Position models a WGS84 coordinate, altitude, and datum reference.
+message Position {
+  // Reference enumerates all known reference systems for altitude measurements.
+  enum Reference {
+    UNKNOWN_REFERENCE = 0;  // The unknown reference.
+    ELLIPSOID         = 1;  // References the hypothetical equipotential gravitational surface.
+    GEOID             = 2;  // References and approximates the mean sea level.
+    SURFACE           = 3;  // References the actual height from the surface.
+    EXTERNAL          = 4;  // References an external measurement or estimate.
+  }
+
+  Degrees latitude    = 1;                      // The latitude component of this coordinate.
+  Degrees longitude   = 2;                      // The longitude component of this coordinate.
+  Meters altitude     = 3;                      // The altitude component of this coordinate.
+  Reference reference = 4;                      // The reference for the altitude of this coordinate.
+  Error error         = 1001 [(nullable) = true];  // The error of the coordinate measurement.
+
+  // Error models the error inherent in the position measurement.
+  message Error {
+    Degrees latitude  = 1 [(nullable) = true];  // The error estimate on the latitude measurement.
+    Degrees longitude = 2 [(nullable) = true];  // The error estimate on the longitude measurement.
+    Meters altitude   = 3 [(nullable) = true];  // The altitude error estimate.
+  }  
+}
+
+// Course models a course measurement.
+message Course {
+  Degrees angle  = 1;                        // The angle of the course relative to true north.
+  Error error    = 1001 [(nullable) = true]; // The error of the course measurement.
+
+  // Error models the error inherent in the velocity measurement.
+  message Error {
+    Degrees degrees = 1 [(nullable) = true, (min_degrees).value = 0.];  // The error in course.
+  }  
+}
+
+// Velocity models a velocity as XYZ vectors in the NED (north-east-down) coordinate space.
+message Velocity {
+  MetersPerSecond x = 1 [(min_meters_per_second).value = 0.];  // The velocity along the X axis.
+  MetersPerSecond y = 2 [(min_meters_per_second).value = 0.];  // The velocity along the Y axis.
+  MetersPerSecond z = 3 [(min_meters_per_second).value = 0.];  // The velocity along the Z axis. 
+  Error error       = 1001 [(nullable) = true]; // The error of the velocity measurement.
+
+  // Error models the error inherent in the velocity measurement.
+  message Error {
+    MetersPerSecond x = 1 [(nullable) = true, (min_meters_per_second).value = 0.];  // The error along the X axis.
+    MetersPerSecond y = 2 [(nullable) = true, (min_meters_per_second).value = 0.];  // The error along the Y axis.
+    MetersPerSecond z = 3 [(nullable) = true, (min_meters_per_second).value = 0.];  // The error along the Z axis.
+  }
+}
+
+// Attitude models a positional orientation measurement.
+message Attitude {
+  Degrees yaw   = 1;                         // The angular rotation of the vehicle along its vertical axis relative to True North.
+  Degrees pitch = 2;                         // The angular rotation of the vehicle along its lateral axis.
+  Degrees roll  = 3;                         // The angular rotation of the vehicle along its longitudinal axis.
+  Error error   = 1001 [(nullable) = true];  // The error of the attitude measurements.
+ 
+  // Error models the error inherent in the attitude measurement.
+  message Error {
+    Degrees yaw   = 1 [(nullable) = true];  // The error in angular rotation of the vehicle along its vertical axis relative to True North.
+    Degrees pitch = 2 [(nullable) = true];  // The error in angular rotation of the vehicle along its lateral axis.
+    Degrees roll  = 3 [(nullable) = true];  // The error in angular rotation of the vehicle along its longitudinal axis.
+  }
+}
+
+// Atmosphere models an atmospheric measurement.
+message Atmosphere {
+  Pascal pressure = 1;
+  Error error     = 1001 [(nullable) = true];  // The error of the atmosphere measurements.
+
+  // Error models the error inherent in the attitude measurement.
+  message Error {
+    Pascal pressure = 1 [(nullable) = true];  // The error in atmospheric pressure.
+  } 
+}

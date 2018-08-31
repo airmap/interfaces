@@ -1,0 +1,25 @@
+// Copyright 2018 AirMap, Inc.  All rights reserved.
+
+syntax = "proto3";
+
+package airmap;
+
+extend google.protobuf.FieldOptions {
+  // All fields in a message are considered optional and it is left up to application code
+  // to handle a field missing properly. For that, we introduce the extension 'nullable' and
+  // the following semantic in the context of this proto:
+  // Any field that is missing and that is not marked with 'nullable = true' is considered an error.
+  bool nullable = 50000 [default = false];
+  // Helps to further specify string formats
+  string format = 50001;
+  // We put the following extensions here and reserve them for future use.
+  Degrees default_degrees                     = 50002;
+  Degrees min_degrees                         = 50003;
+  Degrees max_degrees                         = 50004;
+  Meters default_meters                       = 50005;
+  Meters min_meters                           = 50006;
+  Meters max_meters                           = 50007;
+  MetersPerSecond default_meters_per_second   = 50008;
+  MetersPerSecond min_meters_per_second       = 50009;
+  MetersPerSecond max_meters_per_second       = 50010;
+}
