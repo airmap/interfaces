@@ -15,7 +15,7 @@ service TelemetryService {
 // Telemetry bundles up types used for reporting telematic data.
 message Telemetry {
 
-  // Report bundles a measurement at a given point in time.
+  // Report models a measurement at a given point in time.
   message Report {
     google.protobuf.Timestamp observed = 1;  // The timestamp of the report.
     // details is a discriminated union of all measurement types.
@@ -45,9 +45,9 @@ message Telemetry {
       google.protobuf.Timestamp submitted  = 1;  // The timestamp of when the update was submitted by the client.
       repeated Report reports              = 2;
     }
-    // FromSerivce models communication back to a telemetry client.
+    // FromService models communication back to a telemetry client.
     message FromService {
-      // Ack describes an acknowledgement of updates received by the service.
+      // Ack models an acknowledgement of updates received by the service.
       message Ack {
         uint64 count                         = 1;  // Number of updates received.
         google.protobuf.Timestamp submitted  = 2;  // The time when the message was sent to the client by the service.

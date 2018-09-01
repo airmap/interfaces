@@ -10,7 +10,7 @@ package airmap;
 message Position {
   // Reference enumerates all known reference systems for altitude measurements.
   enum Reference {
-    UNKNOWN_REFERENCE = 0;  // The unknown reference.
+    UNKNOWN_REFERENCE = 0;  // An unknown reference.
     ELLIPSOID         = 1;  // References the hypothetical equipotential gravitational surface.
     GEOID             = 2;  // References and approximates the mean sea level.
     SURFACE           = 3;  // References the actual height from the surface.
