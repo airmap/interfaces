@@ -74,15 +74,15 @@ message Attitude {
 
 // Atmosphere models an atmospheric measurement.
 message Atmosphere {
-  Pascal pressure     = 1 [(nullable) = true];  // The atmospheric pressure.
-  Celcius temperature = 2 [(nullable) = true];  // The atmospheric temperature.
-  Meters visibility   = 3 [(nullable) = true];  // The atmospheric visibility.
-  Error error         = 1001 [(nullable) = true];  // The error of the atmospheric measurements.
+  Pascal pressure            = 1 [(nullable) = true];  // The atmospheric pressure.
+  DegreesCelsius temperature = 2 [(nullable) = true];  // The atmospheric temperature.
+  Meters visibility          = 3 [(nullable) = true];  // The atmospheric visibility.
+  Error error                = 1001 [(nullable) = true];  // The error of the atmospheric measurements.
 
   // Error models the inherent error in the atmospheric measurement.
   message Error {
-    Pascal pressure     = 1 [(nullable) = true];  // The error in the pressure measurement.
-    Celcius temperature = 2 [(nullable) = true];  // The error in the temperature measurement.
-    Meters visibility   = 3 [(nullable) = true];  // The error in the visibility measurement.
+    Pascal pressure            = 1 [(nullable) = true];  // The error in the pressure measurement.
+    DegreesCelsius temperature = 2 [(nullable) = true];  // The error in the temperature measurement.
+    Meters visibility          = 3 [(nullable) = true];  // The error in the visibility measurement.
   } 
 }
