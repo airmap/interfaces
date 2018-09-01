@@ -26,9 +26,9 @@ message Telemetry {
 
     // Spatial bundles geospatial measurements.
     message Spatial {
-      Position position  = 1;                       // A positional measurement.
-      Velocity velocity  = 2  [(nullable) = true];  // A velocity measurement.
-      Attitude attitude  = 3  [(nullable) = true];  // An attitude measurement.
+      Position position       = 1;                       // A positional measurement.
+      Velocity velocity       = 2  [(nullable) = true];  // A velocity measurement.
+      Orientation orientation = 3  [(nullable) = true];  // An orientation/attitude measurement.
     }
   
     // Spatial bundles atmospheric measurements at a given position.
