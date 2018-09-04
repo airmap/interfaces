@@ -7,7 +7,13 @@ import "units.proto";
 
 package airmap;
 
-// Position models a WGS84 coordinate, altitude, and datum reference.
+// Coordinate models a WGS84 latitude and longitude.
+message Coordinate {
+  Degrees latitude    = 1 [(min_degrees).value = -90., (max_degrees).value = 90.];    // The latitude component of this coordinate.
+  Degrees longitude   = 2 [(min_degrees).value = -180., (max_degrees).value = 180.];  // The longitude component of this coordinate.
+}
+
+// Position models a location in space relative to given datum.
 message Position {
   // Reference enumerates all known reference systems for altitude measurements.
   enum Reference {
@@ -18,11 +24,10 @@ message Position {
     EXTERNAL          = 4;  // References an external measurement or estimate.
   }
 
-  Degrees latitude    = 1 [(min_degrees).value = -90., (max_degrees).value = 90.];    // The latitude component of this coordinate.
-  Degrees longitude   = 2 [(min_degrees).value = -180., (max_degrees).value = 180.];  // The longitude component of this coordinate.
-  Meters altitude     = 3;                         // The altitude component of this coordinate.
-  Reference reference = 4;                         // The reference for the altitude of this coordinate.
-  Error error         = 1001 [(nullable) = true];  // The error of the coordinate measurement.
+  Coordinate coordinate = 1;                         // The lat/lng coordinate of the position
+  Meters altitude       = 2;                         // The altitude component of the position.
+  Reference reference   = 3;                         // The reference for the altitude of the position.
+  Error error           = 1001 [(nullable) = true];  // The error of the coordinate measurement.
 
   // Error models the inherent error in the position measurement.
   message Error {
