@@ -9,9 +9,9 @@ extend google.protobuf.FieldOptions {
   // to handle a field missing properly. For that, we introduce the extension 'nullable' and
   // the following semantic in the context of this proto:
   // Any field that is missing and that is not marked with 'nullable = true' is considered an error.
-  bool nullable = 50000 [default = false];
+  bool nullable                               = 50000 [default = false];
   // Helps to further specify string formats
-  string format = 50001;
+  string format                               = 50001;
   // We put the following extensions here and reserve them for future use.
   Degrees default_degrees                     = 50002;
   Degrees min_degrees                         = 50003;
