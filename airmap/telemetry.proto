@@ -31,7 +31,7 @@ message Telemetry {
       Orientation orientation = 3  [(nullable) = true];  // An orientation/attitude measurement.
     }
   
-    // Spatial bundles atmospheric measurements at a given position.
+    // Atmospheric bundles atmospheric measurements at a given position.
     message Atmospheric {
       Position position      = 1;  // A positional measurement.
       Atmosphere atmosphere  = 2;  // An atmospheric measurement.
