@@ -2,8 +2,10 @@
 
 syntax = "proto3";
 
+import "google/protobuf/any.proto";
 import "google/protobuf/duration.proto";
 import "google/protobuf/timestamp.proto";
+import "extensions.proto";
 import "measurements.proto";
 
 package airmap;
@@ -24,7 +26,7 @@ message Traffic {
     Position position                      = 5;                       // Position of the vehicle.
     Course course                          = 6 [(nullable) = true];   // Course over ground relative to True North, 0-359.
     Velocity velocity                      = 7 [(nullable) = true];   // Velocity of the vehicle expressed as XYZ (NED) vectors.
-    Attitude attitude                      = 8 [(nullable) = true];   // Orientation of the vehicle expressed as yaw, pitch, roll.
+    Orientation orientation                = 8 [(nullable) = true];   // Orientation of the vehicle expressed as yaw, pitch, roll.
     repeated google.protobuf.Any details   = 1024;                    // Vendor-specific details.
   }
 

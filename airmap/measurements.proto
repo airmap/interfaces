@@ -2,6 +2,7 @@
 
 syntax = "proto3";
 
+import "extensions.proto";
 import "units.proto";
 
 package airmap;

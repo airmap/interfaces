@@ -2,6 +2,7 @@
 
 syntax = "proto3";
 
+import "extensions.proto";
 import "google/protobuf/timestamp.proto";
 import "measurements.proto";
 
