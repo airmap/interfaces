@@ -9,8 +9,8 @@ message Degrees {
   double value = 1;  // The value of the quantity.
 }
 
-// DegreesCelsius models a quantity in [°C].
-message DegreesCelsius {
+// Celsius models a quantity in [°C].
+message Celsius {
   double value = 1;  // The value of the quantity.
 }
 
