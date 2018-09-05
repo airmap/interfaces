@@ -69,7 +69,7 @@ message Traffic {
       TrackId trackId            = 2;
       Callsign callsign          = 3;
       Registration registration  = 4;
-      ICAO icao                  = 5;
+      Icao icao                  = 5;
       Manufacturer manufacturer  = 6; 
       Network network            = 7;
     }
@@ -94,8 +94,8 @@ message Traffic {
       string as_string  = 1;
     }
 
-    // ICAO bundles up information that describes an aircraft in the ICAO context.
-    message ICAO {
+    // Icao bundles up information that describes an aircraft in the ICAO context.
+    message Icao {
       Address24 address           = 1 [(nullable) = true];  // The ICAO-assigned address of an aircraft.
       AircraftType aircraft_type  = 2 [(nullable) = true];  // The ICAO-assigned type of an aircraft.
 
