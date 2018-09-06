@@ -7,6 +7,12 @@ import "units.proto";
 
 package airmap;
 
+// Position models a spatial location.
+message Position {
+  Coordinate2D coordinate = 1;  // The lat/lng coordinate of the position
+  Altitude altitude       = 2;  // The altitude component of the position.
+}
+
 // Coordinate2D models a WGS84 latitude and longitude.
 message Coordinate2D {
   Degrees latitude    = 1 [(min_degrees).value = -90., (max_degrees).value = 90.];    // The latitude component of this coordinate.
@@ -38,12 +44,6 @@ message Altitude {
   message Error {
     Meters height = 1;  // The altitude error estimate.
   }  
-}
-
-// Position models a spatial location.
-message Position {
-  Coordinate2D coordinate = 1;                         // The lat/lng coordinate of the position
-  Altitude altitude       = 2;                         // The altitude component of the position.
 }
 
 // Course models a course measurement.
