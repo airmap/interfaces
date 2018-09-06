@@ -21,8 +21,8 @@ message Coordinate2D {
 
   // Error models the inherent error in a coordinate measurement.
   message Error {
-    Degrees latitude  = 1;  // The error estimate on the latitude measurement.
-    Degrees longitude = 2;  // The error estimate on the longitude measurement.
+    Degrees latitude  = 1 [(min_degrees).value = 0.];  // The error estimate on the latitude measurement.
+    Degrees longitude = 2 [(min_degrees).value = 0.];  // The error estimate on the longitude measurement.
   }    
 }
 
@@ -42,7 +42,7 @@ message Altitude {
 
   // Error models the inherent error in the altitude measurement.
   message Error {
-    Meters height = 1;  // The altitude error estimate.
+    Meters height = 1 [(min_meters).value = 0.];  // The altitude error estimate.
   }  
 }
 
@@ -81,9 +81,9 @@ message Orientation {
  
   // Error models the inherent error in the orientation measurement.
   message Error {
-    Degrees yaw   = 1;  // The error in angular rotation of the vehicle along its vertical axis relative to True North.
-    Degrees pitch = 2;  // The error in angular rotation of the vehicle along its lateral axis.
-    Degrees roll  = 3;  // The error in angular rotation of the vehicle along its longitudinal axis.
+    Degrees yaw   = 1 [(min_degrees).value = 0.];  // The error in angular rotation of the vehicle along its vertical axis relative to True North.
+    Degrees pitch = 2 [(min_degrees).value = 0.];  // The error in angular rotation of the vehicle along its lateral axis.
+    Degrees roll  = 3 [(min_degrees).value = 0.];  // The error in angular rotation of the vehicle along its longitudinal axis.
   }
 }
 
