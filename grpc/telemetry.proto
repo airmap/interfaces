@@ -10,7 +10,7 @@ package airmap;
 
 // TelemetryService exposes services that enable the reporting of telematic data.
 service TelemetryService {
-  rpc StreamUpdates(stream Telemetry.Update.FromClient) returns (stream Telemetry.Update.FromService);
+  rpc ConnectUpdatesStream(stream Telemetry.Update.FromClient) returns (stream Telemetry.Update.FromService);
 }
 
 // Telemetry bundles up types used for reporting telematic data.
