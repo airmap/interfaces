@@ -59,9 +59,9 @@ message Course {
 
 // Velocity models a velocity as XYZ vectors in the NED (north-east-down) coordinate space.
 message Velocity {
-  MetersPerSecond x = 1 [(min_meters_per_second).value = 0.];  // The velocity along the X axis.
-  MetersPerSecond y = 2 [(min_meters_per_second).value = 0.];  // The velocity along the Y axis.
-  MetersPerSecond z = 3 [(min_meters_per_second).value = 0.];  // The velocity along the Z axis. 
+  MetersPerSecond x = 1;  // The velocity along the X axis.
+  MetersPerSecond y = 2;  // The velocity along the Y axis.
+  MetersPerSecond z = 3;  // The velocity along the Z axis. 
   Error error       = 1001 [(nullable) = true]; // The error of the velocity measurement.
 
   // Error models the inherent error in the velocity measurement.
