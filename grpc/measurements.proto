@@ -11,30 +11,39 @@ package airmap;
 message Coordinate2D {
   Degrees latitude    = 1 [(min_degrees).value = -90., (max_degrees).value = 90.];    // The latitude component of this coordinate.
   Degrees longitude   = 2 [(min_degrees).value = -180., (max_degrees).value = 180.];  // The longitude component of this coordinate.
+  Error error         = 1001 [(nullable) = true];
+
+  // Error models the inherent error in a coordinate measurement.
+  message Error {
+    Degrees latitude  = 1;  // The error estimate on the latitude measurement.
+    Degrees longitude = 2;  // The error estimate on the longitude measurement.
+  }    
 }
 
-// Position models a location in space relative to given datum.
-message Position {
-  // Reference enumerates all known reference systems for altitude measurements.
+// Altitude models a height measurement from a given datum/reference.
+message Altitude {
+  // Reference enumerates all known reference/datum systems for altitude measurements.
   enum Reference {
-    UNKNOWN_REFERENCE = 0;  // An unknown reference.
-    ELLIPSOID         = 1;  // References the hypothetical equipotential gravitational surface.
-    GEOID             = 2;  // References and approximates the mean sea level.
-    SURFACE           = 3;  // References the actual height from the surface.
-    EXTERNAL          = 4;  // References an external measurement or estimate.
+    UNKNOWN      = 0;  // An unknown reference.
+    ELLIPSOID    = 1;  // References the hypothetical equipotential gravitational surface.
+    GEOID        = 2;  // References and approximates the mean sea level.
+    SURFACE      = 3;  // References the physical surface beneath the measurement.
+    EXTERNAL     = 4;  // References an external measurement or estimate.
   }
+  Meters height        = 1;  // The altitude as measured from the reference.
+  Reference reference  = 2;  // The reference from which the altitude was measured.
+  Error error          = 1001 [(nullable) = true];
 
-  Coordinate2D coordinate = 1;                         // The lat/lng coordinate of the position
-  Meters altitude         = 2;                         // The altitude component of the position.
-  Reference reference     = 3;                         // The reference for the altitude of the position.
-  Error error             = 1001 [(nullable) = true];  // The error of the coordinate measurement.
-
-  // Error models the inherent error in the position measurement.
+  // Error models the inherent error in the altitude measurement.
   message Error {
-    Degrees latitude  = 1 [(nullable) = true];  // The error estimate on the latitude measurement.
-    Degrees longitude = 2 [(nullable) = true];  // The error estimate on the longitude measurement.
-    Meters altitude   = 3 [(nullable) = true];  // The altitude error estimate.
+    Meters height = 1;  // The altitude height error estimate.
   }  
+}
+
+// Position models a spatial location.
+message Position {
+  Coordinate2D coordinate = 1;                         // The lat/lng coordinate of the position
+  Altitude altitude       = 2;                         // The altitude component of the position.
 }
 
 // Course models a course measurement.
@@ -44,7 +53,7 @@ message Course {
 
   // Error models the inherent error in the velocity measurement.
   message Error {
-    Degrees degrees = 1 [(nullable) = true, (min_degrees).value = 0.];  // The error in course.
+    Degrees degrees = 1 [(min_degrees).value = 0.];  // The error in course.
   }  
 }
 
