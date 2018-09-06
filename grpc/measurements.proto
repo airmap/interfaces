@@ -11,7 +11,7 @@ package airmap;
 message Coordinate2D {
   Degrees latitude    = 1 [(min_degrees).value = -90., (max_degrees).value = 90.];    // The latitude component of this coordinate.
   Degrees longitude   = 2 [(min_degrees).value = -180., (max_degrees).value = 180.];  // The longitude component of this coordinate.
-  Error error         = 1001 [(nullable) = true];
+  Error error         = 1001 [(nullable) = true];  // The error of the coordinate measurement.
 
   // Error models the inherent error in a coordinate measurement.
   message Error {
@@ -32,11 +32,11 @@ message Altitude {
   }
   Meters height        = 1;  // The altitude as measured from the reference.
   Reference reference  = 2;  // The reference from which the altitude was measured.
-  Error error          = 1001 [(nullable) = true];
+  Error error          = 1001 [(nullable) = true]; // The error of the altitude measurement.
 
   // Error models the inherent error in the altitude measurement.
   message Error {
-    Meters height = 1;  // The altitude height error estimate.
+    Meters height = 1;  // The altitude error estimate.
   }  
 }
 
