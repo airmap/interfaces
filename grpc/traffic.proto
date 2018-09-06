@@ -10,8 +10,8 @@ import "measurements.proto";
 
 package airmap;
 
-// TrafficCollectorService exposes services that enable the exchange of traffic updates with a traffic collector.
-service TrafficCollectorService {
+// TrafficService exposes services that enable the exchange of traffic updates with a traffic service.
+service TrafficService {
   rpc RegisterSource(stream Traffic.Update.FromSource) returns (stream Traffic.Update.ToSource);
 }
 
@@ -19,7 +19,7 @@ service TrafficCollectorService {
 message Traffic {
   // Observation describes an individual observation of an (aerial) vehicle.
   message Observation {
-    Source source                          = 1;                       // Describes the source of the observation.
+    Sensor sensor                          = 1;                       // Describes the sensor(s) from which the observation originated.
     repeated Identity identities           = 2;                       // All known identities for the target.
     google.protobuf.Timestamp observed     = 3;                       // The time when the observation was observed.
     google.protobuf.Duration ttl           = 4 [(nullable) = true];   // Time-to-live for this track.
@@ -30,38 +30,44 @@ message Traffic {
     repeated google.protobuf.Any details   = 1024;                    // Vendor-specific details.
   }
 
-  // Source models a source from which traffic observations originate.
-  message Source {
-    // details provides information that classifies a source.
+  // Sensor models the method used to capture an observations.
+  message Sensor {
+    // details provides specific information for a given sensor.
     oneof details {
-      Fused fused                    = 1;  // Marks multiple sources fused together.
-      PrimaryRadar primary_radar     = 2;  // Marks a primary radar source.
-      SecondaryRadar secondary_radar = 3;  // Marks a secondary radar source.
-      RF rf                          = 4;  // Marks an RF (radio frequency) source.
+      Fused fused                    = 1;  // Marks multiple sensors fused together.
+      PrimaryRadar primary_radar     = 2;  // Marks a primary radar sensor.
+      SecondaryRadar secondary_radar = 3;  // Marks a secondary radar sensor.
+      Adsb adsb                      = 4;  // Marks an ADS-B sensor.
+      RadioFrequency radioFrequency  = 5;  // Marks a Radio Frequency (RF) sensor.
     }
     
-    // Fused models multiple fused data sources.
+    // Fused models multiple fused data sensors.
     message Fused {
-      repeated Source sources = 1;
+      repeated Sensor sensors = 1;
     }
 
-    // PrimaryRadar models a primary radar source.
+    // PrimaryRadar models a primary radar sensor.
     message PrimaryRadar {
-      // Empty for future extensibility
+      // Reserved for future extensibility
     }
 
-    // SecondaryRadar models a secondary radar source.
+    // SecondaryRadar models a secondary radar sensor.
     message SecondaryRadar {
-      // Empty for future extensibility
+      // Reserved for future extensibility
     }
 
-    // RF models a Radio Frequency source.
-    message RF {
-      // Empty for future extensibility
+    // Adsb models an ADS-B sensor.
+    message Adsb {
+      // Reserved for future extensibility  
+    }
+
+    // RadioFrequency models a Radio Frequency (RF) sensor.
+    message RadioFrequency {
+      // Reserved for future extensibility
     }
   }
 
-  // Identity models a uniquely-identifying data point for a traffic source or target.
+  // Identity models a uniquely-identifying data point for a traffic sensor or traffic target.
   message Identity {
     // details is a discriminated union of all identity types.
     oneof details {
