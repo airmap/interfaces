@@ -30,7 +30,7 @@ message Traffic {
     repeated google.protobuf.Any details   = 1024;                    // Vendor-specific details.
   }
 
-  // Sensor models the method used to capture an observations.
+  // Sensor models the device/method used to capture an observations.
   message Sensor {
     // details provides specific information for a given sensor.
     oneof details {
@@ -77,7 +77,7 @@ message Traffic {
       Registration registration  = 4;
       Icao icao                  = 5;
       Manufacturer manufacturer  = 6; 
-      Network network            = 7;
+      NetworkInterface network   = 7;
     }
 
     // SourceId models the unique identifier of a source of traffic observations.
@@ -116,16 +116,21 @@ message Traffic {
       }
     }
 
-    // Manufacturer identifies a make, model, and serial number of an aircraft or a reporting device.
+    // Manufacturer identifies a make, model, and serial number of an aircraft or sensor.
     message Manufacturer {
       string make          = 1 [(nullable) = true];  // The name of the manufacturer of the vehicle.
       string model         = 2 [(nullable) = true];  // The name of the model of the vehicle.
       string serial_number = 3 [(nullable) = true];  // The serial number of the vehicle.
     }
 
-    // Network identifies a vehicle by its network interfaces.
-    message Network {
-      string mac_address  = 1;  // The hardware address of the network interface.
+    // NetworkInterface identifies a vehicle by its network interfaces.
+    message NetworkInterface {
+      MACAddress mac_address  = 1;  // The hardware address of the network interface.
+
+      // MACAddress models the hardware address of the network interface.
+      message MACAddress {
+        string as_string = 1 [(format) = "%02X:%02X:%02X:%02X:%02X:%02X"];
+      }
     }
   }
 
