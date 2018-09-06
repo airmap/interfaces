@@ -66,9 +66,9 @@ message Velocity {
 
   // Error models the inherent error in the velocity measurement.
   message Error {
-    MetersPerSecond x = 1 [(nullable) = true, (min_meters_per_second).value = 0.];  // The error along the X axis.
-    MetersPerSecond y = 2 [(nullable) = true, (min_meters_per_second).value = 0.];  // The error along the Y axis.
-    MetersPerSecond z = 3 [(nullable) = true, (min_meters_per_second).value = 0.];  // The error along the Z axis.
+    MetersPerSecond x = 1 [(min_meters_per_second).value = 0.];  // The error along the X axis.
+    MetersPerSecond y = 2 [(min_meters_per_second).value = 0.];  // The error along the Y axis.
+    MetersPerSecond z = 3 [(min_meters_per_second).value = 0.];  // The error along the Z axis.
   }
 }
 
