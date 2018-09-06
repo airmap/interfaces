@@ -81,9 +81,9 @@ message Orientation {
  
   // Error models the inherent error in the orientation measurement.
   message Error {
-    Degrees yaw   = 1 [(nullable) = true];  // The error in angular rotation of the vehicle along its vertical axis relative to True North.
-    Degrees pitch = 2 [(nullable) = true];  // The error in angular rotation of the vehicle along its lateral axis.
-    Degrees roll  = 3 [(nullable) = true];  // The error in angular rotation of the vehicle along its longitudinal axis.
+    Degrees yaw   = 1;  // The error in angular rotation of the vehicle along its vertical axis relative to True North.
+    Degrees pitch = 2;  // The error in angular rotation of the vehicle along its lateral axis.
+    Degrees roll  = 3;  // The error in angular rotation of the vehicle along its longitudinal axis.
   }
 }
 
