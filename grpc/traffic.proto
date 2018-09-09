@@ -39,7 +39,7 @@ message Traffic {
       PrimaryRadar primary_radar     = 2;  // Marks a primary radar sensor.
       SecondaryRadar secondary_radar = 3;  // Marks a secondary radar sensor.
       Adsb adsb                      = 4;  // Marks an ADS-B sensor.
-      RadioFrequency radioFrequency  = 5;  // Marks a Radio Frequency (RF) sensor.
+      RadioFrequency radio_frequency = 5;  // Marks a Radio Frequency (RF) sensor.
     }
     
     // Fused models multiple fused data sensors.
@@ -72,8 +72,8 @@ message Traffic {
   message Identity {
     // details is a discriminated union of all identity types.
     oneof details {
-      ProviderId providerId      = 1;
-      TrackId trackId            = 2;
+      ProviderId provider_id     = 1;
+      TrackId track_id           = 2;
       Callsign callsign          = 3;
       Registration registration  = 4;
       Icao icao                  = 5;
