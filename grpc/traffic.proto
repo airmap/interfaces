@@ -119,9 +119,9 @@ message Traffic {
 
     // Manufacturer identifies a make, model, and serial number of an aircraft or sensor.
     message Manufacturer {
-      string make          = 1 [(nullable) = true];  // The name of the manufacturer of the vehicle.
-      string model         = 2 [(nullable) = true];  // The name of the model of the vehicle.
-      string serial_number = 3 [(nullable) = true];  // The serial number of the vehicle.
+      string make          = 1 [(nullable) = true];  // The name of the manufacturer.
+      string model         = 2 [(nullable) = true];  // The name of the model.
+      string serial_number = 3 [(nullable) = true];  // The serial number.
     }
 
     // NetworkInterface identifies a vehicle by its network interfaces.
