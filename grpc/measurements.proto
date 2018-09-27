@@ -87,17 +87,24 @@ message Orientation {
   }
 }
 
-// Atmosphere models an atmospheric measurement.
-message Atmosphere {
-  Pascal pressure      = 1 [(nullable) = true];  // The atmospheric pressure.
-  Celsius temperature  = 2 [(nullable) = true];  // The atmospheric temperature.
-  Meters visibility    = 3 [(nullable) = true];  // The atmospheric visibility.
-  Error error          = 1001 [(nullable) = true];  // The error of the atmospheric measurements.
+// Pressure models an atmospheric pressure measurement.
+message Pressure {
+  Pascal units  = 1;                         // The pressure in Pa units.
+  Error error   = 1001 [(nullable) = true];  // The error in the pressure measurement.
 
-  // Error models the inherent error in the atmospheric measurement.
+  // Error models the inherent error in an atmospheric pressure measurement.
   message Error {
-    Pascal pressure      = 1 [(nullable) = true];  // The error in the pressure measurement.
-    Celsius temperature  = 2 [(nullable) = true];  // The error in the temperature measurement.
-    Meters visibility    = 3 [(nullable) = true];  // The error in the visibility measurement.
+    Pascal pressure  = 1 [(min_degrees).value = 0.];  // The error in the pressure value.
+  } 
+}
+
+// Temperature models an atmospheric temperature measurement.
+message Temperature {
+  Celsius degrees  = 1;                         // The temperature in degrees Celsius.
+  Error error      = 1001 [(nullable) = true];  // The error in the temperature measurement.
+
+  // Error models the inherent error in a temperature measurement.
+  message Error {
+    Celsius degrees  = 1 [(min_celsius).value = 0.];  // The error in the temperature value.
   } 
 }

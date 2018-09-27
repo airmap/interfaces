@@ -34,8 +34,9 @@ message Telemetry {
   
     // Atmospheric bundles atmospheric measurements at a given position.
     message Atmospheric {
-      Position position      = 1;  // A positional measurement.
-      Atmosphere atmosphere  = 2;  // An atmospheric measurement.
+      Position position        = 1;                      // The position for the atmospheric measurement.
+      Pressure pressure        = 2 [(nullable) = true];  // An atmospheric pressure measurement.
+      Temperature temperature  = 3 [(nullable) = true];  // A temperature measurement
     }
   }
 
