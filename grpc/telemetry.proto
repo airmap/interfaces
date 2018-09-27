@@ -5,6 +5,7 @@ syntax = "proto3";
 import "extensions.proto";
 import "google/protobuf/timestamp.proto";
 import "measurements.proto";
+import "ids.proto";
 
 package airmap;
 
@@ -44,8 +45,9 @@ message Telemetry {
   message Update {
     // FromClient models a batch of reports observed and sent to a telemetry service.
     message FromClient {
-      google.protobuf.Timestamp submitted  = 1;  // The timestamp of when the update was submitted by the client.
-      repeated Report reports              = 2;
+      FlightId flight                      = 1;  // The identifier of the flight for which the update is for.
+      google.protobuf.Timestamp submitted  = 2;  // The timestamp of when the update was submitted by the client.
+      repeated Report reports              = 3;
     }
     // FromService models communication back to a telemetry client.
     message FromService {
