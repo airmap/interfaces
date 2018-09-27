@@ -8,9 +8,9 @@ import "measurements.proto";
 
 package airmap;
 
-// TelemetryService exposes services that enable the reporting of telematic data.
-service TelemetryService {
-  rpc ConnectUpdatesStream(stream Telemetry.Update.FromClient) returns (stream Telemetry.Update.FromService);
+// TelemetryProvider exposes a service that enables the reporting of telematic data.
+service TelemetryProvider {
+  rpc ConnectUpdates(stream Telemetry.Update.FromClient) returns (stream Telemetry.Update.FromService);
 }
 
 // Telemetry bundles up types used for reporting telematic data.

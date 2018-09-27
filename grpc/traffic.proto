@@ -10,8 +10,8 @@ import "measurements.proto";
 
 package airmap;
 
-// TrafficProviderService exposes services that enable the exchange of traffic updates with a traffic service.
-service TrafficProviderService {
+// TrafficProvider expose a service that enables the exchange of traffic updates with a traffic service.
+service TrafficProvider {
   // RegisterProvider registers a provider of traffic updates.
   rpc RegisterProvider(stream Traffic.Update.FromProvider) returns (stream Traffic.Update.ToProvider);
 }
