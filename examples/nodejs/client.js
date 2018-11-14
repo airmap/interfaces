@@ -31,10 +31,10 @@ source.on('error', function(e) {
 })
 
 
-function dispatchUpdates() {
+function dispatchUpdates(lat, lng) {
 
   // the current time in seconds
-  var now = Date().getTime()
+  var now = new Date().getTime()
   var seconds = Math.floor(now / 1000)
   var nanos = (now - seconds*1000) * 1000
 
@@ -101,15 +101,18 @@ function dispatchUpdates() {
   source.write(update)
 }
 
+function main() {
+  var lat = 23.3575
+  var lng = -109.823
 
-var lat = 23.3575
-var lng = -109.823
+  setInterval(function() {
 
-setInterval(function() {
+    lng += 0.001
+    lat += 0.001
 
-  lng += 0.001
-  lat += 0.001
+    dispatchUpdates(lat, lng)
 
-  dispatchUpdates()
+  }, 1000)
+}
 
-}, 1000)
+main()
