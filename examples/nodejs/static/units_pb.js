@@ -156,7 +156,7 @@ proto.airmap.Degrees.prototype.getValue = function() {
 
 /** @param {number} value */
 proto.airmap.Degrees.prototype.setValue = function(value) {
-  jspb.Message.setProto3FloatField(this, 1, value);
+  jspb.Message.setField(this, 1, value);
 };
 
 
@@ -298,7 +298,7 @@ proto.airmap.Celsius.prototype.getValue = function() {
 
 /** @param {number} value */
 proto.airmap.Celsius.prototype.setValue = function(value) {
-  jspb.Message.setProto3FloatField(this, 1, value);
+  jspb.Message.setField(this, 1, value);
 };
 
 
@@ -440,7 +440,7 @@ proto.airmap.Meters.prototype.getValue = function() {
 
 /** @param {number} value */
 proto.airmap.Meters.prototype.setValue = function(value) {
-  jspb.Message.setProto3FloatField(this, 1, value);
+  jspb.Message.setField(this, 1, value);
 };
 
 
@@ -582,7 +582,7 @@ proto.airmap.Foot.prototype.getValue = function() {
 
 /** @param {number} value */
 proto.airmap.Foot.prototype.setValue = function(value) {
-  jspb.Message.setProto3FloatField(this, 1, value);
+  jspb.Message.setField(this, 1, value);
 };
 
 
@@ -724,7 +724,7 @@ proto.airmap.MetersPerSecond.prototype.getValue = function() {
 
 /** @param {number} value */
 proto.airmap.MetersPerSecond.prototype.setValue = function(value) {
-  jspb.Message.setProto3FloatField(this, 1, value);
+  jspb.Message.setField(this, 1, value);
 };
 
 
@@ -866,7 +866,7 @@ proto.airmap.Pascal.prototype.getValue = function() {
 
 /** @param {number} value */
 proto.airmap.Pascal.prototype.setValue = function(value) {
-  jspb.Message.setProto3FloatField(this, 1, value);
+  jspb.Message.setField(this, 1, value);
 };
 
 
@@ -1008,7 +1008,7 @@ proto.airmap.Percent.prototype.getValue = function() {
 
 /** @param {number} value */
 proto.airmap.Percent.prototype.setValue = function(value) {
-  jspb.Message.setProto3FloatField(this, 1, value);
+  jspb.Message.setField(this, 1, value);
 };
 
 

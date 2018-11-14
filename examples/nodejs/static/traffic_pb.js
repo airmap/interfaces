@@ -437,15 +437,15 @@ proto.airmap.Traffic.Observation.prototype.hasSensor = function() {
 
 /**
  * repeated Identity identities = 2;
- * @return {!Array<!proto.airmap.Traffic.Identity>}
+ * @return {!Array.<!proto.airmap.Traffic.Identity>}
  */
 proto.airmap.Traffic.Observation.prototype.getIdentitiesList = function() {
-  return /** @type{!Array<!proto.airmap.Traffic.Identity>} */ (
+  return /** @type{!Array.<!proto.airmap.Traffic.Identity>} */ (
     jspb.Message.getRepeatedWrapperField(this, proto.airmap.Traffic.Identity, 2));
 };
 
 
-/** @param {!Array<!proto.airmap.Traffic.Identity>} value */
+/** @param {!Array.<!proto.airmap.Traffic.Identity>} value */
 proto.airmap.Traffic.Observation.prototype.setIdentitiesList = function(value) {
   jspb.Message.setRepeatedWrapperField(this, 2, value);
 };
@@ -648,15 +648,15 @@ proto.airmap.Traffic.Observation.prototype.hasOrientation = function() {
 
 /**
  * repeated google.protobuf.Any details = 1024;
- * @return {!Array<!proto.google.protobuf.Any>}
+ * @return {!Array.<!proto.google.protobuf.Any>}
  */
 proto.airmap.Traffic.Observation.prototype.getDetailsList = function() {
-  return /** @type{!Array<!proto.google.protobuf.Any>} */ (
+  return /** @type{!Array.<!proto.google.protobuf.Any>} */ (
     jspb.Message.getRepeatedWrapperField(this, google_protobuf_any_pb.Any, 1024));
 };
 
 
-/** @param {!Array<!proto.google.protobuf.Any>} value */
+/** @param {!Array.<!proto.google.protobuf.Any>} value */
 proto.airmap.Traffic.Observation.prototype.setDetailsList = function(value) {
   jspb.Message.setRepeatedWrapperField(this, 1024, value);
 };
@@ -1030,15 +1030,15 @@ proto.airmap.Traffic.Sensor.Fused.serializeBinaryToWriter = function(message, wr
 
 /**
  * repeated Sensor sensors = 1;
- * @return {!Array<!proto.airmap.Traffic.Sensor>}
+ * @return {!Array.<!proto.airmap.Traffic.Sensor>}
  */
 proto.airmap.Traffic.Sensor.Fused.prototype.getSensorsList = function() {
-  return /** @type{!Array<!proto.airmap.Traffic.Sensor>} */ (
+  return /** @type{!Array.<!proto.airmap.Traffic.Sensor>} */ (
     jspb.Message.getRepeatedWrapperField(this, proto.airmap.Traffic.Sensor, 1));
 };
 
 
-/** @param {!Array<!proto.airmap.Traffic.Sensor>} value */
+/** @param {!Array.<!proto.airmap.Traffic.Sensor>} value */
 proto.airmap.Traffic.Sensor.Fused.prototype.setSensorsList = function(value) {
   jspb.Message.setRepeatedWrapperField(this, 1, value);
 };
@@ -2055,7 +2055,7 @@ proto.airmap.Traffic.Identity.ProviderId.prototype.getAsString = function() {
 
 /** @param {string} value */
 proto.airmap.Traffic.Identity.ProviderId.prototype.setAsString = function(value) {
-  jspb.Message.setProto3StringField(this, 1, value);
+  jspb.Message.setField(this, 1, value);
 };
 
 
@@ -2197,7 +2197,7 @@ proto.airmap.Traffic.Identity.TrackId.prototype.getAsString = function() {
 
 /** @param {string} value */
 proto.airmap.Traffic.Identity.TrackId.prototype.setAsString = function(value) {
-  jspb.Message.setProto3StringField(this, 1, value);
+  jspb.Message.setField(this, 1, value);
 };
 
 
@@ -2339,7 +2339,7 @@ proto.airmap.Traffic.Identity.Callsign.prototype.getAsString = function() {
 
 /** @param {string} value */
 proto.airmap.Traffic.Identity.Callsign.prototype.setAsString = function(value) {
-  jspb.Message.setProto3StringField(this, 1, value);
+  jspb.Message.setField(this, 1, value);
 };
 
 
@@ -2481,7 +2481,7 @@ proto.airmap.Traffic.Identity.Registration.prototype.getAsString = function() {
 
 /** @param {string} value */
 proto.airmap.Traffic.Identity.Registration.prototype.setAsString = function(value) {
-  jspb.Message.setProto3StringField(this, 1, value);
+  jspb.Message.setField(this, 1, value);
 };
 
 
@@ -2766,7 +2766,7 @@ proto.airmap.Traffic.Identity.Icao.Address24.prototype.getAsString = function() 
 
 /** @param {string} value */
 proto.airmap.Traffic.Identity.Icao.Address24.prototype.setAsString = function(value) {
-  jspb.Message.setProto3StringField(this, 1, value);
+  jspb.Message.setField(this, 1, value);
 };
 
 
@@ -2908,7 +2908,7 @@ proto.airmap.Traffic.Identity.Icao.AircraftType.prototype.getAsString = function
 
 /** @param {string} value */
 proto.airmap.Traffic.Identity.Icao.AircraftType.prototype.setAsString = function(value) {
-  jspb.Message.setProto3StringField(this, 1, value);
+  jspb.Message.setField(this, 1, value);
 };
 
 
@@ -3134,7 +3134,7 @@ proto.airmap.Traffic.Identity.Manufacturer.prototype.getMake = function() {
 
 /** @param {string} value */
 proto.airmap.Traffic.Identity.Manufacturer.prototype.setMake = function(value) {
-  jspb.Message.setProto3StringField(this, 1, value);
+  jspb.Message.setField(this, 1, value);
 };
 
 
@@ -3149,7 +3149,7 @@ proto.airmap.Traffic.Identity.Manufacturer.prototype.getModel = function() {
 
 /** @param {string} value */
 proto.airmap.Traffic.Identity.Manufacturer.prototype.setModel = function(value) {
-  jspb.Message.setProto3StringField(this, 2, value);
+  jspb.Message.setField(this, 2, value);
 };
 
 
@@ -3164,7 +3164,7 @@ proto.airmap.Traffic.Identity.Manufacturer.prototype.getSerialNumber = function(
 
 /** @param {string} value */
 proto.airmap.Traffic.Identity.Manufacturer.prototype.setSerialNumber = function(value) {
-  jspb.Message.setProto3StringField(this, 3, value);
+  jspb.Message.setField(this, 3, value);
 };
 
 
@@ -3435,7 +3435,7 @@ proto.airmap.Traffic.Identity.NetworkInterface.MACAddress.prototype.getAsString 
 
 /** @param {string} value */
 proto.airmap.Traffic.Identity.NetworkInterface.MACAddress.prototype.setAsString = function(value) {
-  jspb.Message.setProto3StringField(this, 1, value);
+  jspb.Message.setField(this, 1, value);
 };
 
 
@@ -3962,15 +3962,15 @@ proto.airmap.Traffic.Update.FromProvider.serializeBinaryToWriter = function(mess
 
 /**
  * repeated Observation observations = 1;
- * @return {!Array<!proto.airmap.Traffic.Observation>}
+ * @return {!Array.<!proto.airmap.Traffic.Observation>}
  */
 proto.airmap.Traffic.Update.FromProvider.prototype.getObservationsList = function() {
-  return /** @type{!Array<!proto.airmap.Traffic.Observation>} */ (
+  return /** @type{!Array.<!proto.airmap.Traffic.Observation>} */ (
     jspb.Message.getRepeatedWrapperField(this, proto.airmap.Traffic.Observation, 1));
 };
 
 
-/** @param {!Array<!proto.airmap.Traffic.Observation>} value */
+/** @param {!Array.<!proto.airmap.Traffic.Observation>} value */
 proto.airmap.Traffic.Update.FromProvider.prototype.setObservationsList = function(value) {
   jspb.Message.setRepeatedWrapperField(this, 1, value);
 };
@@ -4332,7 +4332,7 @@ proto.airmap.Traffic.Update.ToProvider.Ack.prototype.getCount = function() {
 
 /** @param {number} value */
 proto.airmap.Traffic.Update.ToProvider.Ack.prototype.setCount = function(value) {
-  jspb.Message.setProto3IntField(this, 1, value);
+  jspb.Message.setField(this, 1, value);
 };
 
 

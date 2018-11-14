@@ -1048,7 +1048,7 @@ proto.airmap.Altitude.prototype.getReference = function() {
 
 /** @param {!proto.airmap.Altitude.Reference} value */
 proto.airmap.Altitude.prototype.setReference = function(value) {
-  jspb.Message.setProto3EnumField(this, 2, value);
+  jspb.Message.setField(this, 2, value);
 };
 
 

@@ -34,7 +34,7 @@ goog.exportSymbol('proto.airmap.nullable', null, global);
 /**
  * A tuple of {field number, class constructor} for the extension
  * field named `nullable`.
- * @type {!jspb.ExtensionFieldInfo<boolean>}
+ * @type {!jspb.ExtensionFieldInfo.<boolean>}
  */
 proto.airmap.nullable = new jspb.ExtensionFieldInfo(
     50000,
@@ -59,7 +59,7 @@ google_protobuf_descriptor_pb.FieldOptions.extensions[50000] = proto.airmap.null
 /**
  * A tuple of {field number, class constructor} for the extension
  * field named `format`.
- * @type {!jspb.ExtensionFieldInfo<string>}
+ * @type {!jspb.ExtensionFieldInfo.<string>}
  */
 proto.airmap.format = new jspb.ExtensionFieldInfo(
     50001,
@@ -84,7 +84,7 @@ google_protobuf_descriptor_pb.FieldOptions.extensions[50001] = proto.airmap.form
 /**
  * A tuple of {field number, class constructor} for the extension
  * field named `defaultDegrees`.
- * @type {!jspb.ExtensionFieldInfo<!proto.airmap.Degrees>}
+ * @type {!jspb.ExtensionFieldInfo.<!proto.airmap.Degrees>}
  */
 proto.airmap.defaultDegrees = new jspb.ExtensionFieldInfo(
     50002,
@@ -109,7 +109,7 @@ google_protobuf_descriptor_pb.FieldOptions.extensions[50002] = proto.airmap.defa
 /**
  * A tuple of {field number, class constructor} for the extension
  * field named `minDegrees`.
- * @type {!jspb.ExtensionFieldInfo<!proto.airmap.Degrees>}
+ * @type {!jspb.ExtensionFieldInfo.<!proto.airmap.Degrees>}
  */
 proto.airmap.minDegrees = new jspb.ExtensionFieldInfo(
     50003,
@@ -134,7 +134,7 @@ google_protobuf_descriptor_pb.FieldOptions.extensions[50003] = proto.airmap.minD
 /**
  * A tuple of {field number, class constructor} for the extension
  * field named `maxDegrees`.
- * @type {!jspb.ExtensionFieldInfo<!proto.airmap.Degrees>}
+ * @type {!jspb.ExtensionFieldInfo.<!proto.airmap.Degrees>}
  */
 proto.airmap.maxDegrees = new jspb.ExtensionFieldInfo(
     50004,
@@ -159,7 +159,7 @@ google_protobuf_descriptor_pb.FieldOptions.extensions[50004] = proto.airmap.maxD
 /**
  * A tuple of {field number, class constructor} for the extension
  * field named `defaultMeters`.
- * @type {!jspb.ExtensionFieldInfo<!proto.airmap.Meters>}
+ * @type {!jspb.ExtensionFieldInfo.<!proto.airmap.Meters>}
  */
 proto.airmap.defaultMeters = new jspb.ExtensionFieldInfo(
     50005,
@@ -184,7 +184,7 @@ google_protobuf_descriptor_pb.FieldOptions.extensions[50005] = proto.airmap.defa
 /**
  * A tuple of {field number, class constructor} for the extension
  * field named `minMeters`.
- * @type {!jspb.ExtensionFieldInfo<!proto.airmap.Meters>}
+ * @type {!jspb.ExtensionFieldInfo.<!proto.airmap.Meters>}
  */
 proto.airmap.minMeters = new jspb.ExtensionFieldInfo(
     50006,
@@ -209,7 +209,7 @@ google_protobuf_descriptor_pb.FieldOptions.extensions[50006] = proto.airmap.minM
 /**
  * A tuple of {field number, class constructor} for the extension
  * field named `maxMeters`.
- * @type {!jspb.ExtensionFieldInfo<!proto.airmap.Meters>}
+ * @type {!jspb.ExtensionFieldInfo.<!proto.airmap.Meters>}
  */
 proto.airmap.maxMeters = new jspb.ExtensionFieldInfo(
     50007,
@@ -234,7 +234,7 @@ google_protobuf_descriptor_pb.FieldOptions.extensions[50007] = proto.airmap.maxM
 /**
  * A tuple of {field number, class constructor} for the extension
  * field named `defaultMetersPerSecond`.
- * @type {!jspb.ExtensionFieldInfo<!proto.airmap.MetersPerSecond>}
+ * @type {!jspb.ExtensionFieldInfo.<!proto.airmap.MetersPerSecond>}
  */
 proto.airmap.defaultMetersPerSecond = new jspb.ExtensionFieldInfo(
     50008,
@@ -259,7 +259,7 @@ google_protobuf_descriptor_pb.FieldOptions.extensions[50008] = proto.airmap.defa
 /**
  * A tuple of {field number, class constructor} for the extension
  * field named `minMetersPerSecond`.
- * @type {!jspb.ExtensionFieldInfo<!proto.airmap.MetersPerSecond>}
+ * @type {!jspb.ExtensionFieldInfo.<!proto.airmap.MetersPerSecond>}
  */
 proto.airmap.minMetersPerSecond = new jspb.ExtensionFieldInfo(
     50009,
@@ -284,7 +284,7 @@ google_protobuf_descriptor_pb.FieldOptions.extensions[50009] = proto.airmap.minM
 /**
  * A tuple of {field number, class constructor} for the extension
  * field named `maxMetersPerSecond`.
- * @type {!jspb.ExtensionFieldInfo<!proto.airmap.MetersPerSecond>}
+ * @type {!jspb.ExtensionFieldInfo.<!proto.airmap.MetersPerSecond>}
  */
 proto.airmap.maxMetersPerSecond = new jspb.ExtensionFieldInfo(
     50010,
@@ -309,7 +309,7 @@ google_protobuf_descriptor_pb.FieldOptions.extensions[50010] = proto.airmap.maxM
 /**
  * A tuple of {field number, class constructor} for the extension
  * field named `defaultPascals`.
- * @type {!jspb.ExtensionFieldInfo<!proto.airmap.Pascal>}
+ * @type {!jspb.ExtensionFieldInfo.<!proto.airmap.Pascal>}
  */
 proto.airmap.defaultPascals = new jspb.ExtensionFieldInfo(
     50011,
@@ -334,7 +334,7 @@ google_protobuf_descriptor_pb.FieldOptions.extensions[50011] = proto.airmap.defa
 /**
  * A tuple of {field number, class constructor} for the extension
  * field named `minPascals`.
- * @type {!jspb.ExtensionFieldInfo<!proto.airmap.Pascal>}
+ * @type {!jspb.ExtensionFieldInfo.<!proto.airmap.Pascal>}
  */
 proto.airmap.minPascals = new jspb.ExtensionFieldInfo(
     50012,
@@ -359,7 +359,7 @@ google_protobuf_descriptor_pb.FieldOptions.extensions[50012] = proto.airmap.minP
 /**
  * A tuple of {field number, class constructor} for the extension
  * field named `maxPascals`.
- * @type {!jspb.ExtensionFieldInfo<!proto.airmap.Pascal>}
+ * @type {!jspb.ExtensionFieldInfo.<!proto.airmap.Pascal>}
  */
 proto.airmap.maxPascals = new jspb.ExtensionFieldInfo(
     50013,
@@ -384,7 +384,7 @@ google_protobuf_descriptor_pb.FieldOptions.extensions[50013] = proto.airmap.maxP
 /**
  * A tuple of {field number, class constructor} for the extension
  * field named `defaultCelsius`.
- * @type {!jspb.ExtensionFieldInfo<!proto.airmap.Celsius>}
+ * @type {!jspb.ExtensionFieldInfo.<!proto.airmap.Celsius>}
  */
 proto.airmap.defaultCelsius = new jspb.ExtensionFieldInfo(
     50014,
@@ -409,7 +409,7 @@ google_protobuf_descriptor_pb.FieldOptions.extensions[50014] = proto.airmap.defa
 /**
  * A tuple of {field number, class constructor} for the extension
  * field named `minCelsius`.
- * @type {!jspb.ExtensionFieldInfo<!proto.airmap.Celsius>}
+ * @type {!jspb.ExtensionFieldInfo.<!proto.airmap.Celsius>}
  */
 proto.airmap.minCelsius = new jspb.ExtensionFieldInfo(
     50015,
@@ -434,7 +434,7 @@ google_protobuf_descriptor_pb.FieldOptions.extensions[50015] = proto.airmap.minC
 /**
  * A tuple of {field number, class constructor} for the extension
  * field named `maxCelsius`.
- * @type {!jspb.ExtensionFieldInfo<!proto.airmap.Celsius>}
+ * @type {!jspb.ExtensionFieldInfo.<!proto.airmap.Celsius>}
  */
 proto.airmap.maxCelsius = new jspb.ExtensionFieldInfo(
     50016,
