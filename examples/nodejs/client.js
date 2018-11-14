@@ -1,18 +1,24 @@
 var grpc = require('grpc')
-
-var google_protobuf_timestamp_pb = require('google-protobuf/google/protobuf/timestamp_pb.js');
-var google_protobuf_duration_pb = require('google-protobuf/google/protobuf/duration_pb.js');
-var measurements_pb = require('./measurements_pb.js')
+var traffic_grpc = require('./traffic_grpc_pb.js')
 var traffic_pb = require('./traffic_pb.js')
-var trafficService = require('./traffic_grpc_pb.js')
+var measurements_pb = require('./measurements_pb.js')
 var units_pb = require('./units_pb.js')
+var google_protobuf_timestamp_pb = require('google-protobuf/google/protobuf/timestamp_pb.js');
+
+
+// Provider Id is a unique identifier assigned to each traffic provider
+const PROVIDER_ID = 'demo'
+
+// Endpoint points to sandbox environment
+const ENDPOINT = '13.77.181.58:7080'
+
 
 // Create a client for connecting to the collector.
-// Please replace with the appropriate URL and appropriate credentials.
-var client = new trafficService.TrafficProviderClient('localhost:7080', grpc.credentials.createInsecure())
+var client = new traffic_grpc.TrafficProviderClient(ENDPOINT, grpc.credentials.createInsecure())
 var source = client.registerProvider()
 
-source.on('data', function(ack) {
+
+source.on('data', function (ack) {
   console.log('received ack from collector: ', ack)
 })
 
@@ -25,61 +31,85 @@ source.on('error', function(e) {
 })
 
 
+function dispatchUpdates() {
 
-function dispatchUpdate() {
-    var update = new traffic_pb.Traffic.Update.FromProvider()
-    var submitted = new google_protobuf_timestamp_pb.Timestamp()
-    var observation = new traffic_pb.Traffic.Observation()
-    var sensor = new traffic_pb.Traffic.Sensor()
-    var identity = new traffic_pb.Traffic.Identity()
-    var observedTime = new google_protobuf_timestamp_pb.Timestamp()
-    var ttl = new google_protobuf_duration_pb.Duration()
-    var position = new measurements_pb.Position()
-    var coordinate = new measurements_pb.Coordinate2D()
-    var course = new measurements_pb.Course()
-    var velocity = new measurements_pb.Velocity()
-    var orientation = new measurements_pb.Orientation()
+  // the current time in seconds
+  var now = Date().getTime()
+  var seconds = Math.floor(now / 1000)
+  var nanos = (now - seconds*1000) * 1000
 
-    var seconds = Math.round(new Date().getTime()/1000)
+  var sensor = new traffic_pb.Traffic.Sensor()
+  sensor.setPrimaryRadar(new traffic_pb.Traffic.Sensor.PrimaryRadar())
+  
+  var observed = new google_protobuf_timestamp_pb.Timestamp()
+  observed.setSeconds(seconds - 1)
+  observed.setNanos(nanos)
+  
+  var latitude = new units_pb.Degrees()
+  var longitude = new units_pb.Degrees()
+  latitude.setValue(lat)
+  longitude.setValue(lng)
+  
+  var coordinate = new measurements_pb.Coordinate2D()
+  coordinate.setLatitude(latitude)
+  coordinate.setLongitude(longitude)
+  
+  var height = new units_pb.Meters()
+  height.setValue(50)
 
-    identity.setProviderId(new traffic_pb.Traffic.Identity.ProviderId('provider.id'))
+  var altitude = new measurements_pb.Altitude()
+  altitude.setHeight(height)
+  altitude.setReference(measurements_pb.Altitude.Reference.SURFACE)
+  
+  var position = new measurements_pb.Position()
+  position.setCoordinate(coordinate)
+  position.setAltitude(altitude)
 
-    submitted.setSeconds(seconds+1)
-    update.setSubmitted(submitted)
+  // required
+  var provider = new traffic_pb.Traffic.Identity.ProviderId()
+  provider.setAsString(PROVIDER_ID)
+  var providerIdentity = new traffic_pb.Traffic.Identity()
+  providerIdentity.setProviderId(provider)
 
-    observedTime.setSeconds(seconds)
-    ttl.setSeconds(1)
+  // required; unique per track
+  var track = new traffic_pb.Traffic.Identity.TrackId()
+  track.setAsString("123")
+  var trackIdentity = new traffic_pb.Traffic.Identity()
+  trackIdentity.setTrackId(track)
 
-    coordinate.setLatitude(new units_pb.Degrees(33.98635))
-    coordinate.setLongitude(new units_pb.Degrees(-118.47639))
+  var callsign = new traffic_pb.Traffic.Identity.Callsign()
+  callsign.setAsString("AIRMAP1")
+  var callsignIdentity = new traffic_pb.Traffic.Identity()
+  callsignIdentity.setCallsign(callsign)
+  
+  var observation = new traffic_pb.Traffic.Observation()
+  observation.setObserved(observed)
+  observation.setPosition(position)
+  observation.setIdentitiesList([trackIdentity, callsignIdentity, providerIdentity])
+  observation.setSensor(sensor)
 
-    position.setCoordinate(coordinate)
-    position.setAltitude(new units_pb.Meters(50))
+  var submitted = new google_protobuf_timestamp_pb.Timestamp()
+  submitted.setSeconds(seconds)
+  submitted.setNanos(nanos)
 
-    course.setAngle(0)
-
-    velocity.setX(new units_pb.MetersPerSecond(0))
-    velocity.setY(new units_pb.MetersPerSecond(3.2))
-    velocity.setZ(new units_pb.MetersPerSecond(0.1))
-
-    orientation.setYaw(new units_pb.Degrees(42))
-    orientation.setPitch(new units_pb.Degrees(42))
-    orientation.setRoll(new units_pb.Degrees(42))
-
-    observation.setSensor(sensor)
-    observation.setIdentitiesList(identity)
-    observation.setObserved(observedTime)
-    observation.setTtl(ttl)
-    observation.setPosition(position)
-    observation.setCourse(course)
-    observation.setVelocity(velocity)
-    observation.setOrientation(orientation)
-
-    update.setObservationsList(observation)
-    source.write(update)
+  var observations = [observation]
+  
+  var update = new traffic_pb.Traffic.Update.FromProvider()
+  update.setSubmitted(submitted)
+  update.setObservationsList(observations)
+  
+  source.write(update)
 }
 
-setInterval(function() {
-    dispatchUpdate()
-}, 1000)
 
+var lat = 23.3575
+var lng = -109.823
+
+setInterval(function() {
+
+  lng += 0.001
+  lat += 0.001
+
+  dispatchUpdates()
+
+}, 1000)
