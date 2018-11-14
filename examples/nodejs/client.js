@@ -42,7 +42,7 @@ update.setSubmitted(submitted)
 
 update.setObservationsList(observation)
 
-source.write(observation)
+source.write(update)
 
 /*
 source.write({
