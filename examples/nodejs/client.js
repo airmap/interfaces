@@ -5,10 +5,11 @@ var google_protobuf_duration_pb = require('google-protobuf/google/protobuf/durat
 var measurements_pb = require('./measurements_pb.js')
 var traffic_pb = require('./traffic_pb.js')
 var trafficService = require('./traffic_grpc_pb.js')
+var units_pb = require('./units_pb.js')
 
 // Create a client for connecting to the collector.
 // Please replace with the appropriate URL and appropriate credentials.
-var client = new trafficService.TrafficProviderClient('13.77.142.211:7080', grpc.credentials.createInsecure())
+var client = new trafficService.TrafficProviderClient('localhost:7090', grpc.credentials.createInsecure())
 var source = client.registerProvider()
 
 source.on('data', function(ack) {
@@ -32,106 +33,45 @@ var identity = new traffic_pb.Traffic.Identity()
 
 var observedTime = new google_protobuf_timestamp_pb.Timestamp()
 var ttl = new google_protobuf_duration_pb.Duration()
-var positions = new measurements_pb.Position()
+var position = new measurements_pb.Position()
 var coordinate = new measurements_pb.Coordinate2D()
+var course = new measurements_pb.Course()
+var velocity = new measurements_pb.Velocity()
+var orientation = new measurements_pb.Orientation()
 
+var seconds = Math.round(new Date().getTime()/1000)
 
-submitted.setSeconds(1542145471)
+submitted.setSeconds(seconds+1)
 update.setSubmitted(submitted)
 
+observedTime.setSeconds(seconds)
+ttl.setSeconds(1)
+
+coordinate.setLatitude(new units_pb.Degrees(33.98635))
+coordinate.setLongitude(new units_pb.Degrees(-118.47639))
+
+position.setCoordinate(coordinate)
+position.setAltitude(new units_pb.Meters(50))
+
+course.setAngle(0)
+
+velocity.setX(new units_pb.MetersPerSecond(0))
+velocity.setY(new units_pb.MetersPerSecond(3.2))
+velocity.setZ(new units_pb.MetersPerSecond(0.1))
+
+orientation.setYaw(new units_pb.Degrees(42))
+orientation.setPitch(new units_pb.Degrees(42))
+orientation.setRoll(new units_pb.Degrees(42))
+
+observation.setSensor(sensor)
+observation.setIdentitiesList(identity)
+observation.setObserved(observedTime)
+observation.setTtl(ttl)
+observation.setPosition(position)
+observation.setCourse(course)
+observation.setVelocity(velocity)
+observation.setOrientation(orientation)
 
 update.setObservationsList(observation)
 
 source.write(update)
-
-/*
-source.write({
-    submitted: "2018-11-13T21:44:31Z",
-    received: "2018-11-13T21:44:32Z",
-    observations: [
-        {
-            identities: [
-                {
-                    provider_id: {
-                        as_string: 'some.provider.id'
-                    },
-                    track_id: {
-                        as_string: 'some.track.id'
-                    },
-                    callsign: {
-                        as_string: "some.callsign"
-                    },
-                    registration: {
-                        as_string: "some.registration"
-                    },
-                    icao: {
-                        address: {
-                            as_string: "some.address"
-                        },
-                        aircraft_type: {
-                            as_string: "some.type"
-                        }
-                    },
-                    manufacturer: {
-                        make: "some.make",
-                        model: "some.model",
-                        serial_number: "some.serial.number"
-                    },
-                    network_adress: {
-                        as_string: "some.address"
-                    }
-
-                }
-            ],
-            observed: "2018-11-13T21:44:30Z",
-            ttl: {
-                seconds: 1,
-                nanos: 1
-            },
-            position: {
-                coordinate: {
-                    latitude: {
-                        value: 33.98635,
-                    },
-                    longitude: {
-                        value: -118.47639
-                    }
-                },
-                altitude: {
-                    height: {
-                        value: 50
-                    },
-                    reference: "ELLIPSOID"
-                }
-            },
-            course: {   
-                angle: {
-                    value: 0
-                }
-            },
-            velocity: {
-                x: {
-                    value: 0
-                },
-                y: {
-                    value: 3.2
-                },
-                z: {
-                    value: 0.1
-                }
-            },
-            orientation: {
-                yaw: {
-                    value: 0
-                },
-                pitch: {
-                    value: 0
-                },
-                roll: {
-                    value: 0
-                }
-            }
-        }
-    ]
-})
-*/
