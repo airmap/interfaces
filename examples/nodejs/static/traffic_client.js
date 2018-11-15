@@ -18,8 +18,8 @@ var client = new traffic_grpc.TrafficProviderClient(ENDPOINT, grpc.credentials.c
 var source = client.registerProvider()
 
 
-source.on('data', function (ack) {
-  console.log('received ack from collector: ', ack)
+source.on('data', function (response) {
+  console.log('received ack from collector: ', response.getAck().getCount())
 })
 
 source.on('end', function() {
