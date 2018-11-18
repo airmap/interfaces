@@ -4,14 +4,20 @@ syntax = "proto3";
 
 import "extensions.proto";
 import "google/protobuf/timestamp.proto";
+import "google/protobuf/duration.proto";
 import "measurements.proto";
 import "ids.proto";
 
 package airmap;
 
-// TelemetryProvider exposes a service that enables the reporting of telematic data.
+// TelemetryProvider exposes services that enable the reporting of telematic data.
 service TelemetryProvider {
   rpc ConnectUpdates(stream Telemetry.Update.FromClient) returns (stream Telemetry.Update.FromService);
+}
+
+// TelemetryArchive exposes services for querying historical telematic data.
+service TelemetryArchive {
+  rpc QueryReports(Telemetry.FlightQuery) returns (stream Telemetry.Report);
 }
 
 // Telemetry bundles up types used for reporting telematic data.
@@ -47,7 +53,7 @@ message Telemetry {
     message FromClient {
       FlightId flight                      = 1;  // The identifier of the flight for which the update is for.
       google.protobuf.Timestamp submitted  = 2;  // The timestamp of when the update was submitted by the client.
-      repeated Report reports              = 3;
+      repeated Report reports              = 3;  // A collection of telemetry reports.
     }
     // FromService models communication back to a telemetry client.
     message FromService {
@@ -58,5 +64,13 @@ message Telemetry {
       }
       Ack ack = 1;  // Ack for received update.
     }
+  }
+
+  // FlightQuery models input parameters for querying historial flight telemetry.
+  message FlightQuery {
+    FlightId flight                       = 1;  // The identifier for the flight being queried.
+    google.protobuf.Timestamp start       = 2 [(nullable) = true];  // A timestamp for the start of a temporal range filter.
+    google.protobuf.Timestamp end         = 3 [(nullable) = true];  // A timestamp for the end of temporal range filter.
+    google.protobuf.Duration sample_rate  = 4 [(nullable) = true, (default_duration).seconds = 1];  // The optional rate at which reports will be downsampled.
   }
 }

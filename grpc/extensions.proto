@@ -3,6 +3,7 @@
 syntax = "proto3";
 
 import "google/protobuf/descriptor.proto";
+import "google/protobuf/duration.proto";
 import "units.proto";
 
 package airmap;
@@ -31,4 +32,7 @@ extend google.protobuf.FieldOptions {
   Celsius default_celsius                     = 50014;
   Celsius min_celsius                         = 50015;
   Celsius max_celsius                         = 50016;
+  google.protobuf.Duration default_duration   = 50017;
+  google.protobuf.Duration min_duration       = 50018;
+  google.protobuf.Duration max_duration       = 50019;
 }
