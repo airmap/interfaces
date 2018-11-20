@@ -57,6 +57,26 @@ message Traffic {
     }
   }
 
+  // Update bundles types used in the exchange of traffic observations.
+  message Update {
+    // FromProvider models a batch of data observed by a traffic provider and sent to a traffic collector.
+    message FromProvider {
+      repeated Traffic.Observation observations  = 1;  // Observations as recorded by a provider.
+      google.protobuf.Timestamp submitted        = 2;  // The time when the update was submitted by the provider.
+      google.protobuf.Timestamp received         = 3  [(nullable) = true];  // The time when the update was received by the traffic collector.
+    }
+
+    // ToProvider models information communicated back to a traffic provider.
+    message ToProvider {
+      // Ack describes an acknowledgement of observations received from a traffic provider.
+      message Ack {
+        uint64 count                         = 1;  // Number of messages received.
+        google.protobuf.Timestamp submitted  = 2;  // The time when the message was sent to a traffic provider.
+      }
+      Ack ack = 1;  // Ack for received update.
+    }
+  }
+  
   // Sensor models the device/method used to capture an observations.
   message Sensor {
     // details provides specific information for a given sensor.
@@ -158,26 +178,6 @@ message Traffic {
       message MACAddress {
         string as_string = 1 [(format) = "%02X:%02X:%02X:%02X:%02X:%02X"];
       }
-    }
-  }
-
-  // Update bundles types used in the exchange of traffic observations.
-  message Update {
-    // FromProvider models a batch of data observed by a traffic provider and sent to a traffic collector.
-    message FromProvider {
-      repeated Traffic.Observation observations  = 1;  // Observations as recorded by a provider.
-      google.protobuf.Timestamp submitted        = 2;  // The time when the update was submitted by the provider.
-      google.protobuf.Timestamp received         = 3  [(nullable) = true];  // The time when the update was received by the traffic collector.
-    }
-
-    // ToProvider models information communicated back to a traffic provider.
-    message ToProvider {
-      // Ack describes an acknowledgement of observations received from a traffic provider.
-      message Ack {
-        uint64 count                         = 1;  // Number of messages received.
-        google.protobuf.Timestamp submitted  = 2;  // The time when the message was sent to a traffic provider.
-      }
-      Ack ack = 1;  // Ack for received update.
     }
   }
 }
