@@ -28,7 +28,32 @@ message Traffic {
     Course course                          = 6 [(nullable) = true];   // Course over ground relative to True North, 0-359.
     Velocity velocity                      = 7 [(nullable) = true];   // Velocity of the vehicle expressed as XYZ (NED) vectors.
     Orientation orientation                = 8 [(nullable) = true];   // Orientation of the vehicle expressed as yaw, pitch, roll.
+    Category category                      = 9 [(nullable) = true];   // Category of the traffic observation.
     repeated google.protobuf.Any details   = 1024;                    // Vendor-specific details.
+
+    enum Category {
+      UNKNOWN                =  0; // unknown
+      LIGHT_AIRCRAFT         =  1; // light aircraft <= 15500 lbs
+      SMALL_AIRCRAFT         =  2; // 15500 lbs < small aircraft < 75000 lbs
+      MEDIUM_AIRCRAFT        =  3; // 75000 lbs < medium aircraft < 300000 lbs
+      LARGE_AIRCRAFT         =  4; // high vortex, large aircraft
+      HEAVY_AIRCAFT          =  5; // >= 300000 lbs
+      HIGHLY_MANUEVERABLE    =  6; // highly maneuverable (5g capability) and high speed (400+ knots cruise)
+      reserved 7 to 9;
+      ROTORCRAFT             = 10; // helicopter / rotocraft
+      GLIDER                 = 11; // glider / sailplane
+      LIGHTER_THAN_AIR       = 12; // lighter than air / blimp
+      UAV                    = 13; // unmanned aerial vehicle
+      SPACE                  = 14; // space / transatmospheric vehicle 
+      ULTRALIGHT             = 15; // ultralight / hang glider / paraglider 
+      PARACHUTIST            = 16; // parachutist / skydiver
+      reserved 17 to 19;
+      SFC_EMERGENCY_VEHICLE  = 20; // surface emergency vehicle
+      SFC_SERVICE_VEHICLE    = 21; // surface service vehicle
+      SFC_OBSTACLE           = 22; // fixed ground or tethered obstacle
+      SFC_OBSTACLE_CLUSTER   = 23; // cluster obstacle
+      SFC_OBSTACLE_LINE      = 24; // line obstacle
+    }
   }
 
   // Sensor models the device/method used to capture an observations.
