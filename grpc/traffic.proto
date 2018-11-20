@@ -18,7 +18,7 @@ service TrafficProvider {
 
 // Traffic bundles all types used in the exchange of traffic observations among traffic providers, collectors, and processors.
 message Traffic {
-  // Observation describes an individual observation of an (aerial) vehicle.
+  // Observation describes an individual observation of a vehicle.
   message Observation {
     Sensor sensor                          = 1;                       // Describes the sensor(s) from which the observation originated.
     repeated Identity identities           = 2;                       // All known identities for the target.
@@ -31,6 +31,7 @@ message Traffic {
     Category category                      = 9 [(nullable) = true];   // Category of the traffic observation.
     repeated google.protobuf.Any details   = 1024;                    // Vendor-specific details.
 
+    // Category marks the category of the reported observation.
     enum Category {
       UNKNOWN                =  0; // unknown
       LIGHT_AIRCRAFT         =  1; // light aircraft <= 15500 lbs
