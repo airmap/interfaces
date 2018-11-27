@@ -40,7 +40,7 @@ message Traffic {
       LARGE_AIRCRAFT         =  4; // high vortex, large aircraft
       HEAVY_AIRCAFT          =  5; // >= 300000 lbs
       HIGHLY_MANUEVERABLE    =  6; // highly maneuverable (5g capability) and high speed (400+ knots cruise)
-      reserved 7 to 9;
+      // reserved 7 to 9;
       ROTORCRAFT             = 10; // helicopter / rotocraft
       GLIDER                 = 11; // glider / sailplane
       LIGHTER_THAN_AIR       = 12; // lighter than air / blimp
@@ -48,7 +48,7 @@ message Traffic {
       SPACE                  = 14; // space / transatmospheric vehicle 
       ULTRALIGHT             = 15; // ultralight / hang glider / paraglider 
       PARACHUTIST            = 16; // parachutist / skydiver
-      reserved 17 to 19;
+      // reserved 17 to 19;
       SFC_EMERGENCY_VEHICLE  = 20; // surface emergency vehicle
       SFC_SERVICE_VEHICLE    = 21; // surface service vehicle
       SFC_OBSTACLE           = 22; // fixed ground or tethered obstacle
