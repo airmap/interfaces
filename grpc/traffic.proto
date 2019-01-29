@@ -137,12 +137,12 @@ message Traffic {
       string as_string  = 1;
     }
 
-    // Callsign models the callsign assigned to a vehicle.
+    // Callsign models the callsign assigned to the aircraft by ATC. Ex. SWR1234.
     message Callsign {
-      string as_string  = 1 [(format) = "%c%c%c%c%c%c%c%c"];
+      string as_string = 1 [(format) = "%c%c%c%c%c%c%c"];
     }
 
-    // Registration models the registration of an aircraft.
+    // Registration models the registration of an aircraft by the regulator. Ex N123ABC.
     message Registration {
       string as_string  = 1;
     }

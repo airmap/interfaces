@@ -35,6 +35,7 @@ message Altitude {
     GEOID        = 2;  // References and approximates the mean sea level.
     SURFACE      = 3;  // References the physical surface beneath the measurement.
     EXTERNAL     = 4;  // References an external measurement or estimate.
+    BAROMETRIC   = 5;  // References a standard barometric pressure altitude. 1013.25 / 29.92
   }
   Meters height        = 1;  // The altitude as measured from the reference.
   Reference reference  = 2;  // The reference from which the altitude was measured.
