@@ -30,12 +30,13 @@ message Coordinate2D {
 message Altitude {
   // Reference enumerates all known reference/datum systems for altitude measurements.
   enum Reference {
-    UNKNOWN      = 0;  // An unknown reference.
-    ELLIPSOID    = 1;  // References the hypothetical equipotential gravitational surface.
-    GEOID        = 2;  // References and approximates the mean sea level.
-    SURFACE      = 3;  // References the physical surface beneath the measurement.
-    EXTERNAL     = 4;  // References an external measurement or estimate.
-    BAROMETRIC   = 5;  // References a standard barometric pressure altitude. 1013.25 / 29.92
+    UNKNOWN       = 0;  // An unknown reference.
+    ELLIPSOID     = 1;  // Height above the WGS84 reference ellipsoid.
+    GEOID         = 2;  // Height above the hypothetical gravitational surface.
+    SURFACE       = 3;  // Height above the physical surface beneath the measurement. (DO NOT USE)
+    EXTERNAL      = 4;  // Height above an external measurement or estimate. (DO NOT USE)
+    STANDARD_BARO = 5;  // Altitude using standard barometric pressure. ISA: 1013.25 / 29.92, Flight Level.
+    LOCAL_BARO    = 6;  // Altitude relative to local sea level adjusted for local barometric pressure. AMSL
   }
   Meters height        = 1;  // The altitude as measured from the reference.
   Reference reference  = 2;  // The reference from which the altitude was measured.
