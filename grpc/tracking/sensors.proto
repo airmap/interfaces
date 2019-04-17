@@ -1,0 +1,44 @@
+// Copyright 2018-2019 AirMap, Inc.  All rights reserved.
+
+syntax = "proto3";
+
+import "extensions.proto";
+
+package tracking;
+
+// Sensor models the method used to observe a track.
+message Sensor {
+  // details provides specific information for a given sensor.
+  oneof details {
+    Fused fused                    = 1;  // Marks multiple sensors fused together.
+    PrimaryRadar primary_radar     = 2;  // Marks a primary radar sensor.
+    SecondaryRadar secondary_radar = 3;  // Marks a secondary radar sensor.
+    Adsb adsb                      = 4;  // Marks an ADS-B sensor.
+    Gnss gnss                      = 5;  // Marks a satellite-based position sensor.
+    RadioFrequency radio_frequency = 6;  // Marks a Radio Frequency (RF) sensor.
+    ElectroOptical electro_Optical = 7;  // Marks an Electro-Optical sensor.
+  }
+
+  // Fused models multiple fused data sensors.
+  message Fused {
+    repeated Sensor sensors = 1;
+  }
+
+  // PrimaryRadar models a primary radar sensor.
+  message PrimaryRadar {}
+
+  // SecondaryRadar models a secondary radar sensor.
+  message SecondaryRadar {}
+
+  // Adsb models an ADS-B sensor.
+  message Adsb {}
+
+  // RadioFrequency models a Radio Frequency (RF) sensor.
+  message RadioFrequency {}
+
+  // Gnns a satellite-based position sensor.
+  message Gnss {}
+
+  // ElectroOptical models an Electro-Optical sensor.
+  message ElectroOptical {}
+}

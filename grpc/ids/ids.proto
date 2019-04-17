@@ -1,0 +1,15 @@
+// Copyright 2018-2019 AirMap, Inc.  All rights reserved.
+
+syntax = "proto3";
+
+package ids;
+
+// Flight models the unique id of a flight in the context of AirMap.
+message Flight {
+  string as_string = 1;  // The textual representation of the id.
+}
+
+// USP models the unique id of a UTM Service Provider (USP)
+message USP {
+  string as_string = 1;  // The textual representation of the id.
+}

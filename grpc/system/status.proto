@@ -1,0 +1,20 @@
+// Copyright 2018-2019 AirMap, Inc.  All rights reserved.
+
+syntax = "proto3";
+
+import "extensions.proto";
+
+package system;
+
+message Status {
+  enum Level {
+    UNKNOWN_STATE  = 0;
+    NORMAL         = 1;
+    MAINTENANCE    = 2;
+    DEGRADED       = 3;
+    FAILED         = 4;
+  }
+
+  Level level     = 1;
+  string message  = 2 [(grpc.nullable) = true];
+}

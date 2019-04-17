@@ -1,0 +1,33 @@
+// Copyright 2018-2019 AirMap, Inc.  All rights reserved.
+
+syntax = "proto3";
+
+import "extensions.proto";
+import "system/status.proto";
+import "system/ack.proto";
+import "telemetry/report.proto";
+
+package telemetry;
+
+// Collector exposes services that enable the reporting of telematic data.
+service Collector {
+  // ConnectAircraft connects a stream of updates from an aircraft to a collector
+  rpc ConnectAircraft(stream Update.FromAircraft) returns (stream Update.ToAircraft);
+}
+
+// Update wraps types used in the exchange of updates with a telemetry collector.
+message Update {
+  message FromAircraft {
+    // details is a discriminated union of all measurement types.
+    oneof details {
+      Report report = 1;
+    }
+  }
+  // ToAircraft wraps messages being sent from a collector back to an aircraft.
+  message ToAircraft {
+    oneof details {
+      system.Status status  = 1;  // Collector operational status.
+      system.Ack ack = 2;  // Acknowledgement of received updates.
+    }
+  }
+}

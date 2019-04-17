@@ -1,0 +1,81 @@
+// Copyright 2018-2019 AirMap, Inc.  All rights reserved.
+
+syntax = "proto3";
+
+import "extensions.proto";
+import "ids/ids.proto";
+package tracking;
+
+// Identity models a unique tracking identity.
+message Identity {
+  // details is a discriminated union of all identity types.
+  oneof details {
+    ProviderId provider_id     = 1;
+    TrackId track_id           = 2;
+    Callsign callsign          = 3;
+    Registration registration  = 4;
+    FlightId flight_id         = 5;
+    Icao icao                  = 6;
+    Manufacturer manufacturer  = 7;
+    NetworkInterface network   = 8;
+  }
+
+  // ProviderId models the unique identifier of a provider of tracks.
+  message ProviderId {
+    string as_string  = 1;
+  }
+
+  // Track models a unique identifier for a track assembled from multiple different observations.
+  message TrackId {
+    string as_string  = 1;
+  }
+
+  // Callsign models the callsign assigned to a vehicle.
+  message Callsign {
+    string as_string  = 1 [(grpc.format) = "%c%c%c%c%c%c%c%c"];
+  }
+
+  // Registration models the registration of an aircraft.
+  message Registration {
+    string as_string  = 1;
+  }
+
+  // FlightId models the identifier of a flight.
+  message FlightId {
+    ids.Flight identifier     = 1;
+    ids.USP service_provider  = 2;
+  }
+
+  // Icao bundles up information that describes an aircraft in the ICAO context.
+  message Icao {
+    Address24 address           = 1 [(grpc.nullable) = true];  // The ICAO-assigned address of an aircraft.
+    AircraftType aircraft_type  = 2 [(grpc.nullable) = true];  // The ICAO-assigned type of an aircraft.
+
+    // Address24 models the unique address of an aircraft assigned by ICAO.
+    message Address24 {
+      string as_string  = 1 [(grpc.format) = "%02X%02X%02X"];
+    }
+
+    // AircraftType models an ICAO-registered aircraft type.
+    message AircraftType {
+      string as_string  = 1;
+    }
+  }
+
+  // Manufacturer identifies a make, model, and serial number of an aircraft or sensor.
+  message Manufacturer {
+    string make           = 1 [(grpc.nullable) = true];  // The name of the manufacturer.
+    string model          = 2 [(grpc.nullable) = true];  // The name of the model.
+    string serial_number  = 3 [(grpc.nullable) = true];  // The serial number.
+  }
+
+  // NetworkInterface identifies a vehicle by its network interfaces.
+  message NetworkInterface {
+    MACAddress mac_address  = 1;  // The hardware address of the network interface.
+
+    // MACAddress models the hardware address of the network interface.
+    message MACAddress {
+      string as_string  = 1 [(grpc.format) = "%02X:%02X:%02X:%02X:%02X:%02X"];
+    }
+  }
+}

@@ -1,0 +1,24 @@
+// Copyright 2018-2019 AirMap, Inc.  All rights reserved.
+
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/duration.proto";
+import "extensions.proto";
+import "ids/ids.proto";
+import "telemetry/report.proto";
+
+package telemetry;
+
+// Archive enables services for querying historical telematic data.
+service Archive {
+  rpc QueryFlightReports(FlightQuery) returns (stream Report);
+}
+
+// FlightQuery models input parameters for querying historial flight telemetry.
+message FlightQuery {
+  ids.Flight flight                     = 1;  // The identifier for the flight being queried.
+  google.protobuf.Timestamp start       = 2 [(grpc.nullable) = true];  // A timestamp for the start of a temporal range filter.
+  google.protobuf.Timestamp end         = 3 [(grpc.nullable) = true];  // A timestamp for the end of temporal range filter.
+  google.protobuf.Duration sample_rate  = 4 [(grpc.nullable) = true, (grpc.default_duration).seconds = 1];  // The optional rate at which reports will be downsampled.
+}

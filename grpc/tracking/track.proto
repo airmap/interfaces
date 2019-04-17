@@ -1,0 +1,30 @@
+// Copyright 2018-2019 AirMap, Inc.  All rights reserved.
+
+syntax = "proto3";
+
+import "google/protobuf/any.proto";
+import "google/protobuf/timestamp.proto";
+import "extensions.proto";
+import "measurements/measurements.proto";
+import "tracking/emitter.proto";
+import "tracking/sensors.proto";
+import "tracking/identity.proto";
+
+package tracking;
+
+// Track models a single track observation.
+message Track {
+  google.protobuf.Timestamp observed    = 1;  // The time the track was observed.
+  measurements.Position position        = 2;  // Position of the vehicle.
+  measurements.Velocity velocity        = 3 [(grpc.nullable) = true];  // Velocity of the vehicle.
+  measurements.Orientation orientation  = 4 [(grpc.nullable) = true];  // Orientation of the vehicle.
+  Emitter emitter                       = 5 [(grpc.nullable) = true];  // Emitter of the track.
+  Sensor sensor                         = 6;  // Describes the sensor from which the track originated.
+  repeated Identity identities          = 7;  // All known identities for the track.
+  repeated google.protobuf.Any details  = 1024 [(grpc.nullable) = true];  // Vendor-specific details.
+
+  // Batch models a batch of tracks.
+  message Batch {
+    repeated Track tracks  = 1;  // A batch of tracks.
+  }
+}

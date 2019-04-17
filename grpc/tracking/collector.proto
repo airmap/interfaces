@@ -1,0 +1,51 @@
+// Copyright 2018-2019 AirMap, Inc.  All rights reserved.
+
+syntax = "proto3";
+
+import "extensions.proto";
+import "system/status.proto";
+import "system/ack.proto";
+import "tracking/track.proto";
+
+package tracking;
+
+// Collector service enables the exchange of surveillance updates with a collector service.
+service Collector {
+  // ConnectProvider connects a stream of updates from a provider to a collector.
+  rpc ConnectProvider(stream Update.FromProvider) returns (stream Update.ToProvider);
+  // ConnectProcessor connects a stream of updates from a collector to a processor.
+  rpc ConnectProcessor(stream Update.FromProcessor) returns (stream Update.ToProcessor);
+}
+
+// Update bundles types used in the exchange of tracks.
+message Update {
+
+  // FromProvider wraps messages being sent by a provider to a traffic collector.
+  message FromProvider {
+    oneof details {
+      system.Status status  = 1;  // Provider operational status.
+      Track.Batch batch     = 2;  // Batch of updates from a track provider.
+    }
+  }
+
+  // ToProvider wraps messages being sent from a collector back to a provider.
+  message ToProvider {
+    oneof details {
+      system.Ack ack = 1;  // Acknowledgement of received updates.
+    }
+  }
+
+  // ToProcessor wraps messages being sent by a collector to a processor.
+  message ToProcessor {
+    oneof details {
+      system.Status status  = 1;  // Collector operational status.
+      Track.Batch batch     = 2;  // Batch of updates from a track collector.
+    }
+  }
+
+  message FromProcessor {
+    oneof details {
+      system.Ack ack = 1;  // Acknowledgement of received updates.
+    }
+  }
+}

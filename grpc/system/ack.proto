@@ -1,0 +1,14 @@
+// Copyright 2018-2019 AirMap, Inc.  All rights reserved.
+
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+import "extensions.proto";
+
+package system;
+
+// Ack models an acknowledgement of a message.
+message Ack {
+  uint64 count                         = 1;  // Cumalative count of messages received.
+  google.protobuf.Timestamp submitted  = 2;  // The time ack was submitted.
+}

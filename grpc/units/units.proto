@@ -1,15 +1,15 @@
-// Copyright 2018 AirMap, Inc.  All rights reserved.
+// Copyright 2018-2019 AirMap, Inc.  All rights reserved.
 
 syntax = "proto3";
 
-package airmap;
+package units;
 
-// Degrees models a quantity in [°].
+// Degrees models an angular quantity in degrees [°].
 message Degrees {
   double value = 1;  // The value of the quantity.
 }
 
-// Celsius models a quantity in [°C].
+// Celsius models a quantity in degrees Celsius [°C].
 message Celsius {
   double value = 1;  // The value of the quantity.
 }
@@ -24,17 +24,17 @@ message Foot {
   double value = 1;  // The value of the quantity.
 }
 
-// MetersPerSecond models a quantity in [m/s].
+// MetersPerSecond models a quantity in meters per second [m/s].
 message MetersPerSecond {
   double value = 1;  // The value of the quantity.
 }
 
-// Pascal models a quantity in [Pa].
+// Pascal models a quantity in Pascals [Pa].
 message Pascal {
   double value = 1;  // The value of the quantity.
 }
 
-// Percent models a quantity in [%].
+// Percent models a quantity as a percentage [%].
 message Percent {
   double value = 1;  // The value of the quantity.
 }
