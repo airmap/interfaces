@@ -9,7 +9,7 @@ import "telemetry/report.proto";
 
 package telemetry;
 
-option go_package = "github.com/airmap/interfaces/grpc/telemetry";
+option go_package = "github.com/airmap/interfaces/src/go/telemetry";
 
 // Collector exposes services that enable the reporting of telematic data.
 service Collector {

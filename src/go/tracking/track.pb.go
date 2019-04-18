@@ -5,7 +5,6 @@ package tracking
 
 import (
 	fmt "fmt"
-	tracking "github.com/airmap/interfaces/grpc/tracking"
 	_ "github.com/airmap/interfaces/src/go"
 	measurements "github.com/airmap/interfaces/src/go/measurements"
 	proto "github.com/golang/protobuf/proto"
@@ -31,9 +30,9 @@ type Track struct {
 	Position             *measurements.Position    `protobuf:"bytes,2,opt,name=position,proto3" json:"position,omitempty"`
 	Velocity             *measurements.Velocity    `protobuf:"bytes,3,opt,name=velocity,proto3" json:"velocity,omitempty"`
 	Orientation          *measurements.Orientation `protobuf:"bytes,4,opt,name=orientation,proto3" json:"orientation,omitempty"`
-	Emitter              tracking.Emitter          `protobuf:"varint,5,opt,name=emitter,proto3,enum=tracking.Emitter" json:"emitter,omitempty"`
-	Sensor               *tracking.Sensor          `protobuf:"bytes,6,opt,name=sensor,proto3" json:"sensor,omitempty"`
-	Identities           []*tracking.Identity      `protobuf:"bytes,7,rep,name=identities,proto3" json:"identities,omitempty"`
+	Emitter              Emitter                   `protobuf:"varint,5,opt,name=emitter,proto3,enum=tracking.Emitter" json:"emitter,omitempty"`
+	Sensor               *Sensor                   `protobuf:"bytes,6,opt,name=sensor,proto3" json:"sensor,omitempty"`
+	Identities           []*Identity               `protobuf:"bytes,7,rep,name=identities,proto3" json:"identities,omitempty"`
 	Details              []*any.Any                `protobuf:"bytes,1024,rep,name=details,proto3" json:"details,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}                  `json:"-"`
 	XXX_unrecognized     []byte                    `json:"-"`
@@ -93,21 +92,21 @@ func (m *Track) GetOrientation() *measurements.Orientation {
 	return nil
 }
 
-func (m *Track) GetEmitter() tracking.Emitter {
+func (m *Track) GetEmitter() Emitter {
 	if m != nil {
 		return m.Emitter
 	}
-	return tracking.Emitter_UNKNOWN_EMITTER
+	return Emitter_UNKNOWN_EMITTER
 }
 
-func (m *Track) GetSensor() *tracking.Sensor {
+func (m *Track) GetSensor() *Sensor {
 	if m != nil {
 		return m.Sensor
 	}
 	return nil
 }
 
-func (m *Track) GetIdentities() []*tracking.Identity {
+func (m *Track) GetIdentities() []*Identity {
 	if m != nil {
 		return m.Identities
 	}

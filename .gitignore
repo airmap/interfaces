@@ -1,4 +1,2 @@
 node_modules
 .vscode
-#*_pb.js
-#*.pb.go

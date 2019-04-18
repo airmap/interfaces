@@ -10,7 +10,7 @@ import "telemetry/report.proto";
 
 package telemetry;
 
-option go_package = "github.com/airmap/interfaces/grpc/telemetry";
+option go_package = "github.com/airmap/interfaces/src/go/telemetry";
 
 // Archive enables services for querying historical telematic data.
 service Archive {
