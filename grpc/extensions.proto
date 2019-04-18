@@ -4,7 +4,6 @@ syntax = "proto3";
 
 import "google/protobuf/descriptor.proto";
 import "google/protobuf/duration.proto";
-import "units/units.proto";
 
 package grpc;
 
@@ -19,21 +18,6 @@ extend google.protobuf.FieldOptions {
   // Helps to further specify string formats
   string format                                     = 50001;
   // We put the following extensions here and reserve them for future use.
-  units.Degrees default_degrees                     = 50002;
-  units.Degrees min_degrees                         = 50003;
-  units.Degrees max_degrees                         = 50004;
-  units.Meters default_meters                       = 50005;
-  units.Meters min_meters                           = 50006;
-  units.Meters max_meters                           = 50007;
-  units.MetersPerSecond default_meters_per_second   = 50008;
-  units.MetersPerSecond min_meters_per_second       = 50009;
-  units.MetersPerSecond max_meters_per_second       = 50010;
-  units.Pascal default_pascals                      = 50011;
-  units.Pascal min_pascals                          = 50012;
-  units.Pascal max_pascals                          = 50013;
-  units.Celsius default_celsius                     = 50014;
-  units.Celsius min_celsius                         = 50015;
-  units.Celsius max_celsius                         = 50016;
   google.protobuf.Duration default_duration         = 50017;
   google.protobuf.Duration min_duration             = 50018;
   google.protobuf.Duration max_duration             = 50019;

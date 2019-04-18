@@ -4,6 +4,7 @@ syntax = "proto3";
 
 import "extensions.proto";
 import "units/units.proto";
+import "units/extensions.proto";
 
 package measurements;
 
@@ -32,22 +33,22 @@ message Position {
     Error error            = 1001 [(grpc.nullable) = true];  // The error in the measurement.
 
     message Error {
-      units.Meters distance  = 1 [(grpc.min_meters).value = 0.];   // The error estimate on the distance measurement.
-      units.Degrees azimuth  = 2 [(grpc.min_degrees).value = 0.];  // The error estimate on the azimuth measurement.
+      units.Meters distance  = 1 [(units.min_meters).value = 0.];   // The error estimate on the distance measurement.
+      units.Degrees azimuth  = 2 [(units.min_degrees).value = 0.];  // The error estimate on the azimuth measurement.
     }
   }
 }
 
 // Coordinate2D models a WGS84 latitude and longitude.
 message Coordinate2D {
-  units.Degrees latitude   = 1 [(grpc.min_degrees).value = -90., (grpc.max_degrees).value = 90.];    // The latitude component.
-  units.Degrees longitude  = 2 [(grpc.min_degrees).value = -180., (grpc.max_degrees).value = 180.];  // The longitude component.
+  units.Degrees latitude   = 1 [(units.min_degrees).value = -90., (units.max_degrees).value = 90.];    // The latitude component.
+  units.Degrees longitude  = 2 [(units.min_degrees).value = -180., (units.max_degrees).value = 180.];  // The longitude component.
   Error error              = 1001 [(grpc.nullable) = true];  // The error in the measurement.
 
   // Error models the inherent error in a coordinate measurement.
   message Error {
-    units.Degrees latitude   = 1 [(grpc.min_degrees).value = 0.];  // The error estimate on the latitude measurement.
-    units.Degrees longitude  = 2 [(grpc.min_degrees).value = 0.];  // The error estimate on the longitude measurement.
+    units.Degrees latitude   = 1 [(units.min_degrees).value = 0.];  // The error estimate on the latitude measurement.
+    units.Degrees longitude  = 2 [(units.min_degrees).value = 0.];  // The error estimate on the longitude measurement.
   }
 }
 
@@ -69,7 +70,7 @@ message Altitude {
 
   // Error models the inherent error in the altitude measurement.
   message Error {
-    units.Meters height  = 1 [(grpc.min_meters).value = 0.];  // The altitude error estimate.
+    units.Meters height  = 1 [(units.min_meters).value = 0.];  // The altitude error estimate.
   }
 }
 
@@ -82,14 +83,14 @@ message Velocity {
 
   // Polar Velocity models a velocity relative to a heading.
   message Polar {
-    units.Degrees heading       = 1 [(grpc.min_degrees).value = 0., (grpc.max_degrees).value = 360.];  // The heading relative to true north.
-    units.MetersPerSecond rate  = 2 [(grpc.min_meters_per_second).value = 0.];
+    units.Degrees heading       = 1 [(units.min_degrees).value = 0., (units.max_degrees).value = 360.];  // The heading relative to true north.
+    units.MetersPerSecond rate  = 2 [(units.min_meters_per_second).value = 0.];
     Error error                 = 1001 [(grpc.nullable) = true]; // The error of the measurement.
 
     // Error models the inherent error in the polar velocity measurement.
     message Error {
-      units.Degrees heading       = 1 [(grpc.min_degrees).value = 0.];  // The error in the heading.
-      units.MetersPerSecond rate  = 2 [(grpc.min_meters_per_second).value = 0.];  // The error in the speed.
+      units.Degrees heading       = 1 [(units.min_degrees).value = 0.];  // The error in the heading.
+      units.MetersPerSecond rate  = 2 [(units.min_meters_per_second).value = 0.];  // The error in the speed.
     }
   }
 
@@ -103,9 +104,9 @@ message Velocity {
 
     // Error models the inherent error in the cartesian velocity measurement.
     message Error {
-      units.MetersPerSecond x  = 1 [(grpc.min_meters_per_second).value = 0.];  // The error along the X axis.
-      units.MetersPerSecond y  = 2 [(grpc.min_meters_per_second).value = 0.];  // The error along the Y axis.
-      units.MetersPerSecond z  = 3 [(grpc.min_meters_per_second).value = 0.];  // The error along the Z axis.
+      units.MetersPerSecond x  = 1 [(units.min_meters_per_second).value = 0.];  // The error along the X axis.
+      units.MetersPerSecond y  = 2 [(units.min_meters_per_second).value = 0.];  // The error along the Y axis.
+      units.MetersPerSecond z  = 3 [(units.min_meters_per_second).value = 0.];  // The error along the Z axis.
     }
   }
 }
@@ -119,9 +120,9 @@ message Orientation {
 
   // Error models the inherent error in the orientation measurement.
   message Error {
-    units.Degrees yaw    = 1 [(grpc.min_degrees).value = 0.];  // The error in angular rotation of the vehicle along its vertical axis relative to True North.
-    units.Degrees pitch  = 2 [(grpc.min_degrees).value = 0.];  // The error in angular rotation of the vehicle along its lateral axis.
-    units.Degrees roll   = 3 [(grpc.min_degrees).value = 0.];  // The error in angular rotation of the vehicle along its longitudinal axis.
+    units.Degrees yaw    = 1 [(units.min_degrees).value = 0.];  // The error in angular rotation of the vehicle along its vertical axis relative to True North.
+    units.Degrees pitch  = 2 [(units.min_degrees).value = 0.];  // The error in angular rotation of the vehicle along its lateral axis.
+    units.Degrees roll   = 3 [(units.min_degrees).value = 0.];  // The error in angular rotation of the vehicle along its longitudinal axis.
   }
 }
 
@@ -132,7 +133,7 @@ message Pressure {
 
   // Error models the inherent error in an atmospheric pressure measurement.
   message Error {
-    units.Pascal pressure  = 1 [(grpc.min_pascals).value = 0.];  // The error in the pressure value.
+    units.Pascal pressure  = 1 [(units.min_pascals).value = 0.];  // The error in the pressure value.
   }
 }
 
@@ -143,19 +144,19 @@ message Temperature {
 
   // Error models the inherent error in a temperature measurement.
   message Error {
-    units.Celsius degrees  = 1 [(grpc.min_celsius).value = 0.];  // The error in the temperature value.
+    units.Celsius degrees  = 1 [(units.min_celsius).value = 0.];  // The error in the temperature value.
   }
 }
 
 // Wind models a wind measurement.
 message Wind {
-  units.Degrees direction      = 1 [(grpc.min_degrees).value = 0., (grpc.max_degrees).value = 360.];  // The direction of the wind.
-  units.MetersPerSecond speed  = 2 [(grpc.min_meters_per_second).value = 0.];  // The speed of the wind.
+  units.Degrees direction      = 1 [(units.min_degrees).value = 0., (units.max_degrees).value = 360.];  // The direction of the wind.
+  units.MetersPerSecond speed  = 2 [(units.min_meters_per_second).value = 0.];  // The speed of the wind.
   Error error                  = 1001 [(grpc.nullable) = true];  // The error in the measurement.
 
   // Error models the inherent error in a temperature measurement.
   message Error {
-    units.Degrees direction      = 1 [(grpc.min_degrees).value = 0.];  // The error in the direction value.
-    units.MetersPerSecond speed  = 2 [(grpc.min_meters_per_second).value = 0.];  // The error in the speed value.
+    units.Degrees direction      = 1 [(units.min_degrees).value = 0.];  // The error in the direction value.
+    units.MetersPerSecond speed  = 2 [(units.min_meters_per_second).value = 0.];  // The error in the speed value.
   }
 }
