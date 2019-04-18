@@ -12,6 +12,8 @@ import "tracking/identity.proto";
 
 package tracking;
 
+option go_package = "github.com/airmap/interfaces/src/go/tracking";
+
 // Track models a single track observation.
 message Track {
   google.protobuf.Timestamp observed    = 1;  // The time the track was observed.

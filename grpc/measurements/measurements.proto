@@ -7,6 +7,8 @@ import "units/units.proto";
 
 package measurements;
 
+option go_package = "github.com/airmap/interfaces/src/go/measurements";
+
 // Position models a spatial location.
 message Position {
 

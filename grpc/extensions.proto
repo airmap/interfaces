@@ -8,6 +8,8 @@ import "units/units.proto";
 
 package grpc;
 
+option go_package = "github.com/airmap/interfaces/src/go";
+
 extend google.protobuf.FieldOptions {
   // All fields in a message are considered optional and it is left up to application code
   // to handle a field missing properly. For that, we introduce the extension 'nullable' and

@@ -7,6 +7,8 @@ import "extensions.proto";
 
 package system;
 
+option go_package = "github.com/airmap/interfaces/src/go/system";
+
 // Ack models an acknowledgement of a message.
 message Ack {
   uint64 count                         = 1;  // Cumalative count of messages received.

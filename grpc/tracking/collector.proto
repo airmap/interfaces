@@ -9,6 +9,8 @@ import "tracking/track.proto";
 
 package tracking;
 
+option go_package = "github.com/airmap/interfaces/src/go/tracking";
+
 // Collector service enables the exchange of surveillance updates with a collector service.
 service Collector {
   // ConnectProvider connects a stream of updates from a provider to a collector.

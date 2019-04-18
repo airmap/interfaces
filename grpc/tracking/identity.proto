@@ -4,7 +4,10 @@ syntax = "proto3";
 
 import "extensions.proto";
 import "ids/ids.proto";
+
 package tracking;
+
+option go_package = "github.com/airmap/interfaces/grpc/tracking";
 
 // Identity models a unique tracking identity.
 message Identity {

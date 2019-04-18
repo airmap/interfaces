@@ -6,6 +6,8 @@ import "extensions.proto";
 
 package tracking;
 
+option go_package = "github.com/airmap/interfaces/grpc/tracking";
+
 // Emitter marks the emitter of the reported observation.
 enum Emitter {
   UNKNOWN_EMITTER        =  0; // unknown

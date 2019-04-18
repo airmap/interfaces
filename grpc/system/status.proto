@@ -6,6 +6,8 @@ import "extensions.proto";
 
 package system;
 
+option go_package = "github.com/airmap/interfaces/src/go/system";
+
 message Status {
   enum Level {
     UNKNOWN_STATE  = 0;
