@@ -4,10 +4,12 @@
 package tracking
 
 import (
+	context "context"
 	fmt "fmt"
 	_ "github.com/airmap/interfaces/src/go"
 	system "github.com/airmap/interfaces/src/go/system"
 	proto "github.com/golang/protobuf/proto"
+	grpc "google.golang.org/grpc"
 	math "math"
 )
 
@@ -381,4 +383,177 @@ var fileDescriptor_ca152adb0a29ed43 = []byte{
 	0x49, 0xc4, 0x94, 0xeb, 0x94, 0x94, 0x79, 0x16, 0x52, 0x59, 0x6e, 0x8d, 0xe4, 0x23, 0xe4, 0x39,
 	0x66, 0x50, 0xc9, 0x9e, 0xd5, 0xe5, 0x57, 0x00, 0x00, 0x00, 0xff, 0xff, 0x99, 0x54, 0x0e, 0x24,
 	0xcb, 0x02, 0x00, 0x00,
+}
+
+// Reference imports to suppress errors if they are not otherwise used.
+var _ context.Context
+var _ grpc.ClientConn
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the grpc package it is being compiled against.
+const _ = grpc.SupportPackageIsVersion4
+
+// CollectorClient is the client API for Collector service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
+type CollectorClient interface {
+	// ConnectProvider connects a stream of updates from a provider to a collector.
+	ConnectProvider(ctx context.Context, opts ...grpc.CallOption) (Collector_ConnectProviderClient, error)
+	// ConnectProcessor connects a stream of updates from a collector to a processor.
+	ConnectProcessor(ctx context.Context, opts ...grpc.CallOption) (Collector_ConnectProcessorClient, error)
+}
+
+type collectorClient struct {
+	cc *grpc.ClientConn
+}
+
+func NewCollectorClient(cc *grpc.ClientConn) CollectorClient {
+	return &collectorClient{cc}
+}
+
+func (c *collectorClient) ConnectProvider(ctx context.Context, opts ...grpc.CallOption) (Collector_ConnectProviderClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_Collector_serviceDesc.Streams[0], "/tracking.Collector/ConnectProvider", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &collectorConnectProviderClient{stream}
+	return x, nil
+}
+
+type Collector_ConnectProviderClient interface {
+	Send(*Update_FromProvider) error
+	Recv() (*Update_ToProvider, error)
+	grpc.ClientStream
+}
+
+type collectorConnectProviderClient struct {
+	grpc.ClientStream
+}
+
+func (x *collectorConnectProviderClient) Send(m *Update_FromProvider) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *collectorConnectProviderClient) Recv() (*Update_ToProvider, error) {
+	m := new(Update_ToProvider)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func (c *collectorClient) ConnectProcessor(ctx context.Context, opts ...grpc.CallOption) (Collector_ConnectProcessorClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_Collector_serviceDesc.Streams[1], "/tracking.Collector/ConnectProcessor", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &collectorConnectProcessorClient{stream}
+	return x, nil
+}
+
+type Collector_ConnectProcessorClient interface {
+	Send(*Update_FromProcessor) error
+	Recv() (*Update_ToProcessor, error)
+	grpc.ClientStream
+}
+
+type collectorConnectProcessorClient struct {
+	grpc.ClientStream
+}
+
+func (x *collectorConnectProcessorClient) Send(m *Update_FromProcessor) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *collectorConnectProcessorClient) Recv() (*Update_ToProcessor, error) {
+	m := new(Update_ToProcessor)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+// CollectorServer is the server API for Collector service.
+type CollectorServer interface {
+	// ConnectProvider connects a stream of updates from a provider to a collector.
+	ConnectProvider(Collector_ConnectProviderServer) error
+	// ConnectProcessor connects a stream of updates from a collector to a processor.
+	ConnectProcessor(Collector_ConnectProcessorServer) error
+}
+
+func RegisterCollectorServer(s *grpc.Server, srv CollectorServer) {
+	s.RegisterService(&_Collector_serviceDesc, srv)
+}
+
+func _Collector_ConnectProvider_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(CollectorServer).ConnectProvider(&collectorConnectProviderServer{stream})
+}
+
+type Collector_ConnectProviderServer interface {
+	Send(*Update_ToProvider) error
+	Recv() (*Update_FromProvider, error)
+	grpc.ServerStream
+}
+
+type collectorConnectProviderServer struct {
+	grpc.ServerStream
+}
+
+func (x *collectorConnectProviderServer) Send(m *Update_ToProvider) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *collectorConnectProviderServer) Recv() (*Update_FromProvider, error) {
+	m := new(Update_FromProvider)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func _Collector_ConnectProcessor_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(CollectorServer).ConnectProcessor(&collectorConnectProcessorServer{stream})
+}
+
+type Collector_ConnectProcessorServer interface {
+	Send(*Update_ToProcessor) error
+	Recv() (*Update_FromProcessor, error)
+	grpc.ServerStream
+}
+
+type collectorConnectProcessorServer struct {
+	grpc.ServerStream
+}
+
+func (x *collectorConnectProcessorServer) Send(m *Update_ToProcessor) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *collectorConnectProcessorServer) Recv() (*Update_FromProcessor, error) {
+	m := new(Update_FromProcessor)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+var _Collector_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "tracking.Collector",
+	HandlerType: (*CollectorServer)(nil),
+	Methods:     []grpc.MethodDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "ConnectProvider",
+			Handler:       _Collector_ConnectProvider_Handler,
+			ServerStreams: true,
+			ClientStreams: true,
+		},
+		{
+			StreamName:    "ConnectProcessor",
+			Handler:       _Collector_ConnectProcessor_Handler,
+			ServerStreams: true,
+			ClientStreams: true,
+		},
+	},
+	Metadata: "tracking/collector.proto",
 }

@@ -4,13 +4,15 @@
 package telemetry
 
 import (
+	context "context"
 	fmt "fmt"
 	_ "github.com/airmap/interfaces/src/go"
 	ids "github.com/airmap/interfaces/src/go/ids"
-	_ "github.com/airmap/interfaces/src/go/telemetry"
+	telemetry "github.com/airmap/interfaces/src/go/telemetry"
 	proto "github.com/golang/protobuf/proto"
 	duration "github.com/golang/protobuf/ptypes/duration"
 	timestamp "github.com/golang/protobuf/ptypes/timestamp"
+	grpc "google.golang.org/grpc"
 	math "math"
 )
 
@@ -117,4 +119,103 @@ var fileDescriptor_b397bcda53d493bb = []byte{
 	0x7c, 0xf5, 0x74, 0x99, 0x6b, 0x9a, 0x37, 0x53, 0x91, 0x9a, 0x52, 0x2a, 0x8d, 0xa5, 0xaa, 0xa5,
 	0xae, 0x08, 0x70, 0xa6, 0x52, 0xb0, 0x32, 0xc7, 0x3a, 0x95, 0xeb, 0xdc, 0xb4, 0xef, 0x7a, 0xde,
 	0x7c, 0x07, 0x00, 0x00, 0xff, 0xff, 0x0f, 0xec, 0x7d, 0xf6, 0x0c, 0x02, 0x00, 0x00,
+}
+
+// Reference imports to suppress errors if they are not otherwise used.
+var _ context.Context
+var _ grpc.ClientConn
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the grpc package it is being compiled against.
+const _ = grpc.SupportPackageIsVersion4
+
+// ArchiveClient is the client API for Archive service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
+type ArchiveClient interface {
+	QueryFlightReports(ctx context.Context, in *FlightQuery, opts ...grpc.CallOption) (Archive_QueryFlightReportsClient, error)
+}
+
+type archiveClient struct {
+	cc *grpc.ClientConn
+}
+
+func NewArchiveClient(cc *grpc.ClientConn) ArchiveClient {
+	return &archiveClient{cc}
+}
+
+func (c *archiveClient) QueryFlightReports(ctx context.Context, in *FlightQuery, opts ...grpc.CallOption) (Archive_QueryFlightReportsClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_Archive_serviceDesc.Streams[0], "/telemetry.Archive/QueryFlightReports", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &archiveQueryFlightReportsClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type Archive_QueryFlightReportsClient interface {
+	Recv() (*telemetry.Report, error)
+	grpc.ClientStream
+}
+
+type archiveQueryFlightReportsClient struct {
+	grpc.ClientStream
+}
+
+func (x *archiveQueryFlightReportsClient) Recv() (*telemetry.Report, error) {
+	m := new(telemetry.Report)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+// ArchiveServer is the server API for Archive service.
+type ArchiveServer interface {
+	QueryFlightReports(*FlightQuery, Archive_QueryFlightReportsServer) error
+}
+
+func RegisterArchiveServer(s *grpc.Server, srv ArchiveServer) {
+	s.RegisterService(&_Archive_serviceDesc, srv)
+}
+
+func _Archive_QueryFlightReports_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(FlightQuery)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(ArchiveServer).QueryFlightReports(m, &archiveQueryFlightReportsServer{stream})
+}
+
+type Archive_QueryFlightReportsServer interface {
+	Send(*telemetry.Report) error
+	grpc.ServerStream
+}
+
+type archiveQueryFlightReportsServer struct {
+	grpc.ServerStream
+}
+
+func (x *archiveQueryFlightReportsServer) Send(m *telemetry.Report) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+var _Archive_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "telemetry.Archive",
+	HandlerType: (*ArchiveServer)(nil),
+	Methods:     []grpc.MethodDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "QueryFlightReports",
+			Handler:       _Archive_QueryFlightReports_Handler,
+			ServerStreams: true,
+		},
+	},
+	Metadata: "telemetry/archive.proto",
 }

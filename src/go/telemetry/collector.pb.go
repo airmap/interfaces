@@ -4,11 +4,13 @@
 package telemetry
 
 import (
+	context "context"
 	fmt "fmt"
 	_ "github.com/airmap/interfaces/src/go"
 	system "github.com/airmap/interfaces/src/go/system"
 	telemetry "github.com/airmap/interfaces/src/go/telemetry"
 	proto "github.com/golang/protobuf/proto"
+	grpc "google.golang.org/grpc"
 	math "math"
 )
 
@@ -231,4 +233,110 @@ var fileDescriptor_42f4f365628b62e0 = []byte{
 	0xf1, 0xe6, 0xcf, 0x1f, 0x93, 0x9d, 0xa6, 0xaf, 0x7d, 0xca, 0x95, 0x29, 0x84, 0xd4, 0x58, 0xc8,
 	0x4a, 0xe8, 0x92, 0x00, 0xb7, 0x52, 0x81, 0x15, 0x3b, 0xac, 0x94, 0xe8, 0x24, 0xa9, 0x5f, 0x9f,
 	0xf3, 0xf5, 0x37, 0x00, 0x00, 0xff, 0xff, 0x69, 0x77, 0x84, 0xbc, 0xc7, 0x01, 0x00, 0x00,
+}
+
+// Reference imports to suppress errors if they are not otherwise used.
+var _ context.Context
+var _ grpc.ClientConn
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the grpc package it is being compiled against.
+const _ = grpc.SupportPackageIsVersion4
+
+// CollectorClient is the client API for Collector service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
+type CollectorClient interface {
+	// ConnectAircraft connects a stream of updates from an aircraft to a collector
+	ConnectAircraft(ctx context.Context, opts ...grpc.CallOption) (Collector_ConnectAircraftClient, error)
+}
+
+type collectorClient struct {
+	cc *grpc.ClientConn
+}
+
+func NewCollectorClient(cc *grpc.ClientConn) CollectorClient {
+	return &collectorClient{cc}
+}
+
+func (c *collectorClient) ConnectAircraft(ctx context.Context, opts ...grpc.CallOption) (Collector_ConnectAircraftClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_Collector_serviceDesc.Streams[0], "/telemetry.Collector/ConnectAircraft", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &collectorConnectAircraftClient{stream}
+	return x, nil
+}
+
+type Collector_ConnectAircraftClient interface {
+	Send(*Update_FromAircraft) error
+	Recv() (*Update_ToAircraft, error)
+	grpc.ClientStream
+}
+
+type collectorConnectAircraftClient struct {
+	grpc.ClientStream
+}
+
+func (x *collectorConnectAircraftClient) Send(m *Update_FromAircraft) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *collectorConnectAircraftClient) Recv() (*Update_ToAircraft, error) {
+	m := new(Update_ToAircraft)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+// CollectorServer is the server API for Collector service.
+type CollectorServer interface {
+	// ConnectAircraft connects a stream of updates from an aircraft to a collector
+	ConnectAircraft(Collector_ConnectAircraftServer) error
+}
+
+func RegisterCollectorServer(s *grpc.Server, srv CollectorServer) {
+	s.RegisterService(&_Collector_serviceDesc, srv)
+}
+
+func _Collector_ConnectAircraft_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(CollectorServer).ConnectAircraft(&collectorConnectAircraftServer{stream})
+}
+
+type Collector_ConnectAircraftServer interface {
+	Send(*Update_ToAircraft) error
+	Recv() (*Update_FromAircraft, error)
+	grpc.ServerStream
+}
+
+type collectorConnectAircraftServer struct {
+	grpc.ServerStream
+}
+
+func (x *collectorConnectAircraftServer) Send(m *Update_ToAircraft) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *collectorConnectAircraftServer) Recv() (*Update_FromAircraft, error) {
+	m := new(Update_FromAircraft)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+var _Collector_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "telemetry.Collector",
+	HandlerType: (*CollectorServer)(nil),
+	Methods:     []grpc.MethodDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "ConnectAircraft",
+			Handler:       _Collector_ConnectAircraft_Handler,
+			ServerStreams: true,
+			ClientStreams: true,
+		},
+	},
+	Metadata: "telemetry/collector.proto",
 }
