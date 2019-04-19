@@ -59,8 +59,8 @@ message Altitude {
     UNKNOWN_REFERENCE  = 0;  // An unknown reference.
     ELLIPSOID          = 1;  // Height above the WGS84 reference ellipsoid.
     GEOID              = 2;  // Height above the hypothetical gravitational surface.
-    SURFACE            = 3;  // (DO NOT USE) Height above the physical surface beneath the measurement.
-    EXTERNAL           = 4;  // (DO NOT USE) Height above an external measurement or estimate.
+    SURFACE            = 3 [deprecated=true];  // (DO NOT USE) Height above the physical surface beneath the measurement.
+    EXTERNAL           = 4 [deprecated=true];  // (DO NOT USE) Height above an external measurement or estimate.
     STANDARD_BARO      = 5;  // Altitude using standard atmospheric pressure. 1013.25 hPa, 29.92 in Hg. Flight Level (FL).
     LOCAL_BARO         = 6;  // Altitude relative to local sea level adjusted for local barometric pressure. AMSL.
   }
