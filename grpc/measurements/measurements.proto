@@ -56,13 +56,13 @@ message Coordinate2D {
 message Altitude {
   // Reference enumerates all known reference/datum systems for altitude measurements.
   enum Reference {
-    REFERENCE_UNKNOWN  = 0;  // An unknown reference.
-    ELLIPSOID          = 1;  // Height above the WGS84 reference ellipsoid.
-    GEOID              = 2;  // Height above the hypothetical gravitational surface.
-    SURFACE            = 3 [deprecated=true];  // (DO NOT USE) Height above the physical surface beneath the measurement.
-    EXTERNAL           = 4 [deprecated=true];  // (DO NOT USE) Height above an external measurement or estimate.
-    STANDARD_BARO      = 5;  // Altitude using standard atmospheric pressure. 1013.25 hPa, 29.92 in Hg. Flight Level (FL).
-    LOCAL_BARO         = 6;  // Altitude relative to local sea level adjusted for local barometric pressure. AMSL.
+    REFERENCE_UNKNOWN        = 0;  // An unknown reference.
+    REFERENCE_ELLIPSOID      = 1;  // Height above the WGS84 reference ellipsoid.
+    REFERENCE_GEOID          = 2;  // Height above the hypothetical gravitational surface.
+    REFERENCE_SURFACE        = 3 [deprecated=true];  // (DO NOT USE) Height above the physical surface beneath the measurement.
+    REFERENCE_EXTERNAL       = 4 [deprecated=true];  // (DO NOT USE) Height above an external measurement or estimate.
+    REFERENCE_STANDARD_BARO  = 5;  // Altitude using standard atmospheric pressure. 1013.25 hPa, 29.92 in Hg. Flight Level (FL).
+    REFERENCE_LOCAL_BARO     = 6;  // Altitude relative to local sea level adjusted for local barometric pressure. AMSL.
   }
   units.Meters height  = 1;  // The altitude as measured from the reference.
   Reference reference  = 2;  // The reference from which the altitude was measured.
