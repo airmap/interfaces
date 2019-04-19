@@ -24,7 +24,7 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 
-// Update wraps types used in the exchange of updates with a telemetry collector.
+// Update wraps types used in the exchange of telemetry updates with a collector.
 type Update struct {
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
@@ -56,182 +56,196 @@ func (m *Update) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_Update proto.InternalMessageInfo
 
-type Update_FromAircraft struct {
-	// details is a discriminated union of all measurement types.
-	//
+// FromProvider wraps messages being sent from a provider to a collector.
+type Update_FromProvider struct {
 	// Types that are valid to be assigned to Details:
-	//	*Update_FromAircraft_Report
-	Details              isUpdate_FromAircraft_Details `protobuf_oneof:"details"`
+	//	*Update_FromProvider_Status
+	//	*Update_FromProvider_Report
+	Details              isUpdate_FromProvider_Details `protobuf_oneof:"details"`
 	XXX_NoUnkeyedLiteral struct{}                      `json:"-"`
 	XXX_unrecognized     []byte                        `json:"-"`
 	XXX_sizecache        int32                         `json:"-"`
 }
 
-func (m *Update_FromAircraft) Reset()         { *m = Update_FromAircraft{} }
-func (m *Update_FromAircraft) String() string { return proto.CompactTextString(m) }
-func (*Update_FromAircraft) ProtoMessage()    {}
-func (*Update_FromAircraft) Descriptor() ([]byte, []int) {
+func (m *Update_FromProvider) Reset()         { *m = Update_FromProvider{} }
+func (m *Update_FromProvider) String() string { return proto.CompactTextString(m) }
+func (*Update_FromProvider) ProtoMessage()    {}
+func (*Update_FromProvider) Descriptor() ([]byte, []int) {
 	return fileDescriptor_42f4f365628b62e0, []int{0, 0}
 }
 
-func (m *Update_FromAircraft) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_Update_FromAircraft.Unmarshal(m, b)
+func (m *Update_FromProvider) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_Update_FromProvider.Unmarshal(m, b)
 }
-func (m *Update_FromAircraft) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_Update_FromAircraft.Marshal(b, m, deterministic)
+func (m *Update_FromProvider) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_Update_FromProvider.Marshal(b, m, deterministic)
 }
-func (m *Update_FromAircraft) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Update_FromAircraft.Merge(m, src)
+func (m *Update_FromProvider) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Update_FromProvider.Merge(m, src)
 }
-func (m *Update_FromAircraft) XXX_Size() int {
-	return xxx_messageInfo_Update_FromAircraft.Size(m)
+func (m *Update_FromProvider) XXX_Size() int {
+	return xxx_messageInfo_Update_FromProvider.Size(m)
 }
-func (m *Update_FromAircraft) XXX_DiscardUnknown() {
-	xxx_messageInfo_Update_FromAircraft.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_Update_FromAircraft proto.InternalMessageInfo
-
-type isUpdate_FromAircraft_Details interface {
-	isUpdate_FromAircraft_Details()
+func (m *Update_FromProvider) XXX_DiscardUnknown() {
+	xxx_messageInfo_Update_FromProvider.DiscardUnknown(m)
 }
 
-type Update_FromAircraft_Report struct {
-	Report *Report `protobuf:"bytes,1,opt,name=report,proto3,oneof"`
+var xxx_messageInfo_Update_FromProvider proto.InternalMessageInfo
+
+type isUpdate_FromProvider_Details interface {
+	isUpdate_FromProvider_Details()
 }
 
-func (*Update_FromAircraft_Report) isUpdate_FromAircraft_Details() {}
+type Update_FromProvider_Status struct {
+	Status *system.Status `protobuf:"bytes,1,opt,name=status,proto3,oneof"`
+}
 
-func (m *Update_FromAircraft) GetDetails() isUpdate_FromAircraft_Details {
+type Update_FromProvider_Report struct {
+	Report *Report `protobuf:"bytes,2,opt,name=report,proto3,oneof"`
+}
+
+func (*Update_FromProvider_Status) isUpdate_FromProvider_Details() {}
+
+func (*Update_FromProvider_Report) isUpdate_FromProvider_Details() {}
+
+func (m *Update_FromProvider) GetDetails() isUpdate_FromProvider_Details {
 	if m != nil {
 		return m.Details
 	}
 	return nil
 }
 
-func (m *Update_FromAircraft) GetReport() *Report {
-	if x, ok := m.GetDetails().(*Update_FromAircraft_Report); ok {
+func (m *Update_FromProvider) GetStatus() *system.Status {
+	if x, ok := m.GetDetails().(*Update_FromProvider_Status); ok {
+		return x.Status
+	}
+	return nil
+}
+
+func (m *Update_FromProvider) GetReport() *Report {
+	if x, ok := m.GetDetails().(*Update_FromProvider_Report); ok {
 		return x.Report
 	}
 	return nil
 }
 
 // XXX_OneofWrappers is for the internal use of the proto package.
-func (*Update_FromAircraft) XXX_OneofWrappers() []interface{} {
+func (*Update_FromProvider) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
-		(*Update_FromAircraft_Report)(nil),
+		(*Update_FromProvider_Status)(nil),
+		(*Update_FromProvider_Report)(nil),
 	}
 }
 
-// ToAircraft wraps messages being sent from a collector back to an aircraft.
-type Update_ToAircraft struct {
+// ToProvider wraps messages being sent from a collector back to a provider.
+type Update_ToProvider struct {
 	// Types that are valid to be assigned to Details:
-	//	*Update_ToAircraft_Status
-	//	*Update_ToAircraft_Ack
-	Details              isUpdate_ToAircraft_Details `protobuf_oneof:"details"`
+	//	*Update_ToProvider_Status
+	//	*Update_ToProvider_Ack
+	Details              isUpdate_ToProvider_Details `protobuf_oneof:"details"`
 	XXX_NoUnkeyedLiteral struct{}                    `json:"-"`
 	XXX_unrecognized     []byte                      `json:"-"`
 	XXX_sizecache        int32                       `json:"-"`
 }
 
-func (m *Update_ToAircraft) Reset()         { *m = Update_ToAircraft{} }
-func (m *Update_ToAircraft) String() string { return proto.CompactTextString(m) }
-func (*Update_ToAircraft) ProtoMessage()    {}
-func (*Update_ToAircraft) Descriptor() ([]byte, []int) {
+func (m *Update_ToProvider) Reset()         { *m = Update_ToProvider{} }
+func (m *Update_ToProvider) String() string { return proto.CompactTextString(m) }
+func (*Update_ToProvider) ProtoMessage()    {}
+func (*Update_ToProvider) Descriptor() ([]byte, []int) {
 	return fileDescriptor_42f4f365628b62e0, []int{0, 1}
 }
 
-func (m *Update_ToAircraft) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_Update_ToAircraft.Unmarshal(m, b)
+func (m *Update_ToProvider) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_Update_ToProvider.Unmarshal(m, b)
 }
-func (m *Update_ToAircraft) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_Update_ToAircraft.Marshal(b, m, deterministic)
+func (m *Update_ToProvider) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_Update_ToProvider.Marshal(b, m, deterministic)
 }
-func (m *Update_ToAircraft) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Update_ToAircraft.Merge(m, src)
+func (m *Update_ToProvider) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Update_ToProvider.Merge(m, src)
 }
-func (m *Update_ToAircraft) XXX_Size() int {
-	return xxx_messageInfo_Update_ToAircraft.Size(m)
+func (m *Update_ToProvider) XXX_Size() int {
+	return xxx_messageInfo_Update_ToProvider.Size(m)
 }
-func (m *Update_ToAircraft) XXX_DiscardUnknown() {
-	xxx_messageInfo_Update_ToAircraft.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_Update_ToAircraft proto.InternalMessageInfo
-
-type isUpdate_ToAircraft_Details interface {
-	isUpdate_ToAircraft_Details()
+func (m *Update_ToProvider) XXX_DiscardUnknown() {
+	xxx_messageInfo_Update_ToProvider.DiscardUnknown(m)
 }
 
-type Update_ToAircraft_Status struct {
+var xxx_messageInfo_Update_ToProvider proto.InternalMessageInfo
+
+type isUpdate_ToProvider_Details interface {
+	isUpdate_ToProvider_Details()
+}
+
+type Update_ToProvider_Status struct {
 	Status *system.Status `protobuf:"bytes,1,opt,name=status,proto3,oneof"`
 }
 
-type Update_ToAircraft_Ack struct {
+type Update_ToProvider_Ack struct {
 	Ack *system.Ack `protobuf:"bytes,2,opt,name=ack,proto3,oneof"`
 }
 
-func (*Update_ToAircraft_Status) isUpdate_ToAircraft_Details() {}
+func (*Update_ToProvider_Status) isUpdate_ToProvider_Details() {}
 
-func (*Update_ToAircraft_Ack) isUpdate_ToAircraft_Details() {}
+func (*Update_ToProvider_Ack) isUpdate_ToProvider_Details() {}
 
-func (m *Update_ToAircraft) GetDetails() isUpdate_ToAircraft_Details {
+func (m *Update_ToProvider) GetDetails() isUpdate_ToProvider_Details {
 	if m != nil {
 		return m.Details
 	}
 	return nil
 }
 
-func (m *Update_ToAircraft) GetStatus() *system.Status {
-	if x, ok := m.GetDetails().(*Update_ToAircraft_Status); ok {
+func (m *Update_ToProvider) GetStatus() *system.Status {
+	if x, ok := m.GetDetails().(*Update_ToProvider_Status); ok {
 		return x.Status
 	}
 	return nil
 }
 
-func (m *Update_ToAircraft) GetAck() *system.Ack {
-	if x, ok := m.GetDetails().(*Update_ToAircraft_Ack); ok {
+func (m *Update_ToProvider) GetAck() *system.Ack {
+	if x, ok := m.GetDetails().(*Update_ToProvider_Ack); ok {
 		return x.Ack
 	}
 	return nil
 }
 
 // XXX_OneofWrappers is for the internal use of the proto package.
-func (*Update_ToAircraft) XXX_OneofWrappers() []interface{} {
+func (*Update_ToProvider) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
-		(*Update_ToAircraft_Status)(nil),
-		(*Update_ToAircraft_Ack)(nil),
+		(*Update_ToProvider_Status)(nil),
+		(*Update_ToProvider_Ack)(nil),
 	}
 }
 
 func init() {
 	proto.RegisterType((*Update)(nil), "telemetry.Update")
-	proto.RegisterType((*Update_FromAircraft)(nil), "telemetry.Update.FromAircraft")
-	proto.RegisterType((*Update_ToAircraft)(nil), "telemetry.Update.ToAircraft")
+	proto.RegisterType((*Update_FromProvider)(nil), "telemetry.Update.FromProvider")
+	proto.RegisterType((*Update_ToProvider)(nil), "telemetry.Update.ToProvider")
 }
 
 func init() { proto.RegisterFile("telemetry/collector.proto", fileDescriptor_42f4f365628b62e0) }
 
 var fileDescriptor_42f4f365628b62e0 = []byte{
-	// 287 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x64, 0x90, 0xdf, 0x4a, 0xc3, 0x30,
-	0x14, 0xc6, 0x57, 0x85, 0x4a, 0x33, 0xd1, 0x59, 0x41, 0x66, 0x11, 0x15, 0xaf, 0x0a, 0x62, 0x22,
-	0xf3, 0x09, 0xb6, 0xc1, 0xd8, 0x75, 0xa7, 0x37, 0x5e, 0x99, 0x66, 0x67, 0x33, 0xf4, 0x4f, 0xca,
-	0xc9, 0x19, 0xb8, 0xf7, 0xf2, 0x01, 0x65, 0x4d, 0xdb, 0x15, 0xbc, 0xfd, 0x7e, 0x1f, 0xbf, 0x7c,
-	0x39, 0xec, 0x96, 0x20, 0x87, 0x02, 0x08, 0xf7, 0x42, 0x99, 0x3c, 0x07, 0x45, 0x06, 0x79, 0x85,
-	0x86, 0x4c, 0x18, 0x74, 0x28, 0x1a, 0xc1, 0x0f, 0x41, 0x69, 0xb5, 0x29, 0xad, 0x83, 0xd1, 0xb5,
-	0xdd, 0x5b, 0x82, 0x42, 0x58, 0x92, 0xb4, 0x6b, 0xc3, 0x51, 0x13, 0x4a, 0x95, 0x35, 0xc9, 0xcd,
-	0x51, 0x8f, 0x50, 0x19, 0x24, 0x97, 0x3f, 0xfd, 0x7a, 0xcc, 0xff, 0xa8, 0xd6, 0x92, 0x20, 0x5a,
-	0xb0, 0xf3, 0x05, 0x9a, 0x62, 0xaa, 0x51, 0xa1, 0xdc, 0x50, 0xf8, 0xcc, 0x7c, 0x57, 0x1d, 0x7b,
-	0x8f, 0x5e, 0x3c, 0x9c, 0x5c, 0xf1, 0xce, 0xc1, 0x93, 0x1a, 0x2c, 0x07, 0x49, 0x53, 0x99, 0x05,
-	0xec, 0x6c, 0x0d, 0x24, 0x75, 0x6e, 0xa3, 0x94, 0xb1, 0x77, 0xd3, 0x59, 0x62, 0xe6, 0xbb, 0x69,
-	0x8d, 0xe5, 0x82, 0xbb, 0x6d, 0x7c, 0x55, 0xa7, 0x07, 0x85, 0xe3, 0xe1, 0x03, 0x3b, 0x95, 0x2a,
-	0x1b, 0x9f, 0xd4, 0xb5, 0x61, 0x5b, 0x9b, 0xaa, 0x6c, 0x39, 0x48, 0x0e, 0xa4, 0xf7, 0xc6, 0xe4,
-	0x8b, 0x05, 0xf3, 0xf6, 0x4a, 0xe1, 0x8a, 0x5d, 0xce, 0x4d, 0x59, 0x82, 0xa2, 0xee, 0xd5, 0xfb,
-	0xde, 0x56, 0xf7, 0x3d, 0xde, 0xff, 0x5b, 0x74, 0xf7, 0x9f, 0x1f, 0x37, 0xc7, 0xde, 0xab, 0x37,
-	0x13, 0x9f, 0x2f, 0x5b, 0x4d, 0xdf, 0xbb, 0x94, 0x2b, 0x53, 0x08, 0xa9, 0xb1, 0x90, 0x95, 0xd0,
-	0x25, 0x01, 0x6e, 0xa4, 0x02, 0x2b, 0x2c, 0x2a, 0xb1, 0x35, 0xa2, 0xd3, 0xa4, 0x7e, 0x7d, 0xd0,
-	0xb7, 0xbf, 0x00, 0x00, 0x00, 0xff, 0xff, 0x38, 0x02, 0x77, 0x4a, 0xc9, 0x01, 0x00, 0x00,
+	// 288 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x90, 0xcf, 0x4a, 0xc3, 0x40,
+	0x18, 0xc4, 0x1b, 0x85, 0x48, 0xb7, 0xa2, 0x35, 0x82, 0xd4, 0x20, 0x2a, 0x9e, 0x02, 0xe2, 0xae,
+	0xd4, 0x27, 0xb0, 0x05, 0xe9, 0x51, 0x52, 0xbd, 0x78, 0x72, 0xb3, 0xf9, 0xac, 0x4b, 0xfe, 0x7c,
+	0x61, 0xf7, 0xab, 0xd8, 0x97, 0xf5, 0x59, 0xa4, 0xd9, 0x24, 0x0d, 0x78, 0xf3, 0x3a, 0xbf, 0x61,
+	0x66, 0x18, 0x76, 0x4e, 0x90, 0x43, 0x01, 0x64, 0x36, 0x42, 0x61, 0x9e, 0x83, 0x22, 0x34, 0xbc,
+	0x32, 0x48, 0x18, 0x0c, 0x3b, 0x14, 0x8e, 0xe1, 0x9b, 0xa0, 0xb4, 0x1a, 0x4b, 0xeb, 0x60, 0x78,
+	0x6a, 0x37, 0x96, 0xa0, 0x10, 0x96, 0x24, 0xad, 0x5b, 0x71, 0xdc, 0x88, 0x52, 0x65, 0x8d, 0x72,
+	0xb6, 0x8b, 0x37, 0x50, 0xa1, 0x21, 0xa7, 0xdf, 0xfc, 0x78, 0xcc, 0x7f, 0xad, 0x52, 0x49, 0x10,
+	0x56, 0xec, 0xf0, 0xc9, 0x60, 0xf1, 0x6c, 0xf0, 0x4b, 0xa7, 0x60, 0x82, 0x88, 0xf9, 0x2e, 0x74,
+	0xe2, 0x5d, 0x7b, 0xd1, 0x68, 0x7a, 0xc4, 0x5d, 0x2a, 0x5f, 0xd6, 0xea, 0x62, 0x10, 0x37, 0x3c,
+	0xb8, 0x65, 0xbe, 0x0b, 0x9d, 0xec, 0xd5, 0xce, 0x13, 0xde, 0xb5, 0xf1, 0xb8, 0x06, 0x5b, 0xb3,
+	0xb3, 0xcc, 0x86, 0xec, 0x20, 0x05, 0x92, 0x3a, 0xb7, 0x61, 0xc2, 0xd8, 0x0b, 0xfe, 0xa3, 0xef,
+	0x8a, 0xed, 0x4b, 0x95, 0x35, 0x65, 0xa3, 0xd6, 0xf6, 0xa8, 0xb2, 0xc5, 0x20, 0xde, 0x92, 0x5e,
+	0xc7, 0xf4, 0x9d, 0x0d, 0xe7, 0xed, 0x9f, 0xc1, 0x92, 0x1d, 0xcf, 0xb1, 0x2c, 0x41, 0x51, 0xd7,
+	0x7a, 0xd9, 0xdb, 0xea, 0x8e, 0xe0, 0xfd, 0x17, 0xc2, 0x8b, 0xbf, 0x7c, 0xb7, 0x39, 0xf2, 0xee,
+	0xbd, 0x99, 0x78, 0xbb, 0x5b, 0x69, 0xfa, 0x5c, 0x27, 0x5c, 0x61, 0x21, 0xa4, 0x36, 0x85, 0xac,
+	0x84, 0x2e, 0x09, 0xcc, 0x87, 0x54, 0x60, 0x85, 0x35, 0x4a, 0xac, 0x50, 0x74, 0x31, 0x89, 0x5f,
+	0x5f, 0xff, 0xf0, 0x1b, 0x00, 0x00, 0xff, 0xff, 0xdd, 0x8d, 0xac, 0x44, 0xf3, 0x01, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -246,8 +260,8 @@ const _ = grpc.SupportPackageIsVersion4
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type CollectorClient interface {
-	// ConnectAircraft connects a stream of updates from an aircraft to a collector
-	ConnectAircraft(ctx context.Context, opts ...grpc.CallOption) (Collector_ConnectAircraftClient, error)
+	// ConnectProvider connects a stream of updates from a  provider to a collector
+	ConnectProvider(ctx context.Context, opts ...grpc.CallOption) (Collector_ConnectProviderClient, error)
 }
 
 type collectorClient struct {
@@ -258,31 +272,31 @@ func NewCollectorClient(cc *grpc.ClientConn) CollectorClient {
 	return &collectorClient{cc}
 }
 
-func (c *collectorClient) ConnectAircraft(ctx context.Context, opts ...grpc.CallOption) (Collector_ConnectAircraftClient, error) {
-	stream, err := c.cc.NewStream(ctx, &_Collector_serviceDesc.Streams[0], "/telemetry.Collector/ConnectAircraft", opts...)
+func (c *collectorClient) ConnectProvider(ctx context.Context, opts ...grpc.CallOption) (Collector_ConnectProviderClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_Collector_serviceDesc.Streams[0], "/telemetry.Collector/ConnectProvider", opts...)
 	if err != nil {
 		return nil, err
 	}
-	x := &collectorConnectAircraftClient{stream}
+	x := &collectorConnectProviderClient{stream}
 	return x, nil
 }
 
-type Collector_ConnectAircraftClient interface {
-	Send(*Update_FromAircraft) error
-	Recv() (*Update_ToAircraft, error)
+type Collector_ConnectProviderClient interface {
+	Send(*Update_FromProvider) error
+	Recv() (*Update_ToProvider, error)
 	grpc.ClientStream
 }
 
-type collectorConnectAircraftClient struct {
+type collectorConnectProviderClient struct {
 	grpc.ClientStream
 }
 
-func (x *collectorConnectAircraftClient) Send(m *Update_FromAircraft) error {
+func (x *collectorConnectProviderClient) Send(m *Update_FromProvider) error {
 	return x.ClientStream.SendMsg(m)
 }
 
-func (x *collectorConnectAircraftClient) Recv() (*Update_ToAircraft, error) {
-	m := new(Update_ToAircraft)
+func (x *collectorConnectProviderClient) Recv() (*Update_ToProvider, error) {
+	m := new(Update_ToProvider)
 	if err := x.ClientStream.RecvMsg(m); err != nil {
 		return nil, err
 	}
@@ -291,34 +305,34 @@ func (x *collectorConnectAircraftClient) Recv() (*Update_ToAircraft, error) {
 
 // CollectorServer is the server API for Collector service.
 type CollectorServer interface {
-	// ConnectAircraft connects a stream of updates from an aircraft to a collector
-	ConnectAircraft(Collector_ConnectAircraftServer) error
+	// ConnectProvider connects a stream of updates from a  provider to a collector
+	ConnectProvider(Collector_ConnectProviderServer) error
 }
 
 func RegisterCollectorServer(s *grpc.Server, srv CollectorServer) {
 	s.RegisterService(&_Collector_serviceDesc, srv)
 }
 
-func _Collector_ConnectAircraft_Handler(srv interface{}, stream grpc.ServerStream) error {
-	return srv.(CollectorServer).ConnectAircraft(&collectorConnectAircraftServer{stream})
+func _Collector_ConnectProvider_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(CollectorServer).ConnectProvider(&collectorConnectProviderServer{stream})
 }
 
-type Collector_ConnectAircraftServer interface {
-	Send(*Update_ToAircraft) error
-	Recv() (*Update_FromAircraft, error)
+type Collector_ConnectProviderServer interface {
+	Send(*Update_ToProvider) error
+	Recv() (*Update_FromProvider, error)
 	grpc.ServerStream
 }
 
-type collectorConnectAircraftServer struct {
+type collectorConnectProviderServer struct {
 	grpc.ServerStream
 }
 
-func (x *collectorConnectAircraftServer) Send(m *Update_ToAircraft) error {
+func (x *collectorConnectProviderServer) Send(m *Update_ToProvider) error {
 	return x.ServerStream.SendMsg(m)
 }
 
-func (x *collectorConnectAircraftServer) Recv() (*Update_FromAircraft, error) {
-	m := new(Update_FromAircraft)
+func (x *collectorConnectProviderServer) Recv() (*Update_FromProvider, error) {
+	m := new(Update_FromProvider)
 	if err := x.ServerStream.RecvMsg(m); err != nil {
 		return nil, err
 	}
@@ -331,8 +345,8 @@ var _Collector_serviceDesc = grpc.ServiceDesc{
 	Methods:     []grpc.MethodDesc{},
 	Streams: []grpc.StreamDesc{
 		{
-			StreamName:    "ConnectAircraft",
-			Handler:       _Collector_ConnectAircraft_Handler,
+			StreamName:    "ConnectProvider",
+			Handler:       _Collector_ConnectProvider_Handler,
 			ServerStreams: true,
 			ClientStreams: true,
 		},

@@ -96,7 +96,7 @@ func (m *Track) GetEmitter() Emitter {
 	if m != nil {
 		return m.Emitter
 	}
-	return Emitter_UNKNOWN_EMITTER
+	return Emitter_EMITTER_UNKNOWN
 }
 
 func (m *Track) GetSensor() *Sensor {
