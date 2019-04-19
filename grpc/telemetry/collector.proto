@@ -13,20 +13,20 @@ option go_package = "github.com/airmap/interfaces/src/go/telemetry";
 
 // Collector exposes services that enable the reporting of telematic data.
 service Collector {
-  // ConnectAircraft connects a stream of updates from an aircraft to a collector
-  rpc ConnectAircraft(stream Update.FromAircraft) returns (stream Update.ToAircraft);
+  // ConnectProvider connects a stream of updates from a  provider to a collector
+  rpc ConnectProvider(stream Update.FromProvider) returns (stream Update.ToProvider);
 }
 
-// Update wraps types used in the exchange of updates with a telemetry collector.
+// Update wraps types used in the exchange of telemetry updates with a collector.
 message Update {
-  message FromAircraft {
-    // details is a discriminated union of all measurement types.
+  // FromProvider wraps messages being sent from a provider to a collector.
+  message FromProvider {
     oneof details {
       Report report = 1;
     }
   }
-  // ToAircraft wraps messages being sent from a collector back to an aircraft.
-  message ToAircraft {
+  // ToProvider wraps messages being sent from a collector back to a provider.
+  message ToProvider {
     oneof details {
       system.Status status  = 1;  // Collector operational status.
       system.Ack ack = 2;  // Acknowledgement of received updates.
