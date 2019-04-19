@@ -6,8 +6,8 @@ package ids;
 
 option go_package = "github.com/airmap/interfaces/src/go/ids";
 
-// Flight models the unique id of a flight in the context of AirMap.
-message Flight {
+// Operation models the unique id of an operation.
+message Operation {
   string as_string = 1;  // The textual representation of the id.
 }
 

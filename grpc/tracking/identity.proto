@@ -17,7 +17,7 @@ message Identity {
     TrackId track_id           = 2;
     Callsign callsign          = 3;
     Registration registration  = 4;
-    FlightId flight_id         = 5;
+    Operation operation        = 5;
     Icao icao                  = 6;
     Manufacturer manufacturer  = 7;
     NetworkInterface network   = 8;
@@ -43,10 +43,10 @@ message Identity {
     string as_string  = 1;
   }
 
-  // FlightId models the identifier of a flight.
-  message FlightId {
-    ids.Flight identifier     = 1;
-    ids.USP service_provider  = 2;
+  // Operation models an operation.
+  message Operation {
+    ids.Operation operation_id   = 1;  // The operation identifier.
+    ids.USP service_provider_id  = 2;  // The UTM Service Provider that issued the identifier.
   }
 
   // Icao bundles up information that describes an aircraft in the ICAO context.
