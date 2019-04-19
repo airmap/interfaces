@@ -33,7 +33,8 @@ message Update {
   // ToProvider wraps messages being sent from a collector back to a provider.
   message ToProvider {
     oneof details {
-      system.Ack ack = 1;  // Acknowledgement of received updates.
+      system.Status status  = 1;  // Collector operational status.
+      system.Ack ack        = 2;  // Acknowledgement of received updates.
     }
   }
 
@@ -47,7 +48,8 @@ message Update {
 
   message FromProcessor {
     oneof details {
-      system.Ack ack = 1;  // Acknowledgement of received updates.
+      system.Status status  = 1;  // Processor operational status.
+      system.Ack ack        = 2;  // Acknowledgement of received updates.
     }
   }
 }

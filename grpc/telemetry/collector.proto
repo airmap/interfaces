@@ -22,14 +22,15 @@ message Update {
   // FromProvider wraps messages being sent from a provider to a collector.
   message FromProvider {
     oneof details {
-      Report report = 1;
+      system.Status status  = 1;  // Collector operational status.
+      Report report         = 2;  // A report from a provider
     }
   }
   // ToProvider wraps messages being sent from a collector back to a provider.
   message ToProvider {
     oneof details {
       system.Status status  = 1;  // Collector operational status.
-      system.Ack ack = 2;  // Acknowledgement of received updates.
+      system.Ack ack        = 2;  // Acknowledgement of received updates.
     }
   }
 }
