@@ -24,135 +24,135 @@ const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 var E_DefaultDegrees = &proto.ExtensionDesc{
 	ExtendedType:  (*descriptor.FieldOptions)(nil),
 	ExtensionType: (*Degrees)(nil),
-	Field:         50002,
+	Field:         60002,
 	Name:          "units.default_degrees",
-	Tag:           "bytes,50002,opt,name=default_degrees",
+	Tag:           "bytes,60002,opt,name=default_degrees",
 	Filename:      "units/extensions.proto",
 }
 
 var E_MinDegrees = &proto.ExtensionDesc{
 	ExtendedType:  (*descriptor.FieldOptions)(nil),
 	ExtensionType: (*Degrees)(nil),
-	Field:         50003,
+	Field:         60003,
 	Name:          "units.min_degrees",
-	Tag:           "bytes,50003,opt,name=min_degrees",
+	Tag:           "bytes,60003,opt,name=min_degrees",
 	Filename:      "units/extensions.proto",
 }
 
 var E_MaxDegrees = &proto.ExtensionDesc{
 	ExtendedType:  (*descriptor.FieldOptions)(nil),
 	ExtensionType: (*Degrees)(nil),
-	Field:         50004,
+	Field:         60004,
 	Name:          "units.max_degrees",
-	Tag:           "bytes,50004,opt,name=max_degrees",
+	Tag:           "bytes,60004,opt,name=max_degrees",
 	Filename:      "units/extensions.proto",
 }
 
 var E_DefaultMeters = &proto.ExtensionDesc{
 	ExtendedType:  (*descriptor.FieldOptions)(nil),
 	ExtensionType: (*Meters)(nil),
-	Field:         50005,
+	Field:         60005,
 	Name:          "units.default_meters",
-	Tag:           "bytes,50005,opt,name=default_meters",
+	Tag:           "bytes,60005,opt,name=default_meters",
 	Filename:      "units/extensions.proto",
 }
 
 var E_MinMeters = &proto.ExtensionDesc{
 	ExtendedType:  (*descriptor.FieldOptions)(nil),
 	ExtensionType: (*Meters)(nil),
-	Field:         50006,
+	Field:         60006,
 	Name:          "units.min_meters",
-	Tag:           "bytes,50006,opt,name=min_meters",
+	Tag:           "bytes,60006,opt,name=min_meters",
 	Filename:      "units/extensions.proto",
 }
 
 var E_MaxMeters = &proto.ExtensionDesc{
 	ExtendedType:  (*descriptor.FieldOptions)(nil),
 	ExtensionType: (*Meters)(nil),
-	Field:         50007,
+	Field:         60007,
 	Name:          "units.max_meters",
-	Tag:           "bytes,50007,opt,name=max_meters",
+	Tag:           "bytes,60007,opt,name=max_meters",
 	Filename:      "units/extensions.proto",
 }
 
 var E_DefaultMetersPerSecond = &proto.ExtensionDesc{
 	ExtendedType:  (*descriptor.FieldOptions)(nil),
 	ExtensionType: (*MetersPerSecond)(nil),
-	Field:         50008,
+	Field:         60008,
 	Name:          "units.default_meters_per_second",
-	Tag:           "bytes,50008,opt,name=default_meters_per_second",
+	Tag:           "bytes,60008,opt,name=default_meters_per_second",
 	Filename:      "units/extensions.proto",
 }
 
 var E_MinMetersPerSecond = &proto.ExtensionDesc{
 	ExtendedType:  (*descriptor.FieldOptions)(nil),
 	ExtensionType: (*MetersPerSecond)(nil),
-	Field:         50009,
+	Field:         60009,
 	Name:          "units.min_meters_per_second",
-	Tag:           "bytes,50009,opt,name=min_meters_per_second",
+	Tag:           "bytes,60009,opt,name=min_meters_per_second",
 	Filename:      "units/extensions.proto",
 }
 
 var E_MaxMetersPerSecond = &proto.ExtensionDesc{
 	ExtendedType:  (*descriptor.FieldOptions)(nil),
 	ExtensionType: (*MetersPerSecond)(nil),
-	Field:         50010,
+	Field:         60010,
 	Name:          "units.max_meters_per_second",
-	Tag:           "bytes,50010,opt,name=max_meters_per_second",
+	Tag:           "bytes,60010,opt,name=max_meters_per_second",
 	Filename:      "units/extensions.proto",
 }
 
 var E_DefaultPascals = &proto.ExtensionDesc{
 	ExtendedType:  (*descriptor.FieldOptions)(nil),
 	ExtensionType: (*Pascal)(nil),
-	Field:         50011,
+	Field:         60011,
 	Name:          "units.default_pascals",
-	Tag:           "bytes,50011,opt,name=default_pascals",
+	Tag:           "bytes,60011,opt,name=default_pascals",
 	Filename:      "units/extensions.proto",
 }
 
 var E_MinPascals = &proto.ExtensionDesc{
 	ExtendedType:  (*descriptor.FieldOptions)(nil),
 	ExtensionType: (*Pascal)(nil),
-	Field:         50012,
+	Field:         60012,
 	Name:          "units.min_pascals",
-	Tag:           "bytes,50012,opt,name=min_pascals",
+	Tag:           "bytes,60012,opt,name=min_pascals",
 	Filename:      "units/extensions.proto",
 }
 
 var E_MaxPascals = &proto.ExtensionDesc{
 	ExtendedType:  (*descriptor.FieldOptions)(nil),
 	ExtensionType: (*Pascal)(nil),
-	Field:         50013,
+	Field:         60013,
 	Name:          "units.max_pascals",
-	Tag:           "bytes,50013,opt,name=max_pascals",
+	Tag:           "bytes,60013,opt,name=max_pascals",
 	Filename:      "units/extensions.proto",
 }
 
 var E_DefaultCelsius = &proto.ExtensionDesc{
 	ExtendedType:  (*descriptor.FieldOptions)(nil),
 	ExtensionType: (*Celsius)(nil),
-	Field:         50014,
+	Field:         60014,
 	Name:          "units.default_celsius",
-	Tag:           "bytes,50014,opt,name=default_celsius",
+	Tag:           "bytes,60014,opt,name=default_celsius",
 	Filename:      "units/extensions.proto",
 }
 
 var E_MinCelsius = &proto.ExtensionDesc{
 	ExtendedType:  (*descriptor.FieldOptions)(nil),
 	ExtensionType: (*Celsius)(nil),
-	Field:         50015,
+	Field:         60015,
 	Name:          "units.min_celsius",
-	Tag:           "bytes,50015,opt,name=min_celsius",
+	Tag:           "bytes,60015,opt,name=min_celsius",
 	Filename:      "units/extensions.proto",
 }
 
 var E_MaxCelsius = &proto.ExtensionDesc{
 	ExtendedType:  (*descriptor.FieldOptions)(nil),
 	ExtensionType: (*Celsius)(nil),
-	Field:         50016,
+	Field:         60016,
 	Name:          "units.max_celsius",
-	Tag:           "bytes,50016,opt,name=max_celsius",
+	Tag:           "bytes,60016,opt,name=max_celsius",
 	Filename:      "units/extensions.proto",
 }
 
@@ -181,7 +181,7 @@ var fileDescriptor_d9098ea9a3573ef1 = []byte{
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0xd4, 0xdd, 0x6a, 0xdb, 0x30,
 	0x14, 0x07, 0x70, 0xc6, 0xd8, 0x60, 0x0a, 0xc9, 0x58, 0x60, 0x61, 0x0b, 0x0c, 0x72, 0xb9, 0x31,
 	0xb0, 0x61, 0xbb, 0xf3, 0xe5, 0x36, 0x76, 0x17, 0x12, 0x52, 0x4a, 0x4b, 0x6f, 0x8c, 0x62, 0x9f,
-	0xb8, 0x2a, 0xb6, 0x64, 0x24, 0x19, 0xf4, 0x04, 0x7d, 0xc0, 0x7e, 0x7f, 0xb7, 0x8f, 0x52, 0x6c,
+	0xb8, 0x2a, 0xb6, 0x64, 0x24, 0x19, 0xf4, 0xa0, 0x7d, 0x82, 0x7e, 0x7f, 0xb7, 0x8f, 0x50, 0x6c,
 	0xc9, 0x8e, 0x1d, 0x62, 0xac, 0xdc, 0x84, 0x48, 0xe4, 0xfc, 0xfe, 0xd6, 0x71, 0x8e, 0xd0, 0x28,
 	0xa3, 0x44, 0x0a, 0x17, 0x94, 0x04, 0x2a, 0x08, 0xa3, 0xc2, 0x49, 0x39, 0x93, 0x6c, 0xf8, 0xae,
 	0xd8, 0x1f, 0x4f, 0x22, 0xc6, 0xa2, 0x18, 0xdc, 0x62, 0x73, 0x99, 0xad, 0xdc, 0x10, 0x44, 0xc0,
@@ -204,5 +204,5 @@ var fileDescriptor_d9098ea9a3573ef1 = []byte{
 	0x5f, 0x5a, 0x45, 0xac, 0xcc, 0xf7, 0x3f, 0x3f, 0x8f, 0x7e, 0x44, 0x44, 0x1e, 0x67, 0x4b, 0x27,
 	0x60, 0x89, 0x8b, 0x09, 0x4f, 0x70, 0xea, 0x12, 0x2a, 0x81, 0xaf, 0x70, 0x00, 0xc2, 0x15, 0x3c,
 	0x70, 0x23, 0xa6, 0xaf, 0xda, 0xe5, 0xfb, 0x22, 0xe7, 0xf7, 0x6b, 0x00, 0x00, 0x00, 0xff, 0xff,
-	0xb9, 0xb0, 0xe3, 0xe0, 0xc1, 0x05, 0x00, 0x00,
+	0x57, 0xf0, 0x78, 0xc2, 0xc1, 0x05, 0x00, 0x00,
 }

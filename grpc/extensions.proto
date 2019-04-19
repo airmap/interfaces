@@ -14,11 +14,11 @@ extend google.protobuf.FieldOptions {
   // to handle a field missing properly. For that, we introduce the extension 'nullable' and
   // the following semantic in the context of this proto:
   // Any field that is missing and that is not marked with 'nullable = true' is considered an error.
-  bool nullable                                     = 50000;
+  bool nullable                                     = 60000;
   // Helps to further specify string formats
-  string format                                     = 50001;
+  string format                                     = 60001;
   // We put the following extensions here and reserve them for future use.
-  google.protobuf.Duration default_duration         = 50017;
-  google.protobuf.Duration min_duration             = 50018;
-  google.protobuf.Duration max_duration             = 50019;
+  google.protobuf.Duration default_duration         = 60017;
+  google.protobuf.Duration min_duration             = 60018;
+  google.protobuf.Duration max_duration             = 60019;
 }

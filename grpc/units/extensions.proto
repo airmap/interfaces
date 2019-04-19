@@ -10,19 +10,19 @@ package units;
 option go_package = "github.com/airmap/interfaces/src/go/units";
 
 extend google.protobuf.FieldOptions {
-  Degrees default_degrees                     = 50002;
-  Degrees min_degrees                         = 50003;
-  Degrees max_degrees                         = 50004;
-  Meters default_meters                       = 50005;
-  Meters min_meters                           = 50006;
-  Meters max_meters                           = 50007;
-  MetersPerSecond default_meters_per_second   = 50008;
-  MetersPerSecond min_meters_per_second       = 50009;
-  MetersPerSecond max_meters_per_second       = 50010;
-  Pascal default_pascals                      = 50011;
-  Pascal min_pascals                          = 50012;
-  Pascal max_pascals                          = 50013;
-  Celsius default_celsius                     = 50014;
-  Celsius min_celsius                         = 50015;
-  Celsius max_celsius                         = 50016;
+  Degrees default_degrees                     = 60002;
+  Degrees min_degrees                         = 60003;
+  Degrees max_degrees                         = 60004;
+  Meters default_meters                       = 60005;
+  Meters min_meters                           = 60006;
+  Meters max_meters                           = 60007;
+  MetersPerSecond default_meters_per_second   = 60008;
+  MetersPerSecond min_meters_per_second       = 60009;
+  MetersPerSecond max_meters_per_second       = 60010;
+  Pascal default_pascals                      = 60011;
+  Pascal min_pascals                          = 60012;
+  Pascal max_pascals                          = 60013;
+  Celsius default_celsius                     = 60014;
+  Celsius min_celsius                         = 60015;
+  Celsius max_celsius                         = 60016;
 }
