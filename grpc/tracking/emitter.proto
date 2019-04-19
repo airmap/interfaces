@@ -10,7 +10,7 @@ option go_package = "github.com/airmap/interfaces/src/go/tracking";
 
 // Emitter marks the emitter of the reported observation.
 enum Emitter {
-  UNKNOWN_EMITTER        =  0; // unknown
+  EMITTER_UNKNOWN        =  0; // unknown
   LIGHT_AIRCRAFT         =  1; // light aircraft <= 15500 lbs
   SMALL_AIRCRAFT         =  2; // 15500 lbs < small aircraft < 75000 lbs
   MEDIUM_AIRCRAFT        =  3; // 75000 lbs < medium aircraft < 300000 lbs

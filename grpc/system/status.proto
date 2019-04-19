@@ -10,7 +10,7 @@ option go_package = "github.com/airmap/interfaces/src/go/system";
 
 message Status {
   enum Level {
-    UNKNOWN_STATE  = 0;
+    LEVEL_UNKNOWN  = 0;
     NORMAL         = 1;
     MAINTENANCE    = 2;
     DEGRADED       = 3;
