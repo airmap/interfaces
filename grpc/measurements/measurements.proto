@@ -83,14 +83,16 @@ message Velocity {
 
   // Polar Velocity models a velocity relative to a heading.
   message Polar {
-    units.Degrees heading       = 1 [(units.min_degrees).value = 0., (units.max_degrees).value = 360.];  // The heading relative to true north.
-    units.MetersPerSecond rate  = 2 [(units.min_meters_per_second).value = 0.];
-    Error error                 = 1001 [(grpc.nullable) = true]; // The error of the measurement.
+    units.Degrees heading                = 1 [(units.min_degrees).value = 0., (units.max_degrees).value = 360.];  // The heading relative to true north.
+    units.MetersPerSecond groundSpeed    = 2 [(units.min_meters_per_second).value = 0.]; // The horizontal speed component relative to the ground.
+    units.MetersPerSecond climbRate      = 3; // The vertical speed component.
+    Error error                          = 1001 [(grpc.nullable) = true]; // The error of the measurement.
 
     // Error models the inherent error in the polar velocity measurement.
     message Error {
-      units.Degrees heading       = 1 [(units.min_degrees).value = 0.];  // The error in the heading.
-      units.MetersPerSecond rate  = 2 [(units.min_meters_per_second).value = 0.];  // The error in the speed.
+      units.Degrees heading              = 1 [(units.min_degrees).value = 0.];  // The error in the heading.
+      units.MetersPerSecond groundSpeed  = 2 [(units.min_meters_per_second).value = 0.];  // The error in the ground speed.
+      units.MetersPerSecond climbRate    = 3 [(units.min_meters_per_second).value = 0.];  // The error in the vertical speed.
     }
   }
 
