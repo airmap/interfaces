@@ -18,7 +18,7 @@ message Sensor {
     Adsb adsb                      = 4;  // Marks an ADS-B sensor.
     Gnss gnss                      = 5;  // Marks a satellite-based position sensor.
     RadioFrequency radio_frequency = 6;  // Marks a Radio Frequency (RF) sensor.
-    ElectroOptical electro_Optical = 7;  // Marks an Electro-Optical sensor.
+    ElectroOptical electro_optical = 7;  // Marks an Electro-Optical sensor.
   }
 
   // Fused models multiple fused data sensors.
