@@ -3,8 +3,9 @@
 syntax = "proto3";
 
 import "extensions.proto";
-import "system/status.proto";
 import "system/ack.proto";
+import "system/monitor.proto";
+import "system/status.proto";
 import "tracking/track.proto";
 
 package tracking;
@@ -25,8 +26,9 @@ message Update {
   // FromProvider wraps messages being sent by a provider to a traffic collector.
   message FromProvider {
     oneof details {
-      system.Status status  = 1;  // Provider operational status.
-      Track.Batch batch     = 2;  // Batch of updates from a track provider.
+      system.Status status   = 1;  // Provider operational status.
+      Track.Batch batch      = 2;  // Batch of updates from a track provider.
+      system.Monitor monitor = 3;  // Request monitoring of an individual provider connection.
     }
   }
 
@@ -48,8 +50,9 @@ message Update {
 
   message FromProcessor {
     oneof details {
-      system.Status status  = 1;  // Processor operational status.
-      system.Ack ack        = 2;  // Acknowledgement of received updates.
+      system.Status status   = 1;  // Processor operational status.
+      system.Ack ack         = 2;  // Acknowledgement of received updates.
+      system.Monitor monitor = 3;  // Request monitoring of an individual processor connection.
     }
   }
 }

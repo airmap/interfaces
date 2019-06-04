@@ -1,0 +1,19 @@
+// Copyright 2018-2019 AirMap, Inc.  All rights reserved.
+
+syntax = "proto3";
+
+import "google/protobuf/duration.proto";
+import "extensions.proto";
+
+package system;
+
+option go_package = "github.com/airmap/interfaces/src/go/system";
+
+// Monitor models parameters for configuration a monitoring component.
+message Monitor {
+  // period enables to configure the monitor with a configurable timeout/duration.
+  //
+  // Interpretation of this value is up to the respective component offering callers
+  // to configure a monitor.
+  google.protobuf.Duration period = 1;
+}
