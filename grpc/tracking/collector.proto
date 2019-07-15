@@ -25,7 +25,7 @@ service Collector {
 // ConnectProviderParameters models configuration parameters for provider streams.
 message ConnectProviderParameters {
   // The ID of the provider.
-  Identity.ProviderID id = 1;
+  Identity.ProviderId id = 1;
   // The expected duration between updates. Used for monitoring and alerting
   // purposes. If null, the pipeline chooses a default value or tries to
   // determine a reasonable value based on historic data.
