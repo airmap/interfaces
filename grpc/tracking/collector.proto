@@ -2,9 +2,12 @@
 
 syntax = "proto3";
 
+import "google/protobuf/duration.proto";
+
 import "extensions.proto";
 import "system/status.proto";
 import "system/ack.proto";
+import "tracking/identity.proto";
 import "tracking/track.proto";
 
 package tracking;
@@ -19,6 +22,16 @@ service Collector {
   rpc ConnectProcessor(stream Update.FromProcessor) returns (stream Update.ToProcessor);
 }
 
+// ConnectProviderParameters models configuration parameters for provider streams.
+message ConnectProviderParameters {
+  // The ID of the provider.
+  Identity.ProviderID id = 1;
+  // The expected duration between updates. Used for monitoring and alerting
+  // purposes. If null, the pipeline chooses a default value or tries to
+  // determine a reasonable value based on historic data.
+  google.protobuf.Duration expected_duration_between_updates = 2 [(grpc.nullable) = true];
+}
+
 // ConnectProcessorParameters models configuration parameters for processor streams
 message ConnectProcessorParameters {
   bool enable_projection = 1;  // Tracks will be forward-projected at a constant rate.
@@ -29,8 +42,9 @@ message Update {
   // FromProvider wraps messages being sent by a provider to a traffic collector.
   message FromProvider {
     oneof details {
-      system.Status status = 1;  // Provider operational status.
-      Track.Batch batch    = 2;  // Batch of updates from a track provider.
+      system.Status status             = 1;  // Provider operational status.
+      Track.Batch batch                = 2;  // Batch of updates from a track provider.
+      ConnectProviderParameters params = 3;  // Parameters used to customize the stream from the provider. 
     }
   }
 
