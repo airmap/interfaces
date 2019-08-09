@@ -1,8 +1,0 @@
-{
-  "name": "interfaces-examples-nodejs",
-  "version": "0.1.0",
-  "dependencies": {
-    "google-protobuf": "^3.0.0",
-    "grpc": "^1.0.0"
-  }
-}

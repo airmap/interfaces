@@ -7,28 +7,54 @@ var pl = require('@grpc/proto-loader');
 const PROVIDER_ID = 'demo'
 
 // Endpoint points to sandbox environment
-const ENDPOINT = '13.77.181.58:7080'
+const ENDPOINT = 'stage.api.airmap.com:443'
 
 
 // Load the gRPC package definitions for the traffic service.
-var packageDefinition = pl.loadSync('traffic.proto', {
-  includeDirs: [
-    __dirname + '/../../../grpc',
-    __dirname + "/node_modules/google-proto-files"
-  ] 
+var packageDefinition = pl.loadSync(
+  [
+      'collector.proto',
+      'identity.proto', 
+      'track.proto',
+      'emitter.proto',
+      'sensors.proto',
+      'status.proto', 
+      'ack.proto', 
+      'measurements.proto', 
+      'units.proto', 
+      'ids.proto'
+  ], 
+  {
+    keepCase: true,
+    longs: String,
+    enums: String,
+    defaults: true,
+    oneofs: true,
+    
+    includeDirs: [
+     __dirname + '/../../../grpc/tracking',
+     __dirname + '/../../../grpc/system',
+     __dirname + '/../../../grpc/measurements',
+     __dirname + '/../../../grpc/units',
+     __dirname + '/../../../grpc/ids',
+     __dirname + "/node_modules/google-proto-files"
+    ] 
 });
 var protoDescriptor = grpc.loadPackageDefinition(packageDefinition);
-var airmap = protoDescriptor.airmap
+var tracking = protoDescriptor.tracking
 
 // Create a client for connecting to the collector.
 // Please replace with the appropriate URL and appropriate credentials.
-var client = new airmap.TrafficProvider(ENDPOINT, grpc.credentials.createInsecure());
-var source = client.registerProvider();
-
-
+var client = new tracking.Collector(ENDPOINT, grpc.credentials.createSsl());
+var source = client.ConnectProvider();
 
 source.on('data', function (response) {
-  console.log('received ack from collector: ', response.ack.count.toInt())
+  if (response.ack) {
+    console.log('received ack from collector: ', response.ack.count)
+  } else {
+    console.log('received status from collector: ', response.status.level)
+  }
+
 })
 
 source.on('end', function() {
@@ -48,71 +74,64 @@ function dispatchUpdates(lat, lng) {
   var seconds = Math.floor(now / 1000)
   var nanos = (now - seconds*1000) * 1000
 
-  var sensor = {
-    primaryRadar: {}
-  }
-
   var observed = {
     seconds: seconds,
     nanos: nanos
   }
 
   var position = {
-    coordinate: {
-      latitude: {
-        value: lat
+    absolute: {
+      coordinate: {
+        latitude: {
+          value: lat
+        },
+        longitude: {
+          value: lng
+        }
       },
-      longitude: {
-        value: lng
-      }
-    },
-    altitude: {
-      height: {
-        value: 50
-      },
-      reference: {
-        value: "SURFACE"
+      altitude: {
+        height: {
+          value: 50
+        },
+        reference: {
+          value: "REFERENCE_ELLIPSOID"
+        }
       }
     }
   }
 
-  // required
-  var providerIdentity = {
-    providerId: {
-      asString: PROVIDER_ID,
-    }
-  }
-
-  // required; unique per track
-  var trackIdentity = {
-    trackId: {
-      asString: "123"
-    }
-  }
-
-  var callsignIdentity = {
-    callsign: {
-      asString: "AIRMAP1"
-    }
-  }
-    
-  var observation = {
-    sensor: sensor,
-    observed: observed,
-    position: position,
-    identities: [providerIdentity, trackIdentity, callsignIdentity],
-  }
-
-  var submitted = {
-    seconds: seconds,
-    nanos: nanos
-  }
+  var batch = {
+    tracks: [
+      {
+        observed: observed,
+        position: position,
+        sensor: {
+          primary_radar: {}
+        },
+        identities: [
+          {
+            provider_id: {
+              as_string: PROVIDER_ID
+            }
+          },
+          {
+            track_id: {
+              as_string: "001"
+            }
+          }
+        ],
+        flags: {
+          projected: false,
+          shadowed: false
+        }
+      }
+    ]
+}
   
   var update = {
-    submitted: submitted,
-    observations: [observation]
+    batch: batch
   } 
-  
+
   source.write(update)
 }
 
@@ -124,6 +143,9 @@ function main() {
 
     lng += 0.001
     lat += 0.001
+
+    console.log(lat)
+    console.log(lng)
 
     dispatchUpdates(lat, lng)
 
