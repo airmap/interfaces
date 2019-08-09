@@ -119,11 +119,7 @@ function dispatchUpdates(lat, lng) {
               as_string: "001"
             }
           }
-        ],
-        flags: {
-          projected: false,
-          shadowed: false
-        }
+        ]
       }
     ]
 }
