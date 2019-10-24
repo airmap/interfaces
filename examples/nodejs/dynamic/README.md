@@ -4,5 +4,5 @@ The example client can then be run by:
 ```sh
 cd examples/nodejs/dynamic
 npm install
-node traffic_client.js
+node traffic_provider_client.js
 ```
