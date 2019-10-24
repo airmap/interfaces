@@ -14,23 +14,23 @@ const ENDPOINT = 'stage.api.airmap.com:443'
 var packageDefinition = pl.loadSync(
   [
       'collector.proto',
-      'identity.proto', 
+      'identity.proto',
       'track.proto',
       'emitter.proto',
       'sensors.proto',
-      'status.proto', 
-      'ack.proto', 
-      'measurements.proto', 
-      'units.proto', 
+      'status.proto',
+      'ack.proto',
+      'measurements.proto',
+      'units.proto',
       'ids.proto'
-  ], 
+  ],
   {
     keepCase: true,
     longs: String,
     enums: String,
     defaults: true,
     oneofs: true,
-    
+
     includeDirs: [
      __dirname + '/../../../grpc/tracking',
      __dirname + '/../../../grpc/system',
@@ -38,7 +38,7 @@ var packageDefinition = pl.loadSync(
      __dirname + '/../../../grpc/units',
      __dirname + '/../../../grpc/ids',
      __dirname + "/node_modules/google-proto-files"
-    ] 
+    ]
 });
 var protoDescriptor = grpc.loadPackageDefinition(packageDefinition);
 var tracking = protoDescriptor.tracking
@@ -123,10 +123,10 @@ function dispatchUpdates(lat, lng) {
       }
     ]
 }
-  
+
   var update = {
     batch: batch
-  } 
+  }
 
   source.write(update)
 }
