@@ -45,10 +45,10 @@ var tracking = protoDescriptor.tracking
 
 // Create a client for connecting to the collector.
 // Please replace with the appropriate URL and appropriate credentials.
-var client = new tracking.Collector(ENDPOINT, grpc.credentials.createSsl());
-var source = client.ConnectProvider();
+var collector = new tracking.Collector(ENDPOINT, grpc.credentials.createSsl());
+var client = collector.ConnectProvider();
 
-source.on('data', function (response) {
+client.on('data', function (response) {
   if (response.ack) {
     console.log('received ack from collector: ', response.ack.count)
   } else {
@@ -57,12 +57,12 @@ source.on('data', function (response) {
 
 })
 
-source.on('end', function() {
-  console.log('source connection to collector ended')
+client.on('end', function() {
+  console.log('client connection to collector ended')
 })
 
-source.on('error', function(e) {
-  console.log('source connection to collector entered error state: ', e)
+client.on('error', function(e) {
+  console.log('client connection to collector entered error state: ', e)
 })
 
 
@@ -128,7 +128,7 @@ function dispatchUpdates(lat, lng) {
     batch: batch
   }
 
-  source.write(update)
+  client.write(update)
 }
 
 function main() {
