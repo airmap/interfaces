@@ -4,6 +4,8 @@
   "dependencies": {
     "@grpc/proto-loader": "^0.5.1",
     "google-proto-files": "^0.18.0",
-    "grpc": "^1.22.0"
+    "grpc": "^1.22.0",
+    "request": "^2.88.2",
+    "request-promise": "^4.2.5"
   }
 }
