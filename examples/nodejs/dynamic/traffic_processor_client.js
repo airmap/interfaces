@@ -43,7 +43,7 @@ const packageDefinition = pl.loadSync(
 const protoDescriptor = grpc.loadPackageDefinition(packageDefinition);
 const tracking = protoDescriptor.tracking
 
-async function login() {
+async function authenticate() {
 
   const options = {
     uri: `https://${AUTH_ENDPOINT}/realms/airmap/protocol/openid-connect/token`,
@@ -64,7 +64,7 @@ async function login() {
   }
 }
 
-function connect(token) {
+function connectProcessor(token) {
 
   const collector = new tracking.Collector(API_ENDPOINT, grpc.credentials.createSsl());
 
@@ -99,6 +99,6 @@ function connect(token) {
 }
 
 // Login using the client credentials and connect to the collector with a token
-login()
-  .then(connect)
+authenticate()
+  .then(connectProcessor)
   .catch(console.log)
