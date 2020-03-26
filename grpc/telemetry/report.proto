@@ -3,8 +3,10 @@
 syntax = "proto3";
 
 import "google/protobuf/timestamp.proto";
+import "google/protobuf/duration.proto";
 import "extensions.proto";
 import "measurements/measurements.proto";
+import "tracking/identity.proto";
 
 package telemetry;
 
@@ -13,17 +15,20 @@ option go_package = "github.com/airmap/interfaces/src/go/telemetry";
 // Report models a measurement at a given point in time.
 message Report {
   google.protobuf.Timestamp observed = 1;  // The timestamp of the report.
+  repeated tracking.Identity identities = 2;
   // details is a discriminated union of all measurement types.
   oneof details {
-    Spatial spatial          = 2;
-    Atmospheric atmospheric  = 3;
+    Spatial spatial          = 3;
+    Atmospheric atmospheric  = 4;
+    System system            = 5;
   }
 
   // Spatial bundles geospatial measurements.
   message Spatial {
-    measurements.Position position        = 1;  // A positional measurement.
-    measurements.Velocity velocity        = 2  [(grpc.nullable) = true];  // A velocity measurement.
-    measurements.Orientation orientation  = 3  [(grpc.nullable) = true];  // An orientation/attitude measurement.
+    measurements.Position position         = 1;  // A positional measurement.
+    measurements.Velocity velocity         = 2  [(grpc.nullable) = true];  // A velocity measurement.
+    measurements.Orientation orientation   = 3  [(grpc.nullable) = true];  // An orientation/attitude measurement.
+    measurements.Acceleration acceleration = 4  [(grpc.nullable) = true];  // An acceloration measurement.
   }
 
   // Atmospheric bundles atmospheric measurements at a given position.
@@ -32,5 +37,13 @@ message Report {
     measurements.Pressure pressure        = 2;  // An atmospheric pressure measurement.
     measurements.Temperature temperature  = 3;  // A temperature measurement.
     measurements.Wind wind                = 4;  // A wind measurement.
+  }
+
+  message System {
+    Battery battery = 1;
+
+    message Battery {
+      google.protobuf.Duration endurance = 1;  // The endurance of the battery level.
+    }
   }
 }

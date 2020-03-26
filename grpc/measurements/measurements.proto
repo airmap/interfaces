@@ -162,3 +162,14 @@ message Wind {
     units.MetersPerSecond speed  = 2 [(units.min_meters_per_second).value = 0.0];  // The error in the speed value.
   }
 }
+
+// Acceleration models an acceleration measurement.
+message Acceleration {
+  units.MetersPerSecondSquared acceleration = 1 [(units.min_meters_per_second_squared).value = 0.0];  // The 
+  Error error                               = 1001 [(grpc.nullable) = true];
+
+  // Error models the inherent error in an acceleration measurement.
+  message Error {
+    units.MetersPerSecondSquared acceleration = 1 [(units.min_meters_per_second_squared).value = 0.0];
+  }
+}

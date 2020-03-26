@@ -2,7 +2,6 @@
 
 syntax = "proto3";
 
-import "extensions.proto";
 import "system/status.proto";
 import "system/ack.proto";
 import "telemetry/report.proto";

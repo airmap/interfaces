@@ -2,8 +2,6 @@
 
 syntax = "proto3";
 
-import "extensions.proto";
-
 package tracking;
 
 option go_package = "github.com/airmap/interfaces/src/go/tracking";
