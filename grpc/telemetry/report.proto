@@ -40,7 +40,9 @@ message Report {
   }
 
   message System {
-    Battery battery = 1;
+    oneof details {
+      Battery battery = 1;
+    }
 
     message Battery {
       google.protobuf.Duration endurance = 1;  // The endurance of the battery level.
