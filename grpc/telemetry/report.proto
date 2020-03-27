@@ -14,7 +14,7 @@ option go_package = "github.com/airmap/interfaces/src/go/telemetry";
 
 // Report models a measurement at a given point in time.
 message Report {
-  google.protobuf.Timestamp observed = 1;  // The timestamp of the report.
+  google.protobuf.Timestamp observed    = 1;  // The timestamp of the report.
   repeated tracking.Identity identities = 2;
   // details is a discriminated union of all measurement types.
   oneof details {
@@ -40,12 +40,21 @@ message Report {
   }
 
   message System {
-    oneof details {
-      Battery battery = 1;
+    google.protobuf.Duration endurance = 1;  // The endurance remaining of the battery level.
+    repeated Subsystem subsystems      = 2;  // A collection of system performances. 
+    
+    message Subsystem {
+      oneof details {
+        Battery battery = 1; 
+      }
     }
-
+  
     message Battery {
-      google.protobuf.Duration endurance = 1;  // The endurance of the battery level.
+      string id                            = 1;
+      double voltage                       = 2;
+      measurements.Temperature temperature = 3;
+      double capacity                      = 4;
+      double charge                        = 5;
     }
   }
 }

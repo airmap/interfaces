@@ -165,11 +165,15 @@ message Wind {
 
 // Acceleration models an acceleration measurement.
 message Acceleration {
-  units.MetersPerSecondSquared units = 1 [(units.min_meters_per_second_squared).value = 0.0];  // The 
+  units.MetersPerSecondSquared x  = 1;  // The acceleration along the X axis.
+  units.MetersPerSecondSquared y  = 2;  // The acceleration along the Y axis.
+  units.MetersPerSecondSquared z  = 3;  // The acceleration along the Z axis.
   Error error                               = 1001 [(grpc.nullable) = true];
 
   // Error models the inherent error in an acceleration measurement.
   message Error {
-    units.MetersPerSecondSquared units = 1 [(units.min_meters_per_second_squared).value = 0.0];
+    units.MetersPerSecond x  = 1 [(units.min_meters_per_second_squared).value = 0.0];  // The error along the X axis.
+    units.MetersPerSecond y  = 2 [(units.min_meters_per_second_squared).value = 0.0];  // The error along the Y axis.
+    units.MetersPerSecond z  = 3 [(units.min_meters_per_second_squared).value = 0.0];  // The error along the Z axis.
   }
 }
