@@ -45,16 +45,25 @@ message Report {
     
     message Subsystem {
       oneof details {
-        Battery battery = 1; 
+        Battery battery = 1;  // Subsystem details about aircraft bettery.
       }
-    }
-  
-    message Battery {
-      string id                            = 1;
-      double voltage                       = 2;
-      measurements.Temperature temperature = 3;
-      double capacity                      = 4;
-      double charge                        = 5;
+
+      message Battery {
+        string id                            = 1;  // The identification number of the battery.
+        double voltage                       = 2;  // The current voltage of the battery.
+        CellVoltageLevel call_voltage_level  = 3;  // The current cell voltage level of the battery.
+        measurements.Temperature temperature = 4;  // Temperature of battery.
+        double capacity                      = 5;  // Total amount of battery capacity, in mAh (milliamp hours).
+        double charge_percentage             = 6;  // The percentage of battery energy remaining with range [0, 100].
+        
+        enum CellVoltageLevel {
+          UNKNOWN  = 0;  // Cell voltage is unknown.
+          LEVEL0   = 1;  // Cell voltage is at a safe level.
+          LEVEL1   = 2;  // Cell voltage level equal to or lower than threshold Level 1.
+          LEVEL2   = 3;  // Cell voltage level equal to or lower than threshold Level 2.
+          LEVEL3   = 4;  // Cell voltage level equal to or lower than threshold Level 3. Aircraft will start landing.
+        }
+      }
     }
   }
 }
