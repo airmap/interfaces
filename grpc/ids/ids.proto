@@ -20,3 +20,8 @@ message Operation {
 message USS {
   string as_string = 1;  // The textual representation of the id.
 }
+
+// Tracker models the unique id of a tracker.
+message Tracker {
+  string as_string = 1;  // The textual representation of the id.
+}

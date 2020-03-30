@@ -23,6 +23,7 @@ message Identity {
     NetworkInterface network   = 8;
     IMEI imei                  = 9;
     IMSI imsi                  = 10;
+    Tracker tracker            = 11;
   }
 
   // ProviderId models the unique identifier of a provider of tracks.
@@ -92,5 +93,10 @@ message Identity {
   // IMSI models the International Mobile Subscriber Identity.
   message IMSI {
     string as_string = 1 [(grpc.format) = "%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c"];
+  }
+
+  // Tracker models a tracker.
+  message Tracker {
+    ids.Tracker tracker_id = 1;  // The tracker identifier.
   }
 }
