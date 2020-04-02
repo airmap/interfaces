@@ -168,7 +168,7 @@ message Acceleration {
   units.MetersPerSecondSquared x  = 1;  // The acceleration along the X axis.
   units.MetersPerSecondSquared y  = 2;  // The acceleration along the Y axis.
   units.MetersPerSecondSquared z  = 3;  // The acceleration along the Z axis.
-  Error error                               = 1001 [(grpc.nullable) = true];
+  Error error                     = 1001 [(grpc.nullable) = true];
 
   // Error models the inherent error in an acceleration measurement.
   message Error {

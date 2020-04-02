@@ -16,54 +16,113 @@ option go_package = "github.com/airmap/interfaces/src/go/telemetry";
 message Report {
   google.protobuf.Timestamp observed    = 1;  // The timestamp of the report.
   repeated tracking.Identity identities = 2;
-  // details is a discriminated union of all measurement types.
+  // details is a discriminated union of all report types.
   oneof details {
-    Spatial spatial          = 3;
-    Atmospheric atmospheric  = 4;
-    System system            = 5;
+    Spatial spatial         = 3;
+    Atmospheric atmospheric = 4;
+    Vehicle vehicle         = 5;
   }
 
-  // Spatial bundles geospatial measurements.
+  // Spatial bundles measurements in a geospatial report.
   message Spatial {
     measurements.Position position         = 1;  // A positional measurement.
     measurements.Velocity velocity         = 2  [(grpc.nullable) = true];  // A velocity measurement.
     measurements.Orientation orientation   = 3  [(grpc.nullable) = true];  // An orientation/attitude measurement.
-    measurements.Acceleration acceleration = 4  [(grpc.nullable) = true];  // An acceloration measurement.
+    measurements.Acceleration acceleration = 4  [(grpc.nullable) = true];  // An acceleration measurement.
   }
 
-  // Atmospheric bundles atmospheric measurements at a given position.
+  // Atmospheric bundles atmospheric measurements in an atmospheric report at a given position.
   message Atmospheric {
-    measurements.Position position        = 1;  // The position for the atmospheric measurement.
-    measurements.Pressure pressure        = 2;  // An atmospheric pressure measurement.
-    measurements.Temperature temperature  = 3;  // A temperature measurement.
-    measurements.Wind wind                = 4;  // A wind measurement.
+    measurements.Position position       = 1;  // The position for the atmospheric measurement.
+    measurements.Pressure pressure       = 2 [(grpc.nullable) = true];  // An atmospheric pressure measurement.
+    measurements.Temperature temperature = 3 [(grpc.nullable) = true];  // A temperature measurement.
+    measurements.Wind wind               = 4 [(grpc.nullable) = true];  // A wind measurement.
   }
 
-  message System {
-    google.protobuf.Duration endurance = 1;  // The endurance remaining of the battery level.
-    repeated Subsystem subsystems      = 2;  // A collection of system performances. 
-    
-    message Subsystem {
+  message Vehicle {
+    repeated System systems = 1;
+
+    message System {
       oneof details {
-        Battery battery = 1;  // Subsystem details about aircraft bettery.
+        FlightControl flight_control = 1;  // Details about the flight control system.
+        Communication communication  = 2;  // Details about the communication system.
+        Electrical electrical        = 3;  // Details about the electrical system.
+        Propulsion propulsion        = 4;  // Details about the propulsion system.
+        Safety safety                = 5;  // Details about the safety system.
       }
 
-      message Battery {
-        string id                            = 1;  // The identification number of the battery.
-        double voltage                       = 2;  // The current voltage of the battery.
-        CellVoltageLevel call_voltage_level  = 3;  // The current cell voltage level of the battery.
-        measurements.Temperature temperature = 4;  // Temperature of battery.
-        double capacity                      = 5;  // Total amount of battery capacity, in mAh (milliamp hours).
-        double charge_percentage             = 6;  // The percentage of battery energy remaining with range [0, 100].
-        
-        enum CellVoltageLevel {
-          UNKNOWN  = 0;  // Cell voltage is unknown.
-          LEVEL0   = 1;  // Cell voltage is at a safe level.
-          LEVEL1   = 2;  // Cell voltage level equal to or lower than threshold Level 1.
-          LEVEL2   = 3;  // Cell voltage level equal to or lower than threshold Level 2.
-          LEVEL3   = 4;  // Cell voltage level equal to or lower than threshold Level 3. Aircraft will start landing.
+      // FlightControl models the flight control system.
+      message FlightControl {
+        bool is_airborne                   = 1;  // A flag to indicate the vehicle is airbone.
+        google.protobuf.Duration endurance = 2 [(grpc.nullable) = true];  // The estimated aggregate remaining flight endurance.
+      }
+
+      // Electrical models the electrical system.
+      message Electrical {
+        repeated Bus buses         = 2;
+        repeated Battery batteries = 3;
+
+        // Bus models an electrical bus.
+        message Bus {
+          string name    = 1;  // The unique name or identifier for the bus.
+          double voltage = 2 [(grpc.nullable) = true];  // The present voltage level in volts.
+          double current = 3 [(grpc.nullable) = true];  // The present load on the bus in amps.
         }
+
+        // Battery models a battery.
+        message Battery {
+          uint32 number      = 1;  // The numeric identifier for the battery [1..n].
+          double temperature = 2 [(grpc.nullable) = true];  // Temperature of battery in degrees Celcius[ºC].
+          uint32 voltage     = 3 [(grpc.nullable) = true];  // The current voltage of the battery in millivolts[mV].
+          uint32 capacity    = 4 [(grpc.nullable) = true];  // Total amount of battery capacity in milliampere-hours[mAh].
+          double charge      = 5 [(grpc.nullable) = true];  // The remaining battery capacity expressed as a % of capacity.
+        }
+      }
+
+      // Propulsion models the propulsion system.
+      message Propulsion {
+        repeated Motor motors = 1;
+
+        message Motor {
+          uint32 number      = 1;  // The numeric identifier for the motor [1..n].
+          uint32 rpm         = 2;  // The revolutions per minute (rpm) of the motor.
+          double temperature = 3;  // Temperature of the motor in degrees[ºC].
+        }
+      }
+
+      // Communication models the communication system.
+      message Communication {
+        WiFi wifi = 1;  // A Wi-Fi communication link.
+        GPS gps   = 2;  // A GPS communication link.
+
+        // WiFi models a Wi-Fi link.
+        message WiFi {
+          string ssid    = 1;  // The network name.
+          uint32 channel = 2;  // The frequency channel.
+          Band band      = 3;  // The frequency band.
+        }
+
+        // Band models a radio frequency band.
+        enum Band {
+          BAND_UNKNOWN  = 0;
+          BAND_2DOT4GHZ = 1;  // 2.4 GHz
+          BAND_5DOT0GHZ = 2;  // 5.0 GHz
+        }
+
+        // GPS models a Global Positioning System link.
+        message GPS {
+          uint32 satellites = 1;  // Number of satellites in range.
+          uint32 hdop       = 2;  // Horizontal dilution of precision.
+          uint32 vdop       = 3;  // Vertical dilution of precision.
+        }
+      }
+
+      // Safety models the safety system.
+      message Safety {
+        bool executing_rth = 1;  // Indicates the aircraft is executing a return to home maneuver.
+        bool loss_of_link  = 2;  // Indicates the link to the aircraft has been lost.
       }
     }
   }
+
 }
