@@ -19,9 +19,9 @@ extend google.protobuf.FieldOptions {
   MetersPerSecond default_meters_per_second                = 60008;
   MetersPerSecond min_meters_per_second                    = 60009;
   MetersPerSecond max_meters_per_second                    = 60010;
-  Pascal default_pascals                                   = 60011;
-  Pascal min_pascals                                       = 60012;
-  Pascal max_pascals                                       = 60013;
+  Pascals default_pascals                                  = 60011;
+  Pascals min_pascals                                      = 60012;
+  Pascals max_pascals                                      = 60013;
   Celsius default_celsius                                  = 60014;
   Celsius min_celsius                                      = 60015;
   Celsius max_celsius                                      = 60016;

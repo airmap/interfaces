@@ -128,41 +128,6 @@ message Orientation {
   }
 }
 
-// Pressure models an atmospheric pressure measurement.
-message Pressure {
-  units.Pascal units  = 1;  // The pressure in Pa units.
-  Error error         = 1001 [(grpc.nullable) = true];  // The error in the measurement.
-
-  // Error models the inherent error in an atmospheric pressure measurement.
-  message Error {
-    units.Pascal pressure  = 1 [(units.min_pascals).value = 0.0];  // The error in the pressure value.
-  }
-}
-
-// Temperature models an atmospheric temperature measurement.
-message Temperature {
-  units.Celsius degrees  = 1; // The temperature in degrees Celsius.
-  Error error            = 1001 [(grpc.nullable) = true];  // The error in the measurement.
-
-  // Error models the inherent error in a temperature measurement.
-  message Error {
-    units.Celsius degrees  = 1 [(units.min_celsius).value = 0.0];  // The error in the temperature value.
-  }
-}
-
-// Wind models a wind measurement.
-message Wind {
-  units.Degrees direction      = 1 [(units.min_degrees).value = 0.0, (units.max_degrees).value = 360.0];  // The direction of the wind.
-  units.MetersPerSecond speed  = 2 [(units.min_meters_per_second).value = 0.0];  // The speed of the wind.
-  Error error                  = 1001 [(grpc.nullable) = true];  // The error in the measurement.
-
-  // Error models the inherent error in a temperature measurement.
-  message Error {
-    units.Degrees direction      = 1 [(units.min_degrees).value = 0.0];  // The error in the direction value.
-    units.MetersPerSecond speed  = 2 [(units.min_meters_per_second).value = 0.0];  // The error in the speed value.
-  }
-}
-
 // Acceleration models an acceleration measurement.
 message Acceleration {
   units.MetersPerSecondSquared x  = 1;  // The acceleration along the X axis.
