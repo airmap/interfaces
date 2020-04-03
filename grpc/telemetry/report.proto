@@ -89,6 +89,7 @@ message Report {
       message Communication {
         repeated Link links = 1;
 
+        // Link models a communication link.
         message Link {
           oneof details {
             GPS gps           = 1;  // A GPS communication link.
