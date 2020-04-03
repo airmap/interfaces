@@ -73,8 +73,8 @@ message Report {
         message Battery {
           uint32 number      = 1;  // The numeric identifier for the battery [1..n].
           double temperature = 2 [(grpc.nullable) = true];  // Temperature of battery in degrees Celcius[ºC].
-          uint32 voltage     = 3 [(grpc.nullable) = true];  // The current voltage of the battery in millivolts[mV].
-          uint32 capacity    = 4 [(grpc.nullable) = true];  // Total amount of battery capacity in milliampere-hours[mAh].
+          double voltage     = 3 [(grpc.nullable) = true];  // The current voltage of the battery in volts[V].
+          double capacity    = 4 [(grpc.nullable) = true];  // Total amount of battery capacity in ampere-hours[Ah].
           double charge      = 5 [(grpc.nullable) = true];  // The remaining battery capacity expressed as a % of capacity.
         }
       }
@@ -124,5 +124,4 @@ message Report {
       }
     }
   }
-
 }
