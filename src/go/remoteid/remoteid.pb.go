@@ -735,6 +735,7 @@ const _ = grpc.SupportPackageIsVersion4
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type RemoteIDClient interface {
+	// ALPHA: API subject to change
 	// MonitorArea monitors a given area for active operations.
 	MonitorArea(ctx context.Context, in *MonitorAreaParameters, opts ...grpc.CallOption) (RemoteID_MonitorAreaClient, error)
 }
@@ -781,6 +782,7 @@ func (x *remoteIDMonitorAreaClient) Recv() (*MonitorAreaResponse, error) {
 
 // RemoteIDServer is the server API for RemoteID service.
 type RemoteIDServer interface {
+	// ALPHA: API subject to change
 	// MonitorArea monitors a given area for active operations.
 	MonitorArea(*MonitorAreaParameters, RemoteID_MonitorAreaServer) error
 }
