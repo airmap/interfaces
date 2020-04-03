@@ -112,7 +112,7 @@ message Report {
             uint32 vdop       = 4 [(grpc.nullable) = true];  // Vertical dilution of precision.
           }
 
-          // Cellulary models a cellular telecom link.
+          // Cellular models a cellular telecom link.
           message Cellular {
             uint32 number         = 1 [(grpc.nullable) = true];  // The numeric identifier for the link [0..n].
             units.Decibels signal = 2 [(grpc.nullable) = true];  // The signal level for the link in decibels [dB].
