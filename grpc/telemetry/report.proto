@@ -40,7 +40,7 @@ message Report {
     Endurance endurance                = 2 [(grpc.nullable) = true];  // The remaining endurance.
     google.protobuf.BoolValue airborne = 3 [(grpc.nullable) = true];  // A flag to indicate the vehicle is airborne.
 
-    // System models a vehicle discrete system.
+    // System models a discrete vehicle system.
     message System {
       oneof details {
         Electrical electrical       = 1;
