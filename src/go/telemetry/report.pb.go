@@ -740,6 +740,7 @@ func (m *Report_Vehicle_System_Communication) GetLinks() []*Report_Vehicle_Syste
 	return nil
 }
 
+// Link models a communication link.
 type Report_Vehicle_System_Communication_Link struct {
 	// Types that are valid to be assigned to Details:
 	//	*Report_Vehicle_System_Communication_Link_Gps
@@ -976,7 +977,7 @@ func (m *Report_Vehicle_System_Communication_Link_GPS) GetVdop() uint32 {
 	return 0
 }
 
-// Cellulary models a cellular telecom link.
+// Cellular models a cellular telecom link.
 type Report_Vehicle_System_Communication_Link_Cellular struct {
 	Number               uint32          `protobuf:"varint,1,opt,name=number,proto3" json:"number,omitempty"`
 	Signal               *units.Decibels `protobuf:"bytes,2,opt,name=signal,proto3" json:"signal,omitempty"`
