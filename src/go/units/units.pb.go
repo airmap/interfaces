@@ -100,6 +100,126 @@ func (m *Celsius) GetValue() float64 {
 	return 0
 }
 
+// Volts models a quantity in volts [V].
+type Volts struct {
+	Value                float64  `protobuf:"fixed64,1,opt,name=value,proto3" json:"value,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *Volts) Reset()         { *m = Volts{} }
+func (m *Volts) String() string { return proto.CompactTextString(m) }
+func (*Volts) ProtoMessage()    {}
+func (*Volts) Descriptor() ([]byte, []int) {
+	return fileDescriptor_0731c5a473a53452, []int{2}
+}
+
+func (m *Volts) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_Volts.Unmarshal(m, b)
+}
+func (m *Volts) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_Volts.Marshal(b, m, deterministic)
+}
+func (m *Volts) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Volts.Merge(m, src)
+}
+func (m *Volts) XXX_Size() int {
+	return xxx_messageInfo_Volts.Size(m)
+}
+func (m *Volts) XXX_DiscardUnknown() {
+	xxx_messageInfo_Volts.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Volts proto.InternalMessageInfo
+
+func (m *Volts) GetValue() float64 {
+	if m != nil {
+		return m.Value
+	}
+	return 0
+}
+
+// Amperes models a quantity in Amperes [A].
+type Amperes struct {
+	Value                float64  `protobuf:"fixed64,1,opt,name=value,proto3" json:"value,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *Amperes) Reset()         { *m = Amperes{} }
+func (m *Amperes) String() string { return proto.CompactTextString(m) }
+func (*Amperes) ProtoMessage()    {}
+func (*Amperes) Descriptor() ([]byte, []int) {
+	return fileDescriptor_0731c5a473a53452, []int{3}
+}
+
+func (m *Amperes) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_Amperes.Unmarshal(m, b)
+}
+func (m *Amperes) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_Amperes.Marshal(b, m, deterministic)
+}
+func (m *Amperes) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Amperes.Merge(m, src)
+}
+func (m *Amperes) XXX_Size() int {
+	return xxx_messageInfo_Amperes.Size(m)
+}
+func (m *Amperes) XXX_DiscardUnknown() {
+	xxx_messageInfo_Amperes.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Amperes proto.InternalMessageInfo
+
+func (m *Amperes) GetValue() float64 {
+	if m != nil {
+		return m.Value
+	}
+	return 0
+}
+
+// AmpereHours models a quantity in Ampere-hours [Ah].
+type AmpereHours struct {
+	Value                float64  `protobuf:"fixed64,1,opt,name=value,proto3" json:"value,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *AmpereHours) Reset()         { *m = AmpereHours{} }
+func (m *AmpereHours) String() string { return proto.CompactTextString(m) }
+func (*AmpereHours) ProtoMessage()    {}
+func (*AmpereHours) Descriptor() ([]byte, []int) {
+	return fileDescriptor_0731c5a473a53452, []int{4}
+}
+
+func (m *AmpereHours) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_AmpereHours.Unmarshal(m, b)
+}
+func (m *AmpereHours) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_AmpereHours.Marshal(b, m, deterministic)
+}
+func (m *AmpereHours) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AmpereHours.Merge(m, src)
+}
+func (m *AmpereHours) XXX_Size() int {
+	return xxx_messageInfo_AmpereHours.Size(m)
+}
+func (m *AmpereHours) XXX_DiscardUnknown() {
+	xxx_messageInfo_AmpereHours.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AmpereHours proto.InternalMessageInfo
+
+func (m *AmpereHours) GetValue() float64 {
+	if m != nil {
+		return m.Value
+	}
+	return 0
+}
+
 // Meters models a quantity in meters.
 type Meters struct {
 	Value                float64  `protobuf:"fixed64,1,opt,name=value,proto3" json:"value,omitempty"`
@@ -112,7 +232,7 @@ func (m *Meters) Reset()         { *m = Meters{} }
 func (m *Meters) String() string { return proto.CompactTextString(m) }
 func (*Meters) ProtoMessage()    {}
 func (*Meters) Descriptor() ([]byte, []int) {
-	return fileDescriptor_0731c5a473a53452, []int{2}
+	return fileDescriptor_0731c5a473a53452, []int{5}
 }
 
 func (m *Meters) XXX_Unmarshal(b []byte) error {
@@ -140,46 +260,6 @@ func (m *Meters) GetValue() float64 {
 	return 0
 }
 
-// Foot models a quantity in feet.
-type Foot struct {
-	Value                float64  `protobuf:"fixed64,1,opt,name=value,proto3" json:"value,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *Foot) Reset()         { *m = Foot{} }
-func (m *Foot) String() string { return proto.CompactTextString(m) }
-func (*Foot) ProtoMessage()    {}
-func (*Foot) Descriptor() ([]byte, []int) {
-	return fileDescriptor_0731c5a473a53452, []int{3}
-}
-
-func (m *Foot) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_Foot.Unmarshal(m, b)
-}
-func (m *Foot) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_Foot.Marshal(b, m, deterministic)
-}
-func (m *Foot) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Foot.Merge(m, src)
-}
-func (m *Foot) XXX_Size() int {
-	return xxx_messageInfo_Foot.Size(m)
-}
-func (m *Foot) XXX_DiscardUnknown() {
-	xxx_messageInfo_Foot.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_Foot proto.InternalMessageInfo
-
-func (m *Foot) GetValue() float64 {
-	if m != nil {
-		return m.Value
-	}
-	return 0
-}
-
 // MetersPerSecond models a quantity in meters per second [m/s].
 type MetersPerSecond struct {
 	Value                float64  `protobuf:"fixed64,1,opt,name=value,proto3" json:"value,omitempty"`
@@ -192,7 +272,7 @@ func (m *MetersPerSecond) Reset()         { *m = MetersPerSecond{} }
 func (m *MetersPerSecond) String() string { return proto.CompactTextString(m) }
 func (*MetersPerSecond) ProtoMessage()    {}
 func (*MetersPerSecond) Descriptor() ([]byte, []int) {
-	return fileDescriptor_0731c5a473a53452, []int{4}
+	return fileDescriptor_0731c5a473a53452, []int{6}
 }
 
 func (m *MetersPerSecond) XXX_Unmarshal(b []byte) error {
@@ -233,7 +313,7 @@ func (m *MetersPerSecondSquared) Reset()         { *m = MetersPerSecondSquared{}
 func (m *MetersPerSecondSquared) String() string { return proto.CompactTextString(m) }
 func (*MetersPerSecondSquared) ProtoMessage()    {}
 func (*MetersPerSecondSquared) Descriptor() ([]byte, []int) {
-	return fileDescriptor_0731c5a473a53452, []int{5}
+	return fileDescriptor_0731c5a473a53452, []int{7}
 }
 
 func (m *MetersPerSecondSquared) XXX_Unmarshal(b []byte) error {
@@ -261,40 +341,120 @@ func (m *MetersPerSecondSquared) GetValue() float64 {
 	return 0
 }
 
-// Pascal models a quantity in Pascals [Pa].
-type Pascal struct {
+// RPM models a quantity in revolutions per minute
+type RPM struct {
 	Value                float64  `protobuf:"fixed64,1,opt,name=value,proto3" json:"value,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *Pascal) Reset()         { *m = Pascal{} }
-func (m *Pascal) String() string { return proto.CompactTextString(m) }
-func (*Pascal) ProtoMessage()    {}
-func (*Pascal) Descriptor() ([]byte, []int) {
-	return fileDescriptor_0731c5a473a53452, []int{6}
+func (m *RPM) Reset()         { *m = RPM{} }
+func (m *RPM) String() string { return proto.CompactTextString(m) }
+func (*RPM) ProtoMessage()    {}
+func (*RPM) Descriptor() ([]byte, []int) {
+	return fileDescriptor_0731c5a473a53452, []int{8}
 }
 
-func (m *Pascal) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_Pascal.Unmarshal(m, b)
+func (m *RPM) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_RPM.Unmarshal(m, b)
 }
-func (m *Pascal) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_Pascal.Marshal(b, m, deterministic)
+func (m *RPM) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_RPM.Marshal(b, m, deterministic)
 }
-func (m *Pascal) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Pascal.Merge(m, src)
+func (m *RPM) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RPM.Merge(m, src)
 }
-func (m *Pascal) XXX_Size() int {
-	return xxx_messageInfo_Pascal.Size(m)
+func (m *RPM) XXX_Size() int {
+	return xxx_messageInfo_RPM.Size(m)
 }
-func (m *Pascal) XXX_DiscardUnknown() {
-	xxx_messageInfo_Pascal.DiscardUnknown(m)
+func (m *RPM) XXX_DiscardUnknown() {
+	xxx_messageInfo_RPM.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_Pascal proto.InternalMessageInfo
+var xxx_messageInfo_RPM proto.InternalMessageInfo
 
-func (m *Pascal) GetValue() float64 {
+func (m *RPM) GetValue() float64 {
+	if m != nil {
+		return m.Value
+	}
+	return 0
+}
+
+// Pascals models a quantity in Pascals [Pa].
+type Pascals struct {
+	Value                float64  `protobuf:"fixed64,1,opt,name=value,proto3" json:"value,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *Pascals) Reset()         { *m = Pascals{} }
+func (m *Pascals) String() string { return proto.CompactTextString(m) }
+func (*Pascals) ProtoMessage()    {}
+func (*Pascals) Descriptor() ([]byte, []int) {
+	return fileDescriptor_0731c5a473a53452, []int{9}
+}
+
+func (m *Pascals) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_Pascals.Unmarshal(m, b)
+}
+func (m *Pascals) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_Pascals.Marshal(b, m, deterministic)
+}
+func (m *Pascals) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Pascals.Merge(m, src)
+}
+func (m *Pascals) XXX_Size() int {
+	return xxx_messageInfo_Pascals.Size(m)
+}
+func (m *Pascals) XXX_DiscardUnknown() {
+	xxx_messageInfo_Pascals.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Pascals proto.InternalMessageInfo
+
+func (m *Pascals) GetValue() float64 {
+	if m != nil {
+		return m.Value
+	}
+	return 0
+}
+
+// Decibels models a quantity in Decibels [dB].
+type Decibels struct {
+	Value                float64  `protobuf:"fixed64,1,opt,name=value,proto3" json:"value,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *Decibels) Reset()         { *m = Decibels{} }
+func (m *Decibels) String() string { return proto.CompactTextString(m) }
+func (*Decibels) ProtoMessage()    {}
+func (*Decibels) Descriptor() ([]byte, []int) {
+	return fileDescriptor_0731c5a473a53452, []int{10}
+}
+
+func (m *Decibels) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_Decibels.Unmarshal(m, b)
+}
+func (m *Decibels) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_Decibels.Marshal(b, m, deterministic)
+}
+func (m *Decibels) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Decibels.Merge(m, src)
+}
+func (m *Decibels) XXX_Size() int {
+	return xxx_messageInfo_Decibels.Size(m)
+}
+func (m *Decibels) XXX_DiscardUnknown() {
+	xxx_messageInfo_Decibels.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Decibels proto.InternalMessageInfo
+
+func (m *Decibels) GetValue() float64 {
 	if m != nil {
 		return m.Value
 	}
@@ -313,7 +473,7 @@ func (m *Percent) Reset()         { *m = Percent{} }
 func (m *Percent) String() string { return proto.CompactTextString(m) }
 func (*Percent) ProtoMessage()    {}
 func (*Percent) Descriptor() ([]byte, []int) {
-	return fileDescriptor_0731c5a473a53452, []int{7}
+	return fileDescriptor_0731c5a473a53452, []int{11}
 }
 
 func (m *Percent) XXX_Unmarshal(b []byte) error {
@@ -344,29 +504,35 @@ func (m *Percent) GetValue() float64 {
 func init() {
 	proto.RegisterType((*Degrees)(nil), "units.Degrees")
 	proto.RegisterType((*Celsius)(nil), "units.Celsius")
+	proto.RegisterType((*Volts)(nil), "units.Volts")
+	proto.RegisterType((*Amperes)(nil), "units.Amperes")
+	proto.RegisterType((*AmpereHours)(nil), "units.AmpereHours")
 	proto.RegisterType((*Meters)(nil), "units.Meters")
-	proto.RegisterType((*Foot)(nil), "units.Foot")
 	proto.RegisterType((*MetersPerSecond)(nil), "units.MetersPerSecond")
 	proto.RegisterType((*MetersPerSecondSquared)(nil), "units.MetersPerSecondSquared")
-	proto.RegisterType((*Pascal)(nil), "units.Pascal")
+	proto.RegisterType((*RPM)(nil), "units.RPM")
+	proto.RegisterType((*Pascals)(nil), "units.Pascals")
+	proto.RegisterType((*Decibels)(nil), "units.Decibels")
 	proto.RegisterType((*Percent)(nil), "units.Percent")
 }
 
 func init() { proto.RegisterFile("units/units.proto", fileDescriptor_0731c5a473a53452) }
 
 var fileDescriptor_0731c5a473a53452 = []byte{
-	// 193 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x74, 0x90, 0x31, 0xeb, 0xc2, 0x30,
-	0x14, 0xc4, 0x29, 0xfc, 0xdb, 0x3f, 0x64, 0x11, 0x8b, 0x88, 0x83, 0xa8, 0xb8, 0xa8, 0x08, 0xcd,
-	0xe0, 0x37, 0x50, 0x71, 0x13, 0x8a, 0xdd, 0xdc, 0xd2, 0xf4, 0xac, 0x81, 0x36, 0xa9, 0x2f, 0x89,
-	0x9f, 0x5f, 0x6c, 0x37, 0x21, 0xcb, 0x83, 0xe3, 0x7e, 0x0f, 0xee, 0x8e, 0x8d, 0xbd, 0x56, 0xce,
-	0xf2, 0xfe, 0x66, 0x1d, 0x19, 0x67, 0xd2, 0xb8, 0x17, 0xeb, 0x25, 0xfb, 0x3f, 0xa3, 0x26, 0xc0,
-	0xa6, 0x13, 0x16, 0xbf, 0x45, 0xe3, 0x31, 0x8b, 0x56, 0xd1, 0x36, 0xba, 0x0d, 0xe2, 0x0b, 0x9c,
-	0xd0, 0x58, 0xe5, 0x43, 0xc0, 0x82, 0x25, 0x57, 0x38, 0x50, 0xc8, 0x9f, 0xb3, 0xbf, 0x8b, 0x31,
-	0x2e, 0xe0, 0x6e, 0xd8, 0x68, 0xf8, 0xce, 0x41, 0x05, 0xa4, 0xd1, 0x55, 0x00, 0xcc, 0xd8, 0xf4,
-	0x07, 0x2c, 0x5e, 0x5e, 0x10, 0xaa, 0x70, 0xac, 0x5c, 0x58, 0x29, 0x9a, 0x70, 0xaf, 0x1c, 0x24,
-	0xa1, 0x03, 0xc9, 0x8e, 0xfb, 0xfb, 0xae, 0x56, 0xee, 0xe9, 0xcb, 0x4c, 0x9a, 0x96, 0x0b, 0x45,
-	0xad, 0xe8, 0xb8, 0xd2, 0x0e, 0xf4, 0x10, 0x12, 0x96, 0x5b, 0x92, 0xbc, 0x36, 0xc3, 0xa6, 0x65,
-	0xd2, 0x8f, 0x7a, 0xf8, 0x04, 0x00, 0x00, 0xff, 0xff, 0x11, 0x0c, 0xbc, 0xb8, 0x69, 0x01, 0x00,
-	0x00,
+	// 228 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x7c, 0xd1, 0x3f, 0x4b, 0x04, 0x31,
+	0x10, 0x05, 0x70, 0x16, 0xd9, 0x53, 0xc6, 0x42, 0x3c, 0x44, 0x04, 0x51, 0x0f, 0x2d, 0x54, 0x84,
+	0x4d, 0xe1, 0x27, 0x50, 0xaf, 0xb0, 0x39, 0x58, 0xee, 0xc0, 0xc2, 0x2e, 0x1b, 0x9f, 0x6b, 0x20,
+	0x9b, 0xac, 0x93, 0xc4, 0xcf, 0x2f, 0x6e, 0x3a, 0xb9, 0xb9, 0x26, 0x30, 0xbc, 0x5f, 0xc8, 0x9f,
+	0x47, 0xc7, 0xd9, 0xdb, 0x14, 0xd5, 0xb4, 0x36, 0x23, 0x87, 0x14, 0xe6, 0xf5, 0x34, 0x5c, 0x5f,
+	0xd1, 0xfe, 0x12, 0x3d, 0x03, 0x71, 0x7e, 0x42, 0xf5, 0x8f, 0x76, 0x19, 0x67, 0xd5, 0xa2, 0xba,
+	0xab, 0xd6, 0x65, 0xf8, 0x03, 0x2f, 0x70, 0xd1, 0x66, 0x09, 0x5c, 0x50, 0xfd, 0x16, 0x5c, 0xda,
+	0xb1, 0xff, 0x69, 0x18, 0xc1, 0xe2, 0x01, 0x37, 0x74, 0x58, 0xc0, 0x6b, 0xc8, 0x2c, 0xa1, 0x4b,
+	0x9a, 0xad, 0x90, 0x20, 0xe6, 0xb7, 0x74, 0x54, 0xf2, 0x16, 0xbc, 0x81, 0x09, 0xfe, 0x43, 0x80,
+	0x0d, 0x9d, 0xfe, 0x83, 0x9b, 0xef, 0xac, 0x19, 0x92, 0x3f, 0xa7, 0xbd, 0x75, 0xbb, 0x92, 0xdf,
+	0xd6, 0xea, 0x68, 0xb4, 0x93, 0xae, 0xb5, 0xa0, 0x83, 0x25, 0x8c, 0xed, 0xe0, 0x76, 0x7c, 0x4f,
+	0x0b, 0x36, 0xf0, 0x69, 0x3b, 0x78, 0x7e, 0x78, 0xbf, 0xef, 0x6d, 0xfa, 0xca, 0x5d, 0x63, 0xc2,
+	0xa0, 0xb4, 0xe5, 0x41, 0x8f, 0xca, 0xfa, 0x04, 0xfe, 0xd4, 0x06, 0x51, 0x45, 0x36, 0xaa, 0x0f,
+	0xa5, 0xda, 0x6e, 0x36, 0x75, 0xfb, 0xf8, 0x1b, 0x00, 0x00, 0xff, 0xff, 0x23, 0xa0, 0x81, 0xc1,
+	0xf0, 0x01, 0x00, 0x00,
 }

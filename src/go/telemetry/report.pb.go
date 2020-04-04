@@ -8,9 +8,11 @@ import (
 	_ "github.com/airmap/interfaces/src/go"
 	measurements "github.com/airmap/interfaces/src/go/measurements"
 	tracking "github.com/airmap/interfaces/src/go/tracking"
+	units "github.com/airmap/interfaces/src/go/units"
 	proto "github.com/golang/protobuf/proto"
 	duration "github.com/golang/protobuf/ptypes/duration"
 	timestamp "github.com/golang/protobuf/ptypes/timestamp"
+	wrappers "github.com/golang/protobuf/ptypes/wrappers"
 	math "math"
 )
 
@@ -25,7 +27,7 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 
-// Band models a radio frequency band.
+// Band marks a radio frequency band.
 type Report_Vehicle_System_Communication_Band int32
 
 const (
@@ -51,10 +53,10 @@ func (x Report_Vehicle_System_Communication_Band) String() string {
 }
 
 func (Report_Vehicle_System_Communication_Band) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_822b117a32fda6fc, []int{0, 2, 0, 3, 0}
+	return fileDescriptor_822b117a32fda6fc, []int{0, 1, 0, 2, 0}
 }
 
-// Report models a measurement at a given point in time.
+// Report models a telemetry report at a given point in time.
 type Report struct {
 	Observed   *timestamp.Timestamp `protobuf:"bytes,1,opt,name=observed,proto3" json:"observed,omitempty"`
 	Identities []*tracking.Identity `protobuf:"bytes,2,rep,name=identities,proto3" json:"identities,omitempty"`
@@ -62,8 +64,8 @@ type Report struct {
 	//
 	// Types that are valid to be assigned to Details:
 	//	*Report_Spatial_
-	//	*Report_Atmospheric_
 	//	*Report_Vehicle_
+	//	*Report_Atmosphere_
 	Details              isReport_Details `protobuf_oneof:"details"`
 	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
 	XXX_unrecognized     []byte           `json:"-"`
@@ -117,19 +119,19 @@ type Report_Spatial_ struct {
 	Spatial *Report_Spatial `protobuf:"bytes,3,opt,name=spatial,proto3,oneof"`
 }
 
-type Report_Atmospheric_ struct {
-	Atmospheric *Report_Atmospheric `protobuf:"bytes,4,opt,name=atmospheric,proto3,oneof"`
+type Report_Vehicle_ struct {
+	Vehicle *Report_Vehicle `protobuf:"bytes,4,opt,name=vehicle,proto3,oneof"`
 }
 
-type Report_Vehicle_ struct {
-	Vehicle *Report_Vehicle `protobuf:"bytes,5,opt,name=vehicle,proto3,oneof"`
+type Report_Atmosphere_ struct {
+	Atmosphere *Report_Atmosphere `protobuf:"bytes,5,opt,name=atmosphere,proto3,oneof"`
 }
 
 func (*Report_Spatial_) isReport_Details() {}
 
-func (*Report_Atmospheric_) isReport_Details() {}
-
 func (*Report_Vehicle_) isReport_Details() {}
+
+func (*Report_Atmosphere_) isReport_Details() {}
 
 func (m *Report) GetDetails() isReport_Details {
 	if m != nil {
@@ -145,16 +147,16 @@ func (m *Report) GetSpatial() *Report_Spatial {
 	return nil
 }
 
-func (m *Report) GetAtmospheric() *Report_Atmospheric {
-	if x, ok := m.GetDetails().(*Report_Atmospheric_); ok {
-		return x.Atmospheric
+func (m *Report) GetVehicle() *Report_Vehicle {
+	if x, ok := m.GetDetails().(*Report_Vehicle_); ok {
+		return x.Vehicle
 	}
 	return nil
 }
 
-func (m *Report) GetVehicle() *Report_Vehicle {
-	if x, ok := m.GetDetails().(*Report_Vehicle_); ok {
-		return x.Vehicle
+func (m *Report) GetAtmosphere() *Report_Atmosphere {
+	if x, ok := m.GetDetails().(*Report_Atmosphere_); ok {
+		return x.Atmosphere
 	}
 	return nil
 }
@@ -163,12 +165,12 @@ func (m *Report) GetVehicle() *Report_Vehicle {
 func (*Report) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
 		(*Report_Spatial_)(nil),
-		(*Report_Atmospheric_)(nil),
 		(*Report_Vehicle_)(nil),
+		(*Report_Atmosphere_)(nil),
 	}
 }
 
-// Spatial bundles measurements in a geospatial report.
+// Spatial models a spatial report
 type Report_Spatial struct {
 	Position             *measurements.Position     `protobuf:"bytes,1,opt,name=position,proto3" json:"position,omitempty"`
 	Velocity             *measurements.Velocity     `protobuf:"bytes,2,opt,name=velocity,proto3" json:"velocity,omitempty"`
@@ -232,82 +234,21 @@ func (m *Report_Spatial) GetAcceleration() *measurements.Acceleration {
 	return nil
 }
 
-// Atmospheric bundles atmospheric measurements in an atmospheric report at a given position.
-type Report_Atmospheric struct {
-	Position             *measurements.Position    `protobuf:"bytes,1,opt,name=position,proto3" json:"position,omitempty"`
-	Pressure             *measurements.Pressure    `protobuf:"bytes,2,opt,name=pressure,proto3" json:"pressure,omitempty"`
-	Temperature          *measurements.Temperature `protobuf:"bytes,3,opt,name=temperature,proto3" json:"temperature,omitempty"`
-	Wind                 *measurements.Wind        `protobuf:"bytes,4,opt,name=wind,proto3" json:"wind,omitempty"`
+// Vehicle models a vehicle report
+type Report_Vehicle struct {
+	Systems              []*Report_Vehicle_System  `protobuf:"bytes,1,rep,name=systems,proto3" json:"systems,omitempty"`
+	Endurance            *Report_Vehicle_Endurance `protobuf:"bytes,2,opt,name=endurance,proto3" json:"endurance,omitempty"`
+	Airborne             *wrappers.BoolValue       `protobuf:"bytes,3,opt,name=airborne,proto3" json:"airborne,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}                  `json:"-"`
 	XXX_unrecognized     []byte                    `json:"-"`
 	XXX_sizecache        int32                     `json:"-"`
-}
-
-func (m *Report_Atmospheric) Reset()         { *m = Report_Atmospheric{} }
-func (m *Report_Atmospheric) String() string { return proto.CompactTextString(m) }
-func (*Report_Atmospheric) ProtoMessage()    {}
-func (*Report_Atmospheric) Descriptor() ([]byte, []int) {
-	return fileDescriptor_822b117a32fda6fc, []int{0, 1}
-}
-
-func (m *Report_Atmospheric) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_Report_Atmospheric.Unmarshal(m, b)
-}
-func (m *Report_Atmospheric) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_Report_Atmospheric.Marshal(b, m, deterministic)
-}
-func (m *Report_Atmospheric) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Report_Atmospheric.Merge(m, src)
-}
-func (m *Report_Atmospheric) XXX_Size() int {
-	return xxx_messageInfo_Report_Atmospheric.Size(m)
-}
-func (m *Report_Atmospheric) XXX_DiscardUnknown() {
-	xxx_messageInfo_Report_Atmospheric.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_Report_Atmospheric proto.InternalMessageInfo
-
-func (m *Report_Atmospheric) GetPosition() *measurements.Position {
-	if m != nil {
-		return m.Position
-	}
-	return nil
-}
-
-func (m *Report_Atmospheric) GetPressure() *measurements.Pressure {
-	if m != nil {
-		return m.Pressure
-	}
-	return nil
-}
-
-func (m *Report_Atmospheric) GetTemperature() *measurements.Temperature {
-	if m != nil {
-		return m.Temperature
-	}
-	return nil
-}
-
-func (m *Report_Atmospheric) GetWind() *measurements.Wind {
-	if m != nil {
-		return m.Wind
-	}
-	return nil
-}
-
-type Report_Vehicle struct {
-	Systems              []*Report_Vehicle_System `protobuf:"bytes,1,rep,name=systems,proto3" json:"systems,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}                 `json:"-"`
-	XXX_unrecognized     []byte                   `json:"-"`
-	XXX_sizecache        int32                    `json:"-"`
 }
 
 func (m *Report_Vehicle) Reset()         { *m = Report_Vehicle{} }
 func (m *Report_Vehicle) String() string { return proto.CompactTextString(m) }
 func (*Report_Vehicle) ProtoMessage()    {}
 func (*Report_Vehicle) Descriptor() ([]byte, []int) {
-	return fileDescriptor_822b117a32fda6fc, []int{0, 2}
+	return fileDescriptor_822b117a32fda6fc, []int{0, 1}
 }
 
 func (m *Report_Vehicle) XXX_Unmarshal(b []byte) error {
@@ -335,11 +276,25 @@ func (m *Report_Vehicle) GetSystems() []*Report_Vehicle_System {
 	return nil
 }
 
+func (m *Report_Vehicle) GetEndurance() *Report_Vehicle_Endurance {
+	if m != nil {
+		return m.Endurance
+	}
+	return nil
+}
+
+func (m *Report_Vehicle) GetAirborne() *wrappers.BoolValue {
+	if m != nil {
+		return m.Airborne
+	}
+	return nil
+}
+
+// System models a discrete vehicle system.
 type Report_Vehicle_System struct {
 	// Types that are valid to be assigned to Details:
-	//	*Report_Vehicle_System_FlightControl_
-	//	*Report_Vehicle_System_Communication_
 	//	*Report_Vehicle_System_Electrical_
+	//	*Report_Vehicle_System_Communication_
 	//	*Report_Vehicle_System_Propulsion_
 	//	*Report_Vehicle_System_Safety_
 	Details              isReport_Vehicle_System_Details `protobuf_oneof:"details"`
@@ -352,7 +307,7 @@ func (m *Report_Vehicle_System) Reset()         { *m = Report_Vehicle_System{} }
 func (m *Report_Vehicle_System) String() string { return proto.CompactTextString(m) }
 func (*Report_Vehicle_System) ProtoMessage()    {}
 func (*Report_Vehicle_System) Descriptor() ([]byte, []int) {
-	return fileDescriptor_822b117a32fda6fc, []int{0, 2, 0}
+	return fileDescriptor_822b117a32fda6fc, []int{0, 1, 0}
 }
 
 func (m *Report_Vehicle_System) XXX_Unmarshal(b []byte) error {
@@ -377,31 +332,25 @@ type isReport_Vehicle_System_Details interface {
 	isReport_Vehicle_System_Details()
 }
 
-type Report_Vehicle_System_FlightControl_ struct {
-	FlightControl *Report_Vehicle_System_FlightControl `protobuf:"bytes,1,opt,name=flight_control,json=flightControl,proto3,oneof"`
+type Report_Vehicle_System_Electrical_ struct {
+	Electrical *Report_Vehicle_System_Electrical `protobuf:"bytes,1,opt,name=electrical,proto3,oneof"`
 }
 
 type Report_Vehicle_System_Communication_ struct {
 	Communication *Report_Vehicle_System_Communication `protobuf:"bytes,2,opt,name=communication,proto3,oneof"`
 }
 
-type Report_Vehicle_System_Electrical_ struct {
-	Electrical *Report_Vehicle_System_Electrical `protobuf:"bytes,3,opt,name=electrical,proto3,oneof"`
-}
-
 type Report_Vehicle_System_Propulsion_ struct {
-	Propulsion *Report_Vehicle_System_Propulsion `protobuf:"bytes,4,opt,name=propulsion,proto3,oneof"`
+	Propulsion *Report_Vehicle_System_Propulsion `protobuf:"bytes,3,opt,name=propulsion,proto3,oneof"`
 }
 
 type Report_Vehicle_System_Safety_ struct {
-	Safety *Report_Vehicle_System_Safety `protobuf:"bytes,5,opt,name=safety,proto3,oneof"`
+	Safety *Report_Vehicle_System_Safety `protobuf:"bytes,4,opt,name=safety,proto3,oneof"`
 }
 
-func (*Report_Vehicle_System_FlightControl_) isReport_Vehicle_System_Details() {}
+func (*Report_Vehicle_System_Electrical_) isReport_Vehicle_System_Details() {}
 
 func (*Report_Vehicle_System_Communication_) isReport_Vehicle_System_Details() {}
-
-func (*Report_Vehicle_System_Electrical_) isReport_Vehicle_System_Details() {}
 
 func (*Report_Vehicle_System_Propulsion_) isReport_Vehicle_System_Details() {}
 
@@ -414,9 +363,9 @@ func (m *Report_Vehicle_System) GetDetails() isReport_Vehicle_System_Details {
 	return nil
 }
 
-func (m *Report_Vehicle_System) GetFlightControl() *Report_Vehicle_System_FlightControl {
-	if x, ok := m.GetDetails().(*Report_Vehicle_System_FlightControl_); ok {
-		return x.FlightControl
+func (m *Report_Vehicle_System) GetElectrical() *Report_Vehicle_System_Electrical {
+	if x, ok := m.GetDetails().(*Report_Vehicle_System_Electrical_); ok {
+		return x.Electrical
 	}
 	return nil
 }
@@ -424,13 +373,6 @@ func (m *Report_Vehicle_System) GetFlightControl() *Report_Vehicle_System_Flight
 func (m *Report_Vehicle_System) GetCommunication() *Report_Vehicle_System_Communication {
 	if x, ok := m.GetDetails().(*Report_Vehicle_System_Communication_); ok {
 		return x.Communication
-	}
-	return nil
-}
-
-func (m *Report_Vehicle_System) GetElectrical() *Report_Vehicle_System_Electrical {
-	if x, ok := m.GetDetails().(*Report_Vehicle_System_Electrical_); ok {
-		return x.Electrical
 	}
 	return nil
 }
@@ -452,66 +394,17 @@ func (m *Report_Vehicle_System) GetSafety() *Report_Vehicle_System_Safety {
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*Report_Vehicle_System) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
-		(*Report_Vehicle_System_FlightControl_)(nil),
-		(*Report_Vehicle_System_Communication_)(nil),
 		(*Report_Vehicle_System_Electrical_)(nil),
+		(*Report_Vehicle_System_Communication_)(nil),
 		(*Report_Vehicle_System_Propulsion_)(nil),
 		(*Report_Vehicle_System_Safety_)(nil),
 	}
 }
 
-// FlightControl models the flight control system.
-type Report_Vehicle_System_FlightControl struct {
-	IsAirborne           bool               `protobuf:"varint,1,opt,name=is_airborne,json=isAirborne,proto3" json:"is_airborne,omitempty"`
-	Endurance            *duration.Duration `protobuf:"bytes,2,opt,name=endurance,proto3" json:"endurance,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}           `json:"-"`
-	XXX_unrecognized     []byte             `json:"-"`
-	XXX_sizecache        int32              `json:"-"`
-}
-
-func (m *Report_Vehicle_System_FlightControl) Reset()         { *m = Report_Vehicle_System_FlightControl{} }
-func (m *Report_Vehicle_System_FlightControl) String() string { return proto.CompactTextString(m) }
-func (*Report_Vehicle_System_FlightControl) ProtoMessage()    {}
-func (*Report_Vehicle_System_FlightControl) Descriptor() ([]byte, []int) {
-	return fileDescriptor_822b117a32fda6fc, []int{0, 2, 0, 0}
-}
-
-func (m *Report_Vehicle_System_FlightControl) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_Report_Vehicle_System_FlightControl.Unmarshal(m, b)
-}
-func (m *Report_Vehicle_System_FlightControl) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_Report_Vehicle_System_FlightControl.Marshal(b, m, deterministic)
-}
-func (m *Report_Vehicle_System_FlightControl) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Report_Vehicle_System_FlightControl.Merge(m, src)
-}
-func (m *Report_Vehicle_System_FlightControl) XXX_Size() int {
-	return xxx_messageInfo_Report_Vehicle_System_FlightControl.Size(m)
-}
-func (m *Report_Vehicle_System_FlightControl) XXX_DiscardUnknown() {
-	xxx_messageInfo_Report_Vehicle_System_FlightControl.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_Report_Vehicle_System_FlightControl proto.InternalMessageInfo
-
-func (m *Report_Vehicle_System_FlightControl) GetIsAirborne() bool {
-	if m != nil {
-		return m.IsAirborne
-	}
-	return false
-}
-
-func (m *Report_Vehicle_System_FlightControl) GetEndurance() *duration.Duration {
-	if m != nil {
-		return m.Endurance
-	}
-	return nil
-}
-
 // Electrical models the electrical system.
 type Report_Vehicle_System_Electrical struct {
-	Buses                []*Report_Vehicle_System_Electrical_Bus     `protobuf:"bytes,2,rep,name=buses,proto3" json:"buses,omitempty"`
-	Batteries            []*Report_Vehicle_System_Electrical_Battery `protobuf:"bytes,3,rep,name=batteries,proto3" json:"batteries,omitempty"`
+	Buses                []*Report_Vehicle_System_Electrical_Bus     `protobuf:"bytes,1,rep,name=buses,proto3" json:"buses,omitempty"`
+	Batteries            []*Report_Vehicle_System_Electrical_Battery `protobuf:"bytes,2,rep,name=batteries,proto3" json:"batteries,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}                                    `json:"-"`
 	XXX_unrecognized     []byte                                      `json:"-"`
 	XXX_sizecache        int32                                       `json:"-"`
@@ -521,7 +414,7 @@ func (m *Report_Vehicle_System_Electrical) Reset()         { *m = Report_Vehicle
 func (m *Report_Vehicle_System_Electrical) String() string { return proto.CompactTextString(m) }
 func (*Report_Vehicle_System_Electrical) ProtoMessage()    {}
 func (*Report_Vehicle_System_Electrical) Descriptor() ([]byte, []int) {
-	return fileDescriptor_822b117a32fda6fc, []int{0, 2, 0, 1}
+	return fileDescriptor_822b117a32fda6fc, []int{0, 1, 0, 0}
 }
 
 func (m *Report_Vehicle_System_Electrical) XXX_Unmarshal(b []byte) error {
@@ -558,19 +451,19 @@ func (m *Report_Vehicle_System_Electrical) GetBatteries() []*Report_Vehicle_Syst
 
 // Bus models an electrical bus.
 type Report_Vehicle_System_Electrical_Bus struct {
-	Name                 string   `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	Voltage              float64  `protobuf:"fixed64,2,opt,name=voltage,proto3" json:"voltage,omitempty"`
-	Current              float64  `protobuf:"fixed64,3,opt,name=current,proto3" json:"current,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
+	Number               uint32         `protobuf:"varint,1,opt,name=number,proto3" json:"number,omitempty"`
+	Voltage              *units.Volts   `protobuf:"bytes,2,opt,name=voltage,proto3" json:"voltage,omitempty"`
+	Current              *units.Amperes `protobuf:"bytes,3,opt,name=current,proto3" json:"current,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
+	XXX_unrecognized     []byte         `json:"-"`
+	XXX_sizecache        int32          `json:"-"`
 }
 
 func (m *Report_Vehicle_System_Electrical_Bus) Reset()         { *m = Report_Vehicle_System_Electrical_Bus{} }
 func (m *Report_Vehicle_System_Electrical_Bus) String() string { return proto.CompactTextString(m) }
 func (*Report_Vehicle_System_Electrical_Bus) ProtoMessage()    {}
 func (*Report_Vehicle_System_Electrical_Bus) Descriptor() ([]byte, []int) {
-	return fileDescriptor_822b117a32fda6fc, []int{0, 2, 0, 1, 0}
+	return fileDescriptor_822b117a32fda6fc, []int{0, 1, 0, 0, 0}
 }
 
 func (m *Report_Vehicle_System_Electrical_Bus) XXX_Unmarshal(b []byte) error {
@@ -591,37 +484,38 @@ func (m *Report_Vehicle_System_Electrical_Bus) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_Report_Vehicle_System_Electrical_Bus proto.InternalMessageInfo
 
-func (m *Report_Vehicle_System_Electrical_Bus) GetName() string {
+func (m *Report_Vehicle_System_Electrical_Bus) GetNumber() uint32 {
 	if m != nil {
-		return m.Name
+		return m.Number
 	}
-	return ""
+	return 0
 }
 
-func (m *Report_Vehicle_System_Electrical_Bus) GetVoltage() float64 {
+func (m *Report_Vehicle_System_Electrical_Bus) GetVoltage() *units.Volts {
 	if m != nil {
 		return m.Voltage
 	}
-	return 0
+	return nil
 }
 
-func (m *Report_Vehicle_System_Electrical_Bus) GetCurrent() float64 {
+func (m *Report_Vehicle_System_Electrical_Bus) GetCurrent() *units.Amperes {
 	if m != nil {
 		return m.Current
 	}
-	return 0
+	return nil
 }
 
 // Battery models a battery.
 type Report_Vehicle_System_Electrical_Battery struct {
-	Number               uint32   `protobuf:"varint,1,opt,name=number,proto3" json:"number,omitempty"`
-	Temperature          float64  `protobuf:"fixed64,2,opt,name=temperature,proto3" json:"temperature,omitempty"`
-	Voltage              float64  `protobuf:"fixed64,3,opt,name=voltage,proto3" json:"voltage,omitempty"`
-	Capacity             float64  `protobuf:"fixed64,4,opt,name=capacity,proto3" json:"capacity,omitempty"`
-	Charge               float64  `protobuf:"fixed64,5,opt,name=charge,proto3" json:"charge,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
+	Number               uint32             `protobuf:"varint,1,opt,name=number,proto3" json:"number,omitempty"`
+	Temperature          *units.Celsius     `protobuf:"bytes,2,opt,name=temperature,proto3" json:"temperature,omitempty"`
+	Voltage              *units.Volts       `protobuf:"bytes,3,opt,name=voltage,proto3" json:"voltage,omitempty"`
+	Current              *units.Amperes     `protobuf:"bytes,4,opt,name=current,proto3" json:"current,omitempty"`
+	Capacity             *units.AmpereHours `protobuf:"bytes,5,opt,name=capacity,proto3" json:"capacity,omitempty"`
+	Charge               *units.Percent     `protobuf:"bytes,6,opt,name=charge,proto3" json:"charge,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}           `json:"-"`
+	XXX_unrecognized     []byte             `json:"-"`
+	XXX_sizecache        int32              `json:"-"`
 }
 
 func (m *Report_Vehicle_System_Electrical_Battery) Reset() {
@@ -630,7 +524,7 @@ func (m *Report_Vehicle_System_Electrical_Battery) Reset() {
 func (m *Report_Vehicle_System_Electrical_Battery) String() string { return proto.CompactTextString(m) }
 func (*Report_Vehicle_System_Electrical_Battery) ProtoMessage()    {}
 func (*Report_Vehicle_System_Electrical_Battery) Descriptor() ([]byte, []int) {
-	return fileDescriptor_822b117a32fda6fc, []int{0, 2, 0, 1, 1}
+	return fileDescriptor_822b117a32fda6fc, []int{0, 1, 0, 0, 1}
 }
 
 func (m *Report_Vehicle_System_Electrical_Battery) XXX_Unmarshal(b []byte) error {
@@ -658,32 +552,39 @@ func (m *Report_Vehicle_System_Electrical_Battery) GetNumber() uint32 {
 	return 0
 }
 
-func (m *Report_Vehicle_System_Electrical_Battery) GetTemperature() float64 {
+func (m *Report_Vehicle_System_Electrical_Battery) GetTemperature() *units.Celsius {
 	if m != nil {
 		return m.Temperature
 	}
-	return 0
+	return nil
 }
 
-func (m *Report_Vehicle_System_Electrical_Battery) GetVoltage() float64 {
+func (m *Report_Vehicle_System_Electrical_Battery) GetVoltage() *units.Volts {
 	if m != nil {
 		return m.Voltage
 	}
-	return 0
+	return nil
 }
 
-func (m *Report_Vehicle_System_Electrical_Battery) GetCapacity() float64 {
+func (m *Report_Vehicle_System_Electrical_Battery) GetCurrent() *units.Amperes {
+	if m != nil {
+		return m.Current
+	}
+	return nil
+}
+
+func (m *Report_Vehicle_System_Electrical_Battery) GetCapacity() *units.AmpereHours {
 	if m != nil {
 		return m.Capacity
 	}
-	return 0
+	return nil
 }
 
-func (m *Report_Vehicle_System_Electrical_Battery) GetCharge() float64 {
+func (m *Report_Vehicle_System_Electrical_Battery) GetCharge() *units.Percent {
 	if m != nil {
 		return m.Charge
 	}
-	return 0
+	return nil
 }
 
 // Propulsion models the propulsion system.
@@ -698,7 +599,7 @@ func (m *Report_Vehicle_System_Propulsion) Reset()         { *m = Report_Vehicle
 func (m *Report_Vehicle_System_Propulsion) String() string { return proto.CompactTextString(m) }
 func (*Report_Vehicle_System_Propulsion) ProtoMessage()    {}
 func (*Report_Vehicle_System_Propulsion) Descriptor() ([]byte, []int) {
-	return fileDescriptor_822b117a32fda6fc, []int{0, 2, 0, 2}
+	return fileDescriptor_822b117a32fda6fc, []int{0, 1, 0, 1}
 }
 
 func (m *Report_Vehicle_System_Propulsion) XXX_Unmarshal(b []byte) error {
@@ -727,12 +628,14 @@ func (m *Report_Vehicle_System_Propulsion) GetMotors() []*Report_Vehicle_System_
 }
 
 type Report_Vehicle_System_Propulsion_Motor struct {
-	Number               uint32   `protobuf:"varint,1,opt,name=number,proto3" json:"number,omitempty"`
-	Rpm                  uint32   `protobuf:"varint,2,opt,name=rpm,proto3" json:"rpm,omitempty"`
-	Temperature          float64  `protobuf:"fixed64,3,opt,name=temperature,proto3" json:"temperature,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
+	Number               uint32         `protobuf:"varint,1,opt,name=number,proto3" json:"number,omitempty"`
+	Voltage              *units.Volts   `protobuf:"bytes,2,opt,name=voltage,proto3" json:"voltage,omitempty"`
+	Current              *units.Amperes `protobuf:"bytes,3,opt,name=current,proto3" json:"current,omitempty"`
+	Temperature          *units.Celsius `protobuf:"bytes,4,opt,name=temperature,proto3" json:"temperature,omitempty"`
+	Rpm                  *units.RPM     `protobuf:"bytes,5,opt,name=rpm,proto3" json:"rpm,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
+	XXX_unrecognized     []byte         `json:"-"`
+	XXX_sizecache        int32          `json:"-"`
 }
 
 func (m *Report_Vehicle_System_Propulsion_Motor) Reset() {
@@ -741,7 +644,7 @@ func (m *Report_Vehicle_System_Propulsion_Motor) Reset() {
 func (m *Report_Vehicle_System_Propulsion_Motor) String() string { return proto.CompactTextString(m) }
 func (*Report_Vehicle_System_Propulsion_Motor) ProtoMessage()    {}
 func (*Report_Vehicle_System_Propulsion_Motor) Descriptor() ([]byte, []int) {
-	return fileDescriptor_822b117a32fda6fc, []int{0, 2, 0, 2, 0}
+	return fileDescriptor_822b117a32fda6fc, []int{0, 1, 0, 1, 0}
 }
 
 func (m *Report_Vehicle_System_Propulsion_Motor) XXX_Unmarshal(b []byte) error {
@@ -769,34 +672,47 @@ func (m *Report_Vehicle_System_Propulsion_Motor) GetNumber() uint32 {
 	return 0
 }
 
-func (m *Report_Vehicle_System_Propulsion_Motor) GetRpm() uint32 {
+func (m *Report_Vehicle_System_Propulsion_Motor) GetVoltage() *units.Volts {
 	if m != nil {
-		return m.Rpm
+		return m.Voltage
 	}
-	return 0
+	return nil
 }
 
-func (m *Report_Vehicle_System_Propulsion_Motor) GetTemperature() float64 {
+func (m *Report_Vehicle_System_Propulsion_Motor) GetCurrent() *units.Amperes {
+	if m != nil {
+		return m.Current
+	}
+	return nil
+}
+
+func (m *Report_Vehicle_System_Propulsion_Motor) GetTemperature() *units.Celsius {
 	if m != nil {
 		return m.Temperature
 	}
-	return 0
+	return nil
+}
+
+func (m *Report_Vehicle_System_Propulsion_Motor) GetRpm() *units.RPM {
+	if m != nil {
+		return m.Rpm
+	}
+	return nil
 }
 
 // Communication models the communication system.
 type Report_Vehicle_System_Communication struct {
-	Wifi                 *Report_Vehicle_System_Communication_WiFi `protobuf:"bytes,1,opt,name=wifi,proto3" json:"wifi,omitempty"`
-	Gps                  *Report_Vehicle_System_Communication_GPS  `protobuf:"bytes,2,opt,name=gps,proto3" json:"gps,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}                                  `json:"-"`
-	XXX_unrecognized     []byte                                    `json:"-"`
-	XXX_sizecache        int32                                     `json:"-"`
+	Links                []*Report_Vehicle_System_Communication_Link `protobuf:"bytes,1,rep,name=links,proto3" json:"links,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                                    `json:"-"`
+	XXX_unrecognized     []byte                                      `json:"-"`
+	XXX_sizecache        int32                                       `json:"-"`
 }
 
 func (m *Report_Vehicle_System_Communication) Reset()         { *m = Report_Vehicle_System_Communication{} }
 func (m *Report_Vehicle_System_Communication) String() string { return proto.CompactTextString(m) }
 func (*Report_Vehicle_System_Communication) ProtoMessage()    {}
 func (*Report_Vehicle_System_Communication) Descriptor() ([]byte, []int) {
-	return fileDescriptor_822b117a32fda6fc, []int{0, 2, 0, 3}
+	return fileDescriptor_822b117a32fda6fc, []int{0, 1, 0, 2}
 }
 
 func (m *Report_Vehicle_System_Communication) XXX_Unmarshal(b []byte) error {
@@ -817,72 +733,175 @@ func (m *Report_Vehicle_System_Communication) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_Report_Vehicle_System_Communication proto.InternalMessageInfo
 
-func (m *Report_Vehicle_System_Communication) GetWifi() *Report_Vehicle_System_Communication_WiFi {
+func (m *Report_Vehicle_System_Communication) GetLinks() []*Report_Vehicle_System_Communication_Link {
 	if m != nil {
-		return m.Wifi
+		return m.Links
 	}
 	return nil
 }
 
-func (m *Report_Vehicle_System_Communication) GetGps() *Report_Vehicle_System_Communication_GPS {
+type Report_Vehicle_System_Communication_Link struct {
+	// Types that are valid to be assigned to Details:
+	//	*Report_Vehicle_System_Communication_Link_Gps
+	//	*Report_Vehicle_System_Communication_Link_Wifi
+	//	*Report_Vehicle_System_Communication_Link_Cellular_
+	Details              isReport_Vehicle_System_Communication_Link_Details `protobuf_oneof:"details"`
+	XXX_NoUnkeyedLiteral struct{}                                           `json:"-"`
+	XXX_unrecognized     []byte                                             `json:"-"`
+	XXX_sizecache        int32                                              `json:"-"`
+}
+
+func (m *Report_Vehicle_System_Communication_Link) Reset() {
+	*m = Report_Vehicle_System_Communication_Link{}
+}
+func (m *Report_Vehicle_System_Communication_Link) String() string { return proto.CompactTextString(m) }
+func (*Report_Vehicle_System_Communication_Link) ProtoMessage()    {}
+func (*Report_Vehicle_System_Communication_Link) Descriptor() ([]byte, []int) {
+	return fileDescriptor_822b117a32fda6fc, []int{0, 1, 0, 2, 0}
+}
+
+func (m *Report_Vehicle_System_Communication_Link) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_Report_Vehicle_System_Communication_Link.Unmarshal(m, b)
+}
+func (m *Report_Vehicle_System_Communication_Link) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_Report_Vehicle_System_Communication_Link.Marshal(b, m, deterministic)
+}
+func (m *Report_Vehicle_System_Communication_Link) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Report_Vehicle_System_Communication_Link.Merge(m, src)
+}
+func (m *Report_Vehicle_System_Communication_Link) XXX_Size() int {
+	return xxx_messageInfo_Report_Vehicle_System_Communication_Link.Size(m)
+}
+func (m *Report_Vehicle_System_Communication_Link) XXX_DiscardUnknown() {
+	xxx_messageInfo_Report_Vehicle_System_Communication_Link.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Report_Vehicle_System_Communication_Link proto.InternalMessageInfo
+
+type isReport_Vehicle_System_Communication_Link_Details interface {
+	isReport_Vehicle_System_Communication_Link_Details()
+}
+
+type Report_Vehicle_System_Communication_Link_Gps struct {
+	Gps *Report_Vehicle_System_Communication_Link_GPS `protobuf:"bytes,1,opt,name=gps,proto3,oneof"`
+}
+
+type Report_Vehicle_System_Communication_Link_Wifi struct {
+	Wifi *Report_Vehicle_System_Communication_Link_WiFi `protobuf:"bytes,2,opt,name=wifi,proto3,oneof"`
+}
+
+type Report_Vehicle_System_Communication_Link_Cellular_ struct {
+	Cellular *Report_Vehicle_System_Communication_Link_Cellular `protobuf:"bytes,3,opt,name=cellular,proto3,oneof"`
+}
+
+func (*Report_Vehicle_System_Communication_Link_Gps) isReport_Vehicle_System_Communication_Link_Details() {
+}
+
+func (*Report_Vehicle_System_Communication_Link_Wifi) isReport_Vehicle_System_Communication_Link_Details() {
+}
+
+func (*Report_Vehicle_System_Communication_Link_Cellular_) isReport_Vehicle_System_Communication_Link_Details() {
+}
+
+func (m *Report_Vehicle_System_Communication_Link) GetDetails() isReport_Vehicle_System_Communication_Link_Details {
 	if m != nil {
-		return m.Gps
+		return m.Details
 	}
 	return nil
+}
+
+func (m *Report_Vehicle_System_Communication_Link) GetGps() *Report_Vehicle_System_Communication_Link_GPS {
+	if x, ok := m.GetDetails().(*Report_Vehicle_System_Communication_Link_Gps); ok {
+		return x.Gps
+	}
+	return nil
+}
+
+func (m *Report_Vehicle_System_Communication_Link) GetWifi() *Report_Vehicle_System_Communication_Link_WiFi {
+	if x, ok := m.GetDetails().(*Report_Vehicle_System_Communication_Link_Wifi); ok {
+		return x.Wifi
+	}
+	return nil
+}
+
+func (m *Report_Vehicle_System_Communication_Link) GetCellular() *Report_Vehicle_System_Communication_Link_Cellular {
+	if x, ok := m.GetDetails().(*Report_Vehicle_System_Communication_Link_Cellular_); ok {
+		return x.Cellular
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*Report_Vehicle_System_Communication_Link) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*Report_Vehicle_System_Communication_Link_Gps)(nil),
+		(*Report_Vehicle_System_Communication_Link_Wifi)(nil),
+		(*Report_Vehicle_System_Communication_Link_Cellular_)(nil),
+	}
 }
 
 // WiFi models a Wi-Fi link.
-type Report_Vehicle_System_Communication_WiFi struct {
-	Ssid                 string                                   `protobuf:"bytes,1,opt,name=ssid,proto3" json:"ssid,omitempty"`
-	Channel              uint32                                   `protobuf:"varint,2,opt,name=channel,proto3" json:"channel,omitempty"`
-	Band                 Report_Vehicle_System_Communication_Band `protobuf:"varint,3,opt,name=band,proto3,enum=telemetry.Report_Vehicle_System_Communication_Band" json:"band,omitempty"`
+type Report_Vehicle_System_Communication_Link_WiFi struct {
+	Number               uint32                                   `protobuf:"varint,1,opt,name=number,proto3" json:"number,omitempty"`
+	Ssid                 string                                   `protobuf:"bytes,2,opt,name=ssid,proto3" json:"ssid,omitempty"`
+	Channel              uint32                                   `protobuf:"varint,3,opt,name=channel,proto3" json:"channel,omitempty"`
+	Band                 Report_Vehicle_System_Communication_Band `protobuf:"varint,4,opt,name=band,proto3,enum=telemetry.Report_Vehicle_System_Communication_Band" json:"band,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}                                 `json:"-"`
 	XXX_unrecognized     []byte                                   `json:"-"`
 	XXX_sizecache        int32                                    `json:"-"`
 }
 
-func (m *Report_Vehicle_System_Communication_WiFi) Reset() {
-	*m = Report_Vehicle_System_Communication_WiFi{}
+func (m *Report_Vehicle_System_Communication_Link_WiFi) Reset() {
+	*m = Report_Vehicle_System_Communication_Link_WiFi{}
 }
-func (m *Report_Vehicle_System_Communication_WiFi) String() string { return proto.CompactTextString(m) }
-func (*Report_Vehicle_System_Communication_WiFi) ProtoMessage()    {}
-func (*Report_Vehicle_System_Communication_WiFi) Descriptor() ([]byte, []int) {
-	return fileDescriptor_822b117a32fda6fc, []int{0, 2, 0, 3, 0}
+func (m *Report_Vehicle_System_Communication_Link_WiFi) String() string {
+	return proto.CompactTextString(m)
 }
-
-func (m *Report_Vehicle_System_Communication_WiFi) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_Report_Vehicle_System_Communication_WiFi.Unmarshal(m, b)
-}
-func (m *Report_Vehicle_System_Communication_WiFi) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_Report_Vehicle_System_Communication_WiFi.Marshal(b, m, deterministic)
-}
-func (m *Report_Vehicle_System_Communication_WiFi) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Report_Vehicle_System_Communication_WiFi.Merge(m, src)
-}
-func (m *Report_Vehicle_System_Communication_WiFi) XXX_Size() int {
-	return xxx_messageInfo_Report_Vehicle_System_Communication_WiFi.Size(m)
-}
-func (m *Report_Vehicle_System_Communication_WiFi) XXX_DiscardUnknown() {
-	xxx_messageInfo_Report_Vehicle_System_Communication_WiFi.DiscardUnknown(m)
+func (*Report_Vehicle_System_Communication_Link_WiFi) ProtoMessage() {}
+func (*Report_Vehicle_System_Communication_Link_WiFi) Descriptor() ([]byte, []int) {
+	return fileDescriptor_822b117a32fda6fc, []int{0, 1, 0, 2, 0, 0}
 }
 
-var xxx_messageInfo_Report_Vehicle_System_Communication_WiFi proto.InternalMessageInfo
+func (m *Report_Vehicle_System_Communication_Link_WiFi) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_Report_Vehicle_System_Communication_Link_WiFi.Unmarshal(m, b)
+}
+func (m *Report_Vehicle_System_Communication_Link_WiFi) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_Report_Vehicle_System_Communication_Link_WiFi.Marshal(b, m, deterministic)
+}
+func (m *Report_Vehicle_System_Communication_Link_WiFi) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Report_Vehicle_System_Communication_Link_WiFi.Merge(m, src)
+}
+func (m *Report_Vehicle_System_Communication_Link_WiFi) XXX_Size() int {
+	return xxx_messageInfo_Report_Vehicle_System_Communication_Link_WiFi.Size(m)
+}
+func (m *Report_Vehicle_System_Communication_Link_WiFi) XXX_DiscardUnknown() {
+	xxx_messageInfo_Report_Vehicle_System_Communication_Link_WiFi.DiscardUnknown(m)
+}
 
-func (m *Report_Vehicle_System_Communication_WiFi) GetSsid() string {
+var xxx_messageInfo_Report_Vehicle_System_Communication_Link_WiFi proto.InternalMessageInfo
+
+func (m *Report_Vehicle_System_Communication_Link_WiFi) GetNumber() uint32 {
+	if m != nil {
+		return m.Number
+	}
+	return 0
+}
+
+func (m *Report_Vehicle_System_Communication_Link_WiFi) GetSsid() string {
 	if m != nil {
 		return m.Ssid
 	}
 	return ""
 }
 
-func (m *Report_Vehicle_System_Communication_WiFi) GetChannel() uint32 {
+func (m *Report_Vehicle_System_Communication_Link_WiFi) GetChannel() uint32 {
 	if m != nil {
 		return m.Channel
 	}
 	return 0
 }
 
-func (m *Report_Vehicle_System_Communication_WiFi) GetBand() Report_Vehicle_System_Communication_Band {
+func (m *Report_Vehicle_System_Communication_Link_WiFi) GetBand() Report_Vehicle_System_Communication_Band {
 	if m != nil {
 		return m.Band
 	}
@@ -890,77 +909,138 @@ func (m *Report_Vehicle_System_Communication_WiFi) GetBand() Report_Vehicle_Syst
 }
 
 // GPS models a Global Positioning System link.
-type Report_Vehicle_System_Communication_GPS struct {
-	Satellites           uint32   `protobuf:"varint,1,opt,name=satellites,proto3" json:"satellites,omitempty"`
-	Hdop                 uint32   `protobuf:"varint,2,opt,name=hdop,proto3" json:"hdop,omitempty"`
-	Vdop                 uint32   `protobuf:"varint,3,opt,name=vdop,proto3" json:"vdop,omitempty"`
+type Report_Vehicle_System_Communication_Link_GPS struct {
+	Number               uint32   `protobuf:"varint,1,opt,name=number,proto3" json:"number,omitempty"`
+	Satellites           uint32   `protobuf:"varint,2,opt,name=satellites,proto3" json:"satellites,omitempty"`
+	Hdop                 uint32   `protobuf:"varint,3,opt,name=hdop,proto3" json:"hdop,omitempty"`
+	Vdop                 uint32   `protobuf:"varint,4,opt,name=vdop,proto3" json:"vdop,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *Report_Vehicle_System_Communication_GPS) Reset() {
-	*m = Report_Vehicle_System_Communication_GPS{}
+func (m *Report_Vehicle_System_Communication_Link_GPS) Reset() {
+	*m = Report_Vehicle_System_Communication_Link_GPS{}
 }
-func (m *Report_Vehicle_System_Communication_GPS) String() string { return proto.CompactTextString(m) }
-func (*Report_Vehicle_System_Communication_GPS) ProtoMessage()    {}
-func (*Report_Vehicle_System_Communication_GPS) Descriptor() ([]byte, []int) {
-	return fileDescriptor_822b117a32fda6fc, []int{0, 2, 0, 3, 1}
+func (m *Report_Vehicle_System_Communication_Link_GPS) String() string {
+	return proto.CompactTextString(m)
 }
-
-func (m *Report_Vehicle_System_Communication_GPS) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_Report_Vehicle_System_Communication_GPS.Unmarshal(m, b)
-}
-func (m *Report_Vehicle_System_Communication_GPS) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_Report_Vehicle_System_Communication_GPS.Marshal(b, m, deterministic)
-}
-func (m *Report_Vehicle_System_Communication_GPS) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Report_Vehicle_System_Communication_GPS.Merge(m, src)
-}
-func (m *Report_Vehicle_System_Communication_GPS) XXX_Size() int {
-	return xxx_messageInfo_Report_Vehicle_System_Communication_GPS.Size(m)
-}
-func (m *Report_Vehicle_System_Communication_GPS) XXX_DiscardUnknown() {
-	xxx_messageInfo_Report_Vehicle_System_Communication_GPS.DiscardUnknown(m)
+func (*Report_Vehicle_System_Communication_Link_GPS) ProtoMessage() {}
+func (*Report_Vehicle_System_Communication_Link_GPS) Descriptor() ([]byte, []int) {
+	return fileDescriptor_822b117a32fda6fc, []int{0, 1, 0, 2, 0, 1}
 }
 
-var xxx_messageInfo_Report_Vehicle_System_Communication_GPS proto.InternalMessageInfo
+func (m *Report_Vehicle_System_Communication_Link_GPS) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_Report_Vehicle_System_Communication_Link_GPS.Unmarshal(m, b)
+}
+func (m *Report_Vehicle_System_Communication_Link_GPS) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_Report_Vehicle_System_Communication_Link_GPS.Marshal(b, m, deterministic)
+}
+func (m *Report_Vehicle_System_Communication_Link_GPS) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Report_Vehicle_System_Communication_Link_GPS.Merge(m, src)
+}
+func (m *Report_Vehicle_System_Communication_Link_GPS) XXX_Size() int {
+	return xxx_messageInfo_Report_Vehicle_System_Communication_Link_GPS.Size(m)
+}
+func (m *Report_Vehicle_System_Communication_Link_GPS) XXX_DiscardUnknown() {
+	xxx_messageInfo_Report_Vehicle_System_Communication_Link_GPS.DiscardUnknown(m)
+}
 
-func (m *Report_Vehicle_System_Communication_GPS) GetSatellites() uint32 {
+var xxx_messageInfo_Report_Vehicle_System_Communication_Link_GPS proto.InternalMessageInfo
+
+func (m *Report_Vehicle_System_Communication_Link_GPS) GetNumber() uint32 {
+	if m != nil {
+		return m.Number
+	}
+	return 0
+}
+
+func (m *Report_Vehicle_System_Communication_Link_GPS) GetSatellites() uint32 {
 	if m != nil {
 		return m.Satellites
 	}
 	return 0
 }
 
-func (m *Report_Vehicle_System_Communication_GPS) GetHdop() uint32 {
+func (m *Report_Vehicle_System_Communication_Link_GPS) GetHdop() uint32 {
 	if m != nil {
 		return m.Hdop
 	}
 	return 0
 }
 
-func (m *Report_Vehicle_System_Communication_GPS) GetVdop() uint32 {
+func (m *Report_Vehicle_System_Communication_Link_GPS) GetVdop() uint32 {
 	if m != nil {
 		return m.Vdop
 	}
 	return 0
 }
 
+// Cellulary models a cellular telecom link.
+type Report_Vehicle_System_Communication_Link_Cellular struct {
+	Number               uint32          `protobuf:"varint,1,opt,name=number,proto3" json:"number,omitempty"`
+	Signal               *units.Decibels `protobuf:"bytes,2,opt,name=signal,proto3" json:"signal,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}        `json:"-"`
+	XXX_unrecognized     []byte          `json:"-"`
+	XXX_sizecache        int32           `json:"-"`
+}
+
+func (m *Report_Vehicle_System_Communication_Link_Cellular) Reset() {
+	*m = Report_Vehicle_System_Communication_Link_Cellular{}
+}
+func (m *Report_Vehicle_System_Communication_Link_Cellular) String() string {
+	return proto.CompactTextString(m)
+}
+func (*Report_Vehicle_System_Communication_Link_Cellular) ProtoMessage() {}
+func (*Report_Vehicle_System_Communication_Link_Cellular) Descriptor() ([]byte, []int) {
+	return fileDescriptor_822b117a32fda6fc, []int{0, 1, 0, 2, 0, 2}
+}
+
+func (m *Report_Vehicle_System_Communication_Link_Cellular) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_Report_Vehicle_System_Communication_Link_Cellular.Unmarshal(m, b)
+}
+func (m *Report_Vehicle_System_Communication_Link_Cellular) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_Report_Vehicle_System_Communication_Link_Cellular.Marshal(b, m, deterministic)
+}
+func (m *Report_Vehicle_System_Communication_Link_Cellular) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Report_Vehicle_System_Communication_Link_Cellular.Merge(m, src)
+}
+func (m *Report_Vehicle_System_Communication_Link_Cellular) XXX_Size() int {
+	return xxx_messageInfo_Report_Vehicle_System_Communication_Link_Cellular.Size(m)
+}
+func (m *Report_Vehicle_System_Communication_Link_Cellular) XXX_DiscardUnknown() {
+	xxx_messageInfo_Report_Vehicle_System_Communication_Link_Cellular.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Report_Vehicle_System_Communication_Link_Cellular proto.InternalMessageInfo
+
+func (m *Report_Vehicle_System_Communication_Link_Cellular) GetNumber() uint32 {
+	if m != nil {
+		return m.Number
+	}
+	return 0
+}
+
+func (m *Report_Vehicle_System_Communication_Link_Cellular) GetSignal() *units.Decibels {
+	if m != nil {
+		return m.Signal
+	}
+	return nil
+}
+
 // Safety models the safety system.
 type Report_Vehicle_System_Safety struct {
-	ExecutingRth         bool     `protobuf:"varint,1,opt,name=executing_rth,json=executingRth,proto3" json:"executing_rth,omitempty"`
-	LossOfLink           bool     `protobuf:"varint,2,opt,name=loss_of_link,json=lossOfLink,proto3" json:"loss_of_link,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
+	LossOfLink           *wrappers.BoolValue `protobuf:"bytes,1,opt,name=loss_of_link,json=lossOfLink,proto3" json:"loss_of_link,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}            `json:"-"`
+	XXX_unrecognized     []byte              `json:"-"`
+	XXX_sizecache        int32               `json:"-"`
 }
 
 func (m *Report_Vehicle_System_Safety) Reset()         { *m = Report_Vehicle_System_Safety{} }
 func (m *Report_Vehicle_System_Safety) String() string { return proto.CompactTextString(m) }
 func (*Report_Vehicle_System_Safety) ProtoMessage()    {}
 func (*Report_Vehicle_System_Safety) Descriptor() ([]byte, []int) {
-	return fileDescriptor_822b117a32fda6fc, []int{0, 2, 0, 4}
+	return fileDescriptor_822b117a32fda6fc, []int{0, 1, 0, 3}
 }
 
 func (m *Report_Vehicle_System_Safety) XXX_Unmarshal(b []byte) error {
@@ -981,110 +1061,227 @@ func (m *Report_Vehicle_System_Safety) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_Report_Vehicle_System_Safety proto.InternalMessageInfo
 
-func (m *Report_Vehicle_System_Safety) GetExecutingRth() bool {
-	if m != nil {
-		return m.ExecutingRth
-	}
-	return false
-}
-
-func (m *Report_Vehicle_System_Safety) GetLossOfLink() bool {
+func (m *Report_Vehicle_System_Safety) GetLossOfLink() *wrappers.BoolValue {
 	if m != nil {
 		return m.LossOfLink
 	}
-	return false
+	return nil
+}
+
+// Endurance models the run endurance of a vehicle.
+type Report_Vehicle_Endurance struct {
+	Duration             *duration.Duration `protobuf:"bytes,1,opt,name=duration,proto3" json:"duration,omitempty"`
+	Distance             *units.Meters      `protobuf:"bytes,2,opt,name=distance,proto3" json:"distance,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}           `json:"-"`
+	XXX_unrecognized     []byte             `json:"-"`
+	XXX_sizecache        int32              `json:"-"`
+}
+
+func (m *Report_Vehicle_Endurance) Reset()         { *m = Report_Vehicle_Endurance{} }
+func (m *Report_Vehicle_Endurance) String() string { return proto.CompactTextString(m) }
+func (*Report_Vehicle_Endurance) ProtoMessage()    {}
+func (*Report_Vehicle_Endurance) Descriptor() ([]byte, []int) {
+	return fileDescriptor_822b117a32fda6fc, []int{0, 1, 1}
+}
+
+func (m *Report_Vehicle_Endurance) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_Report_Vehicle_Endurance.Unmarshal(m, b)
+}
+func (m *Report_Vehicle_Endurance) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_Report_Vehicle_Endurance.Marshal(b, m, deterministic)
+}
+func (m *Report_Vehicle_Endurance) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Report_Vehicle_Endurance.Merge(m, src)
+}
+func (m *Report_Vehicle_Endurance) XXX_Size() int {
+	return xxx_messageInfo_Report_Vehicle_Endurance.Size(m)
+}
+func (m *Report_Vehicle_Endurance) XXX_DiscardUnknown() {
+	xxx_messageInfo_Report_Vehicle_Endurance.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Report_Vehicle_Endurance proto.InternalMessageInfo
+
+func (m *Report_Vehicle_Endurance) GetDuration() *duration.Duration {
+	if m != nil {
+		return m.Duration
+	}
+	return nil
+}
+
+func (m *Report_Vehicle_Endurance) GetDistance() *units.Meters {
+	if m != nil {
+		return m.Distance
+	}
+	return nil
+}
+
+// Atmosphere models an atmospheric report
+type Report_Atmosphere struct {
+	Position             *measurements.Position `protobuf:"bytes,1,opt,name=position,proto3" json:"position,omitempty"`
+	Pressure             *units.Pascals         `protobuf:"bytes,2,opt,name=pressure,proto3" json:"pressure,omitempty"`
+	Temperature          *units.Celsius         `protobuf:"bytes,3,opt,name=temperature,proto3" json:"temperature,omitempty"`
+	Wind                 *units.MetersPerSecond `protobuf:"bytes,4,opt,name=wind,proto3" json:"wind,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}               `json:"-"`
+	XXX_unrecognized     []byte                 `json:"-"`
+	XXX_sizecache        int32                  `json:"-"`
+}
+
+func (m *Report_Atmosphere) Reset()         { *m = Report_Atmosphere{} }
+func (m *Report_Atmosphere) String() string { return proto.CompactTextString(m) }
+func (*Report_Atmosphere) ProtoMessage()    {}
+func (*Report_Atmosphere) Descriptor() ([]byte, []int) {
+	return fileDescriptor_822b117a32fda6fc, []int{0, 2}
+}
+
+func (m *Report_Atmosphere) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_Report_Atmosphere.Unmarshal(m, b)
+}
+func (m *Report_Atmosphere) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_Report_Atmosphere.Marshal(b, m, deterministic)
+}
+func (m *Report_Atmosphere) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Report_Atmosphere.Merge(m, src)
+}
+func (m *Report_Atmosphere) XXX_Size() int {
+	return xxx_messageInfo_Report_Atmosphere.Size(m)
+}
+func (m *Report_Atmosphere) XXX_DiscardUnknown() {
+	xxx_messageInfo_Report_Atmosphere.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Report_Atmosphere proto.InternalMessageInfo
+
+func (m *Report_Atmosphere) GetPosition() *measurements.Position {
+	if m != nil {
+		return m.Position
+	}
+	return nil
+}
+
+func (m *Report_Atmosphere) GetPressure() *units.Pascals {
+	if m != nil {
+		return m.Pressure
+	}
+	return nil
+}
+
+func (m *Report_Atmosphere) GetTemperature() *units.Celsius {
+	if m != nil {
+		return m.Temperature
+	}
+	return nil
+}
+
+func (m *Report_Atmosphere) GetWind() *units.MetersPerSecond {
+	if m != nil {
+		return m.Wind
+	}
+	return nil
 }
 
 func init() {
 	proto.RegisterEnum("telemetry.Report_Vehicle_System_Communication_Band", Report_Vehicle_System_Communication_Band_name, Report_Vehicle_System_Communication_Band_value)
 	proto.RegisterType((*Report)(nil), "telemetry.Report")
 	proto.RegisterType((*Report_Spatial)(nil), "telemetry.Report.Spatial")
-	proto.RegisterType((*Report_Atmospheric)(nil), "telemetry.Report.Atmospheric")
 	proto.RegisterType((*Report_Vehicle)(nil), "telemetry.Report.Vehicle")
 	proto.RegisterType((*Report_Vehicle_System)(nil), "telemetry.Report.Vehicle.System")
-	proto.RegisterType((*Report_Vehicle_System_FlightControl)(nil), "telemetry.Report.Vehicle.System.FlightControl")
 	proto.RegisterType((*Report_Vehicle_System_Electrical)(nil), "telemetry.Report.Vehicle.System.Electrical")
 	proto.RegisterType((*Report_Vehicle_System_Electrical_Bus)(nil), "telemetry.Report.Vehicle.System.Electrical.Bus")
 	proto.RegisterType((*Report_Vehicle_System_Electrical_Battery)(nil), "telemetry.Report.Vehicle.System.Electrical.Battery")
 	proto.RegisterType((*Report_Vehicle_System_Propulsion)(nil), "telemetry.Report.Vehicle.System.Propulsion")
 	proto.RegisterType((*Report_Vehicle_System_Propulsion_Motor)(nil), "telemetry.Report.Vehicle.System.Propulsion.Motor")
 	proto.RegisterType((*Report_Vehicle_System_Communication)(nil), "telemetry.Report.Vehicle.System.Communication")
-	proto.RegisterType((*Report_Vehicle_System_Communication_WiFi)(nil), "telemetry.Report.Vehicle.System.Communication.WiFi")
-	proto.RegisterType((*Report_Vehicle_System_Communication_GPS)(nil), "telemetry.Report.Vehicle.System.Communication.GPS")
+	proto.RegisterType((*Report_Vehicle_System_Communication_Link)(nil), "telemetry.Report.Vehicle.System.Communication.Link")
+	proto.RegisterType((*Report_Vehicle_System_Communication_Link_WiFi)(nil), "telemetry.Report.Vehicle.System.Communication.Link.WiFi")
+	proto.RegisterType((*Report_Vehicle_System_Communication_Link_GPS)(nil), "telemetry.Report.Vehicle.System.Communication.Link.GPS")
+	proto.RegisterType((*Report_Vehicle_System_Communication_Link_Cellular)(nil), "telemetry.Report.Vehicle.System.Communication.Link.Cellular")
 	proto.RegisterType((*Report_Vehicle_System_Safety)(nil), "telemetry.Report.Vehicle.System.Safety")
+	proto.RegisterType((*Report_Vehicle_Endurance)(nil), "telemetry.Report.Vehicle.Endurance")
+	proto.RegisterType((*Report_Atmosphere)(nil), "telemetry.Report.Atmosphere")
 }
 
 func init() { proto.RegisterFile("telemetry/report.proto", fileDescriptor_822b117a32fda6fc) }
 
 var fileDescriptor_822b117a32fda6fc = []byte{
-	// 1093 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x55, 0xd1, 0x6e, 0x1b, 0x45,
-	0x14, 0xb5, 0x63, 0xd7, 0x76, 0x6e, 0xe2, 0x2a, 0x0c, 0x52, 0x71, 0x57, 0xb4, 0xb5, 0x8a, 0x04,
-	0x95, 0x80, 0x5d, 0x70, 0x29, 0x42, 0x48, 0x20, 0xd9, 0x75, 0x1b, 0x57, 0xd0, 0x38, 0xac, 0x43,
-	0x22, 0xfa, 0x62, 0x8d, 0xd7, 0x63, 0x7b, 0x94, 0xdd, 0x99, 0xd5, 0xcc, 0x6c, 0xa8, 0x1f, 0x90,
-	0xfa, 0x35, 0x48, 0x48, 0xe5, 0x13, 0xf8, 0x19, 0x9e, 0x79, 0xe5, 0x1d, 0xcd, 0xec, 0xec, 0x7a,
-	0x97, 0x24, 0x0a, 0xe6, 0x6d, 0x7c, 0xe6, 0x9c, 0x33, 0x77, 0xce, 0xde, 0xb9, 0x86, 0x3b, 0x8a,
-	0x84, 0x24, 0x22, 0x4a, 0xac, 0x3d, 0x41, 0x62, 0x2e, 0x94, 0x1b, 0x0b, 0xae, 0x38, 0xda, 0xcd,
-	0x71, 0xe7, 0xc1, 0x92, 0xf3, 0x65, 0x48, 0x3c, 0xb3, 0x31, 0x4b, 0x16, 0x9e, 0xa2, 0x11, 0x91,
-	0x0a, 0x47, 0x71, 0xca, 0x75, 0xee, 0xff, 0x9b, 0x30, 0x4f, 0x04, 0x56, 0x94, 0x33, 0xbb, 0x7f,
-	0x40, 0x5e, 0x2b, 0xc2, 0x24, 0xe5, 0x4c, 0x5a, 0xe4, 0x41, 0x44, 0xb0, 0x4c, 0x04, 0x89, 0x08,
-	0x53, 0xd2, 0x2b, 0xfe, 0xb0, 0x84, 0xf7, 0x94, 0xc0, 0xc1, 0x39, 0x65, 0x4b, 0x8f, 0xce, 0x09,
-	0x53, 0x54, 0xad, 0xd3, 0x8d, 0x87, 0x7f, 0xbe, 0x0b, 0x0d, 0xdf, 0x14, 0x8a, 0xbe, 0x84, 0x16,
-	0x9f, 0x49, 0x22, 0x2e, 0xc8, 0xbc, 0x53, 0xed, 0x56, 0x1f, 0xed, 0xf5, 0x1c, 0x37, 0xad, 0xc4,
-	0xcd, 0x2a, 0x71, 0x4f, 0xb2, 0x52, 0xfd, 0x9c, 0x8b, 0x7a, 0x00, 0xd6, 0x94, 0x12, 0xd9, 0xd9,
-	0xe9, 0xd6, 0x1e, 0xed, 0xf5, 0x90, 0x9b, 0x1d, 0xe8, 0xbe, 0xb0, 0x07, 0xfa, 0x05, 0x16, 0x7a,
-	0x02, 0x4d, 0x19, 0x63, 0x45, 0x71, 0xd8, 0xa9, 0x99, 0xa3, 0xee, 0xba, 0x79, 0x40, 0x6e, 0x5a,
-	0x8f, 0x3b, 0x49, 0x09, 0xa3, 0x8a, 0x9f, 0x71, 0x51, 0x1f, 0xf6, 0xb0, 0x8a, 0xb8, 0x8c, 0x57,
-	0x44, 0xd0, 0xa0, 0x53, 0x37, 0xd2, 0x7b, 0x97, 0xa5, 0xfd, 0x0d, 0x69, 0x54, 0xf1, 0x8b, 0x1a,
-	0x7d, 0xf2, 0x05, 0x59, 0xd1, 0x20, 0x24, 0x9d, 0x5b, 0xd7, 0x9d, 0x7c, 0x9a, 0x12, 0xf4, 0xc9,
-	0x96, 0xeb, 0xbc, 0xd9, 0x81, 0xa6, 0x2d, 0x08, 0xf5, 0xa0, 0x15, 0x73, 0x49, 0xf5, 0x17, 0xb1,
-	0x41, 0xdd, 0x71, 0x4b, 0x99, 0x1f, 0xdb, 0x5d, 0x3f, 0xe7, 0xa1, 0xaf, 0xa0, 0x75, 0x41, 0x42,
-	0x1e, 0x50, 0xb5, 0xee, 0xec, 0x5c, 0xa5, 0x39, 0xb5, 0xbb, 0x83, 0xfa, 0x9b, 0x5f, 0xef, 0x55,
-	0xfd, 0x9c, 0xad, 0xef, 0xcc, 0x05, 0x25, 0x4c, 0x99, 0x16, 0xc8, 0xe3, 0x2a, 0x89, 0xc7, 0x1b,
-	0x82, 0xd5, 0x17, 0x35, 0x68, 0x08, 0xfb, 0x38, 0x08, 0x48, 0x48, 0xd2, 0x36, 0xb2, 0xb9, 0x39,
-	0x65, 0x8f, 0x7e, 0x81, 0x61, 0x4d, 0x4a, 0x2a, 0xe7, 0xaf, 0x2a, 0xec, 0x15, 0x82, 0xfd, 0xbf,
-	0x31, 0xc4, 0x82, 0x48, 0xcd, 0xb9, 0x3a, 0x86, 0x63, 0xbb, 0x9b, 0xc5, 0x90, 0xb1, 0x75, 0x0c,
-	0x8a, 0x44, 0xb1, 0x2e, 0x46, 0x8b, 0xaf, 0x8c, 0xe1, 0x64, 0x43, 0xc8, 0x62, 0x28, 0x68, 0xd0,
-	0x27, 0x50, 0xff, 0x99, 0xb2, 0xb9, 0xbd, 0x3e, 0x2a, 0x6b, 0xcf, 0x28, 0x9b, 0x5b, 0x91, 0x61,
-	0x39, 0x7f, 0xb4, 0xa1, 0x69, 0x1b, 0x01, 0x7d, 0x0d, 0x4d, 0xb9, 0x96, 0x8a, 0x44, 0xb2, 0x53,
-	0x35, 0xfd, 0xdd, 0xbd, 0xb6, 0x69, 0xdc, 0x89, 0x21, 0xfa, 0x99, 0xc0, 0xf9, 0x7b, 0x1f, 0x1a,
-	0x29, 0x86, 0xce, 0xe0, 0xf6, 0x22, 0xa4, 0xcb, 0x95, 0x9a, 0x06, 0x9c, 0x29, 0xc1, 0x43, 0x9b,
-	0x9b, 0x7b, 0x93, 0x9b, 0xfb, 0xdc, 0xc8, 0x9e, 0xa6, 0xaa, 0x51, 0xc5, 0x6f, 0x2f, 0x8a, 0x00,
-	0x3a, 0x85, 0x76, 0xc0, 0xa3, 0x28, 0x61, 0x34, 0x48, 0xbf, 0xf0, 0xce, 0x7f, 0xf4, 0x7d, 0x5a,
-	0x54, 0x69, 0xdf, 0x92, 0x0d, 0x7a, 0x09, 0x40, 0x42, 0x12, 0x28, 0x41, 0x83, 0xfc, 0xa5, 0x7e,
-	0x7c, 0xa3, 0xe9, 0xb3, 0x5c, 0x32, 0xaa, 0xf8, 0x05, 0x03, 0x6d, 0x17, 0x0b, 0x1e, 0x27, 0xa1,
-	0xdc, 0x74, 0xe1, 0xcd, 0x76, 0xc7, 0xb9, 0x44, 0xdb, 0x6d, 0x0c, 0x50, 0x1f, 0x1a, 0x12, 0x2f,
-	0x88, 0x5a, 0xdb, 0x97, 0xfc, 0xd1, 0x8d, 0x56, 0x13, 0x43, 0x1f, 0x55, 0x7c, 0x2b, 0x74, 0x38,
-	0xb4, 0x4b, 0xd1, 0xa2, 0x07, 0xb0, 0x47, 0xe5, 0x14, 0x53, 0x31, 0xe3, 0x82, 0x11, 0xf3, 0x7d,
-	0x5a, 0x3e, 0x50, 0xd9, 0xb7, 0x08, 0xfa, 0x06, 0x76, 0x09, 0xd3, 0x03, 0x99, 0x05, 0x59, 0x0b,
-	0xdf, 0xbd, 0x34, 0x26, 0x87, 0x49, 0xe9, 0x1d, 0x6d, 0x14, 0xce, 0xef, 0x35, 0x80, 0x4d, 0x3e,
-	0xe8, 0x19, 0xdc, 0x9a, 0x25, 0x32, 0x1f, 0x9b, 0xde, 0x16, 0xd9, 0xba, 0x83, 0x44, 0xfa, 0xa9,
-	0x1a, 0xfd, 0x00, 0xbb, 0x33, 0xac, 0x14, 0x11, 0x7a, 0x02, 0xd7, 0x8c, 0xd5, 0xe3, 0xad, 0xac,
-	0x8c, 0x78, 0xed, 0x6f, 0x5c, 0x9c, 0x9f, 0xa0, 0x36, 0x48, 0x24, 0x42, 0x50, 0x67, 0x38, 0x4a,
-	0x83, 0xd8, 0xf5, 0xcd, 0x1a, 0xdd, 0x87, 0xe6, 0x05, 0x0f, 0x15, 0x5e, 0xa6, 0x01, 0x54, 0xed,
-	0x2d, 0x33, 0x50, 0xef, 0x07, 0x89, 0x10, 0x84, 0x29, 0xd3, 0x32, 0xf9, 0xbe, 0x05, 0x9d, 0xdf,
-	0xaa, 0xd0, 0xb4, 0x27, 0xa2, 0x3b, 0xd0, 0x60, 0x49, 0x34, 0x23, 0xc2, 0x9c, 0xd0, 0xf6, 0xed,
-	0x2f, 0xf4, 0x61, 0xf9, 0xb9, 0x17, 0xcf, 0x29, 0xbd, 0xe9, 0x42, 0x2d, 0xb5, 0xab, 0x6a, 0xe9,
-	0x42, 0x2b, 0xc0, 0x31, 0x36, 0x73, 0xb7, 0x5e, 0x20, 0xe4, 0x28, 0x7a, 0x1f, 0x1a, 0xc1, 0x0a,
-	0x8b, 0x65, 0xfa, 0x7f, 0x90, 0xed, 0x5b, 0xcc, 0x79, 0x5b, 0x05, 0xd8, 0x34, 0x20, 0x7a, 0x01,
-	0x8d, 0x88, 0x2b, 0x2e, 0xb2, 0x39, 0xf0, 0xf9, 0x16, 0xdd, 0xeb, 0xbe, 0xd4, 0x4a, 0xdf, 0x1a,
-	0x38, 0x13, 0xb8, 0x65, 0x80, 0x6b, 0x23, 0x38, 0x80, 0x9a, 0x88, 0x23, 0x73, 0xf5, 0xb6, 0xaf,
-	0x97, 0xa8, 0x7b, 0x79, 0x06, 0x96, 0xe3, 0x70, 0xde, 0xd6, 0xa0, 0x5d, 0x7a, 0xd3, 0xe8, 0x50,
-	0x0f, 0xbd, 0x05, 0xb5, 0x93, 0xe6, 0xf1, 0x76, 0x13, 0xc1, 0x3d, 0xa3, 0xcf, 0xa9, 0x6f, 0x0c,
-	0xd0, 0x10, 0x6a, 0xcb, 0x58, 0xda, 0x96, 0xef, 0x6d, 0xe9, 0x73, 0x78, 0x3c, 0xf1, 0xb5, 0xdc,
-	0xf9, 0x05, 0xea, 0xda, 0x53, 0xf7, 0x95, 0x94, 0x74, 0x9e, 0xf5, 0x95, 0x5e, 0xa3, 0x0e, 0x34,
-	0x83, 0x15, 0x66, 0x8c, 0x84, 0xf6, 0xd2, 0xd9, 0x4f, 0x7d, 0x89, 0x19, 0x66, 0x73, 0x73, 0xe3,
-	0xdb, 0x5b, 0x5f, 0x62, 0x80, 0xd9, 0xdc, 0x37, 0x06, 0xce, 0x4b, 0xa8, 0x1d, 0x1e, 0x4f, 0xd0,
-	0x7d, 0x00, 0x89, 0x15, 0x09, 0x43, 0xaa, 0x88, 0xb4, 0xb1, 0x17, 0x10, 0x5d, 0xdd, 0x6a, 0xce,
-	0x63, 0x5b, 0x86, 0x59, 0x6b, 0xec, 0x42, 0x63, 0xb5, 0x14, 0xd3, 0xeb, 0x87, 0xdf, 0x42, 0x5d,
-	0x9b, 0xa3, 0x03, 0xd8, 0x1f, 0xf4, 0x8f, 0x86, 0xd3, 0x1f, 0x8f, 0xbe, 0x3b, 0x1a, 0x9f, 0x1d,
-	0x1d, 0x54, 0xd0, 0x3b, 0xd0, 0x36, 0x48, 0x6f, 0x38, 0x3e, 0xf9, 0xe2, 0x70, 0xf4, 0xea, 0xa0,
-	0x9a, 0x43, 0x4f, 0x86, 0xe3, 0x93, 0xcf, 0x34, 0xb4, 0xe3, 0x8c, 0xa1, 0x91, 0x8e, 0x24, 0xf4,
-	0x01, 0xb4, 0xc9, 0x6b, 0x12, 0x24, 0x8a, 0xb2, 0xe5, 0x54, 0xa8, 0x95, 0x9d, 0x3c, 0xfb, 0x39,
-	0xe8, 0xab, 0x15, 0xea, 0xc2, 0x7e, 0xc8, 0xa5, 0x9c, 0xf2, 0xc5, 0x34, 0xa4, 0xec, 0xdc, 0x94,
-	0xd7, 0xf2, 0x41, 0x63, 0xe3, 0xc5, 0xf7, 0x94, 0x9d, 0x0f, 0x76, 0xa1, 0x39, 0x27, 0x0a, 0xd3,
-	0x50, 0x16, 0x97, 0xde, 0xab, 0x4f, 0x97, 0x54, 0xad, 0x92, 0x99, 0x1b, 0xf0, 0xc8, 0xc3, 0x54,
-	0x44, 0x38, 0xf6, 0x28, 0x53, 0x44, 0x2c, 0x70, 0x40, 0xa4, 0x27, 0x45, 0xe0, 0x2d, 0xb9, 0x97,
-	0xa7, 0x3a, 0x6b, 0x98, 0x49, 0xf6, 0xf8, 0x9f, 0x00, 0x00, 0x00, 0xff, 0xff, 0x3f, 0x31, 0x02,
-	0x95, 0xce, 0x0a, 0x00, 0x00,
+	// 1254 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xbc, 0x56, 0xdd, 0x6e, 0xdc, 0x44,
+	0x14, 0xde, 0xcd, 0x3a, 0xbb, 0x9b, 0x93, 0xa4, 0xa4, 0x83, 0x54, 0xb6, 0x56, 0x69, 0xab, 0x82,
+	0x44, 0x25, 0x5a, 0xbb, 0xa4, 0x3f, 0x54, 0x50, 0x55, 0xca, 0x36, 0x25, 0x5b, 0xb5, 0x49, 0x56,
+	0x4e, 0x49, 0xa4, 0xde, 0x54, 0xb3, 0xde, 0x93, 0xcd, 0xa8, 0xb6, 0xc7, 0x9a, 0x19, 0xa7, 0xe4,
+	0x02, 0xa9, 0xbc, 0x02, 0x6f, 0xc0, 0x0d, 0x12, 0x17, 0x88, 0x0b, 0x2e, 0x79, 0x12, 0x10, 0x12,
+	0xaf, 0x82, 0xc6, 0x9e, 0xb1, 0xbd, 0x09, 0xd1, 0x36, 0xb9, 0xe0, 0x26, 0x52, 0xce, 0xf9, 0xbe,
+	0xcf, 0xdf, 0x9c, 0x73, 0xe6, 0xec, 0xc0, 0x25, 0x85, 0x11, 0xc6, 0xa8, 0xc4, 0x91, 0x2f, 0x30,
+	0xe5, 0x42, 0x79, 0xa9, 0xe0, 0x8a, 0x93, 0x85, 0x32, 0xee, 0x5e, 0x9b, 0x70, 0x3e, 0x89, 0xd0,
+	0xcf, 0x13, 0xa3, 0x6c, 0xdf, 0x57, 0x2c, 0x46, 0xa9, 0x68, 0x9c, 0x16, 0x58, 0xf7, 0xea, 0x71,
+	0xc0, 0x38, 0x13, 0x54, 0x31, 0x9e, 0x9c, 0x96, 0x7f, 0x2b, 0x68, 0x9a, 0xa2, 0x90, 0x26, 0xbf,
+	0x82, 0xdf, 0x29, 0x4c, 0x24, 0xe3, 0x89, 0x8d, 0x5c, 0xcc, 0x12, 0xa6, 0xa4, 0x9f, 0xff, 0x35,
+	0xa1, 0x6b, 0x31, 0x52, 0x99, 0x09, 0x8c, 0x31, 0x51, 0xd2, 0xaf, 0xff, 0x63, 0x00, 0x1f, 0x29,
+	0x41, 0xc3, 0x37, 0x2c, 0x99, 0xf8, 0x6c, 0x8c, 0x89, 0x62, 0xea, 0xa8, 0x48, 0xdc, 0xf8, 0xe3,
+	0x32, 0xb4, 0x83, 0xfc, 0x6c, 0xe4, 0x01, 0x74, 0xf9, 0x48, 0xa2, 0x38, 0xc4, 0x71, 0xaf, 0x79,
+	0xbd, 0x79, 0x73, 0x71, 0xd5, 0xf5, 0x0a, 0x73, 0x9e, 0x35, 0xe7, 0xbd, 0xb4, 0xa7, 0x0b, 0x4a,
+	0x2c, 0x59, 0x05, 0x30, 0xa2, 0x0c, 0x65, 0x6f, 0xee, 0x7a, 0xeb, 0xe6, 0xe2, 0x2a, 0xf1, 0xec,
+	0x07, 0xbd, 0x67, 0xe6, 0x83, 0x41, 0x0d, 0x45, 0xee, 0x43, 0x47, 0xa6, 0x54, 0x31, 0x1a, 0xf5,
+	0x5a, 0xf9, 0xa7, 0x2e, 0x7b, 0x65, 0x4d, 0xbd, 0xc2, 0x8f, 0xb7, 0x53, 0x00, 0x06, 0x8d, 0xc0,
+	0x62, 0x35, 0xed, 0x10, 0x0f, 0x58, 0x18, 0x61, 0xcf, 0x39, 0x8d, 0xb6, 0x5b, 0x00, 0x34, 0xcd,
+	0x60, 0xc9, 0x63, 0x00, 0xaa, 0x62, 0x2e, 0xd3, 0x03, 0x14, 0xd8, 0x9b, 0xcf, 0x99, 0x57, 0x4e,
+	0x32, 0xd7, 0x4a, 0xcc, 0xa0, 0x11, 0xd4, 0x18, 0xee, 0xbb, 0x39, 0xe8, 0x18, 0x37, 0x64, 0x15,
+	0xba, 0x29, 0x97, 0x4c, 0x77, 0xd0, 0x54, 0xe9, 0x92, 0x37, 0x55, 0xf0, 0xa1, 0xc9, 0x06, 0x25,
+	0x8e, 0x3c, 0x84, 0xee, 0x21, 0x46, 0x3c, 0x64, 0xea, 0xa8, 0x37, 0xf7, 0x5f, 0x9c, 0x5d, 0x93,
+	0xed, 0x3b, 0xef, 0x7e, 0xfe, 0xb8, 0x19, 0x94, 0x68, 0xb2, 0x06, 0x8b, 0x5c, 0x30, 0x4c, 0x54,
+	0x3e, 0x32, 0x65, 0xad, 0xa6, 0xc8, 0xdb, 0x15, 0xc0, 0xf0, 0xeb, 0x1c, 0xb2, 0x0e, 0x4b, 0x34,
+	0x0c, 0x31, 0xc2, 0x62, 0xec, 0x4c, 0xe1, 0xdc, 0x69, 0x8d, 0xb5, 0x1a, 0xc2, 0x88, 0x4c, 0xb1,
+	0xdc, 0x5f, 0x3e, 0x84, 0x8e, 0xa9, 0x2c, 0xf9, 0x0a, 0x3a, 0xf2, 0x48, 0x2a, 0x8c, 0x65, 0xaf,
+	0x99, 0x77, 0xfb, 0xfa, 0xa9, 0x5d, 0xf0, 0x76, 0x72, 0x60, 0x60, 0x09, 0x64, 0x03, 0x16, 0x30,
+	0xd1, 0x57, 0x20, 0x09, 0xd1, 0xd4, 0xe2, 0x93, 0xd3, 0xd9, 0x4f, 0x2d, 0xd4, 0x78, 0xaa, 0xb8,
+	0xe4, 0x11, 0x74, 0x29, 0x13, 0x23, 0x2e, 0x12, 0x34, 0x65, 0x39, 0x39, 0xad, 0x7d, 0xce, 0xa3,
+	0x5d, 0x1a, 0x65, 0x96, 0x5e, 0x32, 0xdc, 0x7f, 0x56, 0xa0, 0x5d, 0x58, 0x23, 0x9b, 0x00, 0x18,
+	0x61, 0xa8, 0x04, 0x0b, 0x69, 0x64, 0x5a, 0xfa, 0xf9, 0xac, 0x03, 0x79, 0x4f, 0x4b, 0x8a, 0x9e,
+	0x95, 0x4a, 0x80, 0xec, 0xc2, 0x72, 0xc8, 0xe3, 0x38, 0x4b, 0x58, 0x58, 0xd4, 0xbb, 0x38, 0xa4,
+	0x37, 0x53, 0xf1, 0x49, 0x9d, 0x35, 0x68, 0x04, 0xd3, 0x32, 0xda, 0x66, 0x2a, 0x78, 0x9a, 0x45,
+	0xb2, 0x1a, 0x84, 0xd9, 0x36, 0x87, 0x25, 0x45, 0xdb, 0xac, 0x04, 0xc8, 0x1a, 0xb4, 0x25, 0xdd,
+	0x47, 0x75, 0x64, 0xe6, 0xe1, 0xb3, 0x99, 0x52, 0x3b, 0x39, 0x7c, 0xd0, 0x08, 0x0c, 0xd1, 0xfd,
+	0xcb, 0x01, 0xa8, 0xca, 0x40, 0x9e, 0xc3, 0xfc, 0x28, 0x93, 0x68, 0x67, 0xc2, 0x3f, 0x43, 0x09,
+	0xbd, 0x7e, 0x26, 0x4d, 0x8b, 0x0a, 0x0d, 0xb2, 0x07, 0x0b, 0x23, 0xaa, 0x14, 0x8a, 0x6a, 0xa5,
+	0xdc, 0x3d, 0x93, 0x60, 0x4e, 0xb6, 0xf7, 0xa9, 0xd2, 0x72, 0x7f, 0x68, 0x42, 0xab, 0x9f, 0x49,
+	0x72, 0x05, 0xda, 0x49, 0x16, 0x8f, 0x50, 0xe4, 0x1d, 0x5f, 0x36, 0x40, 0x13, 0x23, 0xb7, 0xa0,
+	0x73, 0xc8, 0x23, 0x45, 0x27, 0x76, 0x46, 0x97, 0xbc, 0x62, 0xdd, 0xee, 0xf2, 0x48, 0x59, 0xab,
+	0x16, 0x42, 0x3c, 0xe8, 0x84, 0x99, 0x10, 0x98, 0x28, 0xd3, 0x97, 0x0b, 0x06, 0xbd, 0x16, 0xa7,
+	0x28, 0xb0, 0xc4, 0x1b, 0x90, 0xfb, 0xd3, 0x1c, 0x74, 0x8c, 0xc1, 0x19, 0x3e, 0x1e, 0xc0, 0xa2,
+	0x42, 0x2d, 0x42, 0x55, 0x26, 0xac, 0x17, 0xab, 0xfe, 0x04, 0x23, 0xc9, 0xca, 0xc2, 0xd5, 0x81,
+	0x75, 0xff, 0xad, 0x33, 0xf9, 0x77, 0xde, 0xc3, 0x3f, 0xb9, 0x07, 0xdd, 0x90, 0xa6, 0x34, 0x5f,
+	0x67, 0xc5, 0x32, 0x25, 0x53, 0x84, 0x01, 0xcf, 0x84, 0x25, 0x95, 0x48, 0x72, 0x0b, 0xda, 0xe1,
+	0x01, 0x15, 0x13, 0xec, 0xb5, 0xa7, 0x3e, 0x32, 0x44, 0x11, 0x62, 0xa2, 0xec, 0xc9, 0x0b, 0x8c,
+	0xfb, 0xfb, 0x1c, 0x40, 0x35, 0xbc, 0xe4, 0x19, 0xb4, 0x63, 0xae, 0xb8, 0xb0, 0xd3, 0xf5, 0xc5,
+	0x19, 0x26, 0xdf, 0xdb, 0xd4, 0xcc, 0xc0, 0x08, 0xb8, 0x7f, 0x36, 0x61, 0x3e, 0x8f, 0x90, 0x4b,
+	0xd3, 0xb5, 0xff, 0x7f, 0xba, 0x7f, 0xbc, 0xa7, 0xce, 0xfb, 0xf6, 0xf4, 0x06, 0xb4, 0x44, 0x1a,
+	0x9b, 0x82, 0x83, 0xc1, 0x07, 0xc3, 0x4d, 0x83, 0xd5, 0x49, 0xf7, 0xb7, 0x36, 0x2c, 0x4f, 0xed,
+	0x11, 0xf2, 0x0c, 0xe6, 0x23, 0x96, 0xbc, 0xb1, 0x75, 0xbb, 0x7b, 0xb6, 0x35, 0xe4, 0xbd, 0x60,
+	0xc9, 0x9b, 0xa0, 0x50, 0x70, 0x7f, 0x9c, 0x07, 0x47, 0xff, 0x4f, 0x9e, 0x43, 0x6b, 0x92, 0x4a,
+	0xb3, 0x2a, 0xbf, 0x3c, 0x87, 0xa2, 0xb7, 0x31, 0xdc, 0x19, 0x34, 0x02, 0xad, 0x42, 0xb6, 0xc0,
+	0x79, 0xcb, 0xf6, 0x99, 0xa9, 0xf4, 0xc3, 0xf3, 0xa8, 0xed, 0xb1, 0x6f, 0xd8, 0xa0, 0x11, 0xe4,
+	0x3a, 0xe4, 0x15, 0x74, 0x43, 0x8c, 0xa2, 0x2c, 0xa2, 0xc2, 0xf4, 0xe3, 0xd1, 0x79, 0x34, 0x9f,
+	0x18, 0x8d, 0x41, 0x23, 0x28, 0xf5, 0xdc, 0x5f, 0x9b, 0xe0, 0xe8, 0x8f, 0xcd, 0xb8, 0xb5, 0x3d,
+	0x70, 0xa4, 0x64, 0xe3, 0xfc, 0x48, 0x0b, 0x26, 0x97, 0x47, 0xc8, 0x55, 0xe8, 0x84, 0x07, 0x34,
+	0x49, 0xb0, 0x78, 0xf6, 0x2c, 0x97, 0xb3, 0x51, 0x04, 0xc9, 0x26, 0x38, 0x23, 0x9a, 0x8c, 0xf3,
+	0xa1, 0xb8, 0x70, 0xe6, 0x66, 0xf5, 0x69, 0x32, 0xb6, 0x9f, 0xd3, 0x32, 0xee, 0xf7, 0xd0, 0xda,
+	0x18, 0xee, 0xcc, 0x70, 0xfb, 0x29, 0x80, 0xa4, 0x0a, 0xa3, 0x88, 0xa9, 0x7c, 0xd7, 0x56, 0x88,
+	0x5a, 0x5c, 0x9f, 0xe9, 0x60, 0xcc, 0xd3, 0x29, 0xdb, 0x79, 0x44, 0x67, 0x0e, 0x75, 0xc6, 0xa9,
+	0x67, 0x74, 0xc4, 0xdd, 0x83, 0xae, 0x2d, 0xe3, 0x0c, 0x0f, 0xb7, 0xa1, 0x2d, 0xd9, 0x24, 0xa1,
+	0x91, 0x19, 0x83, 0x0f, 0xcc, 0x78, 0xaf, 0x63, 0xc8, 0x46, 0x18, 0xd9, 0xfb, 0x60, 0x40, 0xfd,
+	0x05, 0xe8, 0x8c, 0x51, 0x51, 0x16, 0xc9, 0x1b, 0x8f, 0xc1, 0xd1, 0xc7, 0x26, 0x2b, 0xb0, 0xd4,
+	0x5f, 0xdb, 0x5a, 0x7f, 0xfd, 0xed, 0xd6, 0xf3, 0xad, 0xed, 0xbd, 0xad, 0x95, 0x06, 0xb9, 0x08,
+	0xcb, 0x79, 0x64, 0x75, 0x7d, 0xfb, 0xe5, 0xbd, 0x8d, 0xc1, 0xab, 0x95, 0x66, 0x19, 0xba, 0xbf,
+	0xbe, 0xfd, 0xf2, 0x8e, 0x0e, 0xcd, 0xb9, 0x2f, 0xa0, 0x5d, 0xfc, 0xb0, 0x91, 0x3e, 0x2c, 0x45,
+	0x5c, 0xca, 0xd7, 0x7c, 0xff, 0xb5, 0x9e, 0xf7, 0x53, 0x9f, 0xc0, 0xc7, 0x1f, 0x15, 0xa0, 0x59,
+	0xdb, 0xfb, 0x7a, 0x6a, 0x6a, 0xc6, 0xdc, 0x23, 0x58, 0x28, 0x5f, 0x2f, 0xe4, 0x6b, 0xe8, 0xda,
+	0x67, 0xbf, 0xd1, 0xbd, 0x7c, 0x42, 0x77, 0x3d, 0x9b, 0x7a, 0x7e, 0x95, 0x04, 0xe2, 0x43, 0x77,
+	0xcc, 0xa4, 0xaa, 0xbd, 0x98, 0x96, 0x4d, 0x79, 0x36, 0x51, 0x61, 0xb5, 0x69, 0x2d, 0xc8, 0xfd,
+	0xbb, 0x09, 0x50, 0xbd, 0x65, 0xcf, 0xf5, 0x62, 0xbd, 0x03, 0xdd, 0x54, 0xa0, 0x94, 0x27, 0x7f,
+	0x75, 0x86, 0x54, 0x86, 0xb4, 0xec, 0x48, 0x89, 0x3a, 0xbe, 0xd6, 0x5a, 0xef, 0xbb, 0xd6, 0xee,
+	0xe8, 0xfb, 0x6f, 0x46, 0x5e, 0x3b, 0xab, 0x9f, 0x6c, 0x88, 0x62, 0x07, 0x43, 0x5e, 0x4d, 0xb5,
+	0x46, 0xd6, 0x8a, 0xdc, 0xf7, 0x5f, 0xdd, 0x9e, 0x30, 0x75, 0x90, 0x8d, 0xbc, 0x90, 0xc7, 0x3e,
+	0x65, 0x22, 0xa6, 0xa9, 0xcf, 0x12, 0x85, 0x62, 0x9f, 0x86, 0x28, 0x7d, 0x29, 0x42, 0x7f, 0xc2,
+	0xfd, 0xf2, 0x1a, 0x8d, 0xda, 0x79, 0xb9, 0xef, 0xfe, 0x1b, 0x00, 0x00, 0xff, 0xff, 0x54, 0x6f,
+	0x9f, 0xc7, 0xda, 0x0d, 0x00, 0x00,
 }
