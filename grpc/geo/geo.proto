@@ -4,7 +4,7 @@ syntax = "proto3";
 
 import "extensions.proto";
 import "units/units.proto";
-import "units/extensions.proto";
+import "units/units_ext.proto";
 import "measurements/measurements.proto";
 import "google/protobuf/timestamp.proto";
 
