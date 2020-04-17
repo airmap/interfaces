@@ -13,3 +13,10 @@ message Ack {
   uint64 count                         = 1;  // Cumalative count of messages received.
   google.protobuf.Timestamp submitted  = 2;  // The time ack was submitted.
 }
+
+// Nack models an negative acknowledgement of a message due to an error.
+message Nack {
+  uint64 count                         = 1;  // Cumalative count of messages not received.
+  google.protobuf.Timestamp submitted  = 2;  // The time nack was submitted.
+  string reason                        = 3;  // An error message related to the cause of the nack.
+}

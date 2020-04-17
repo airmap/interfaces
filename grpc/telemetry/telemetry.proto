@@ -29,7 +29,8 @@ message Update {
   message ToProvider {
     oneof details {
       system.Status status  = 1;  // Collector operational status.
-      system.Ack ack        = 2;  // Acknowledgement of received updates.
+      system.Ack ack        = 2;  // Acknowledgement of a received update.
+      system.Nack nack      = 3;  // A negative acknowledgement of a received update.
     }
   }
 }

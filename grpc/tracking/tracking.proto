@@ -44,7 +44,7 @@ message Update {
     oneof details {
       system.Status status             = 1;  // Provider operational status.
       Track.Batch batch                = 2;  // Batch of updates from a track provider.
-      ConnectProviderParameters params = 3;  // Parameters used to customize the stream from the provider. 
+      ConnectProviderParameters params = 3;  // Parameters used to customize the stream from the provider.
     }
   }
 
@@ -53,6 +53,7 @@ message Update {
     oneof details {
       system.Status status = 1;  // Collector operational status.
       system.Ack ack       = 2;  // Acknowledgement of received updates.
+      system.Nack nack     = 3;  // Negative acknowledgement of received updates.
     }
   }
 
