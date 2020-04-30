@@ -5,6 +5,7 @@ syntax = "proto3";
 import "extensions.proto";
 import "units/units.proto";
 import "units/units_ext.proto";
+import "measurements/dop.proto";
 
 package measurements;
 
@@ -33,8 +34,8 @@ message Position {
     Error error            = 1001 [(grpc.nullable) = true];  // The error in the measurement.
 
     message Error {
-      units.Meters distance  = 1 [(units.min_meters).value = 0.0];   // The error estimate on the distance measurement.
-      units.Degrees azimuth  = 2 [(units.min_degrees).value = 0.0];  // The error estimate on the azimuth measurement.
+      units.Meters distance  = 1 [(units.min_meters).value = 0.0, (grpc.nullable) = true];   // The error estimate on the distance measurement.
+      units.Degrees azimuth  = 2 [(units.min_degrees).value = 0.0, (grpc.nullable) = true];  // The error estimate on the azimuth measurement.
     }
   }
 }
@@ -47,8 +48,9 @@ message Coordinate2D {
 
   // Error models the inherent error in a coordinate measurement.
   message Error {
-    units.Degrees latitude   = 1 [(units.min_degrees).value = 0.0];  // The error estimate on the latitude measurement.
-    units.Degrees longitude  = 2 [(units.min_degrees).value = 0.0];  // The error estimate on the longitude measurement.
+    units.Degrees latitude   = 1 [(units.min_degrees).value = 0.0, (grpc.nullable) = true];  // The error estimate on the latitude measurement.
+    units.Degrees longitude  = 2 [(units.min_degrees).value = 0.0, (grpc.nullable) = true];  // The error estimate on the longitude measurement.
+    DOP.Horizontal hdop      = 3 [(grpc.nullable) = true]; // The error expressed as the Horizontal Dilution of Precision (HDOP).
   }
 }
 
@@ -70,7 +72,8 @@ message Altitude {
 
   // Error models the inherent error in the altitude measurement.
   message Error {
-    units.Meters height  = 1 [(units.min_meters).value = 0.0];  // The altitude error estimate.
+    units.Meters height  = 1 [(units.min_meters).value = 0.0, (grpc.nullable) = true];  // The altitude error estimate.
+    DOP.Vertical vdop    = 2 [(grpc.nullable) = true];  // The error expressed as the Vertical Dilution of Precision (HDOP).
   }
 }
 
@@ -90,9 +93,9 @@ message Velocity {
 
     // Error models the inherent error in the polar velocity measurement.
     message Error {
-      units.Degrees heading              = 1 [(units.min_degrees).value = 0.0];  // The error in the heading.
-      units.MetersPerSecond groundSpeed  = 2 [(units.min_meters_per_second).value = 0.0];  // The error in the ground speed.
-      units.MetersPerSecond climbRate    = 3 [(units.min_meters_per_second).value = 0.0];  // The error in the vertical speed.
+      units.Degrees heading              = 1 [(units.min_degrees).value = 0.0, (grpc.nullable) = true];  // The error in the heading.
+      units.MetersPerSecond groundSpeed  = 2 [(units.min_meters_per_second).value = 0.0, (grpc.nullable) = true];  // The error in the ground speed.
+      units.MetersPerSecond climbRate    = 3 [(units.min_meters_per_second).value = 0.0, (grpc.nullable) = true];  // The error in the vertical speed.
     }
   }
 
@@ -106,9 +109,9 @@ message Velocity {
 
     // Error models the inherent error in the cartesian velocity measurement.
     message Error {
-      units.MetersPerSecond x  = 1 [(units.min_meters_per_second).value = 0.0];  // The error along the X axis.
-      units.MetersPerSecond y  = 2 [(units.min_meters_per_second).value = 0.0];  // The error along the Y axis.
-      units.MetersPerSecond z  = 3 [(units.min_meters_per_second).value = 0.0];  // The error along the Z axis.
+      units.MetersPerSecond x  = 1 [(units.min_meters_per_second).value = 0.0, (grpc.nullable) = true];  // The error along the X axis.
+      units.MetersPerSecond y  = 2 [(units.min_meters_per_second).value = 0.0, (grpc.nullable) = true];  // The error along the Y axis.
+      units.MetersPerSecond z  = 3 [(units.min_meters_per_second).value = 0.0, (grpc.nullable) = true];  // The error along the Z axis.
     }
   }
 }
@@ -122,9 +125,9 @@ message Orientation {
 
   // Error models the inherent error in the orientation measurement.
   message Error {
-    units.Degrees yaw    = 1 [(units.min_degrees).value = 0.0];  // The error in angular rotation of the vehicle along its vertical axis relative to True North.
-    units.Degrees pitch  = 2 [(units.min_degrees).value = 0.0];  // The error in angular rotation of the vehicle along its lateral axis.
-    units.Degrees roll   = 3 [(units.min_degrees).value = 0.0];  // The error in angular rotation of the vehicle along its longitudinal axis.
+    units.Degrees yaw    = 1 [(units.min_degrees).value = 0.0, (grpc.nullable) = true];  // The error in angular rotation of the vehicle along its vertical axis relative to True North.
+    units.Degrees pitch  = 2 [(units.min_degrees).value = 0.0, (grpc.nullable) = true];  // The error in angular rotation of the vehicle along its lateral axis.
+    units.Degrees roll   = 3 [(units.min_degrees).value = 0.0, (grpc.nullable) = true];  // The error in angular rotation of the vehicle along its longitudinal axis.
   }
 }
 
@@ -137,8 +140,8 @@ message Acceleration {
 
   // Error models the inherent error in an acceleration measurement.
   message Error {
-    units.MetersPerSecond x  = 1 [(units.min_meters_per_second_squared).value = 0.0];  // The error along the X axis.
-    units.MetersPerSecond y  = 2 [(units.min_meters_per_second_squared).value = 0.0];  // The error along the Y axis.
-    units.MetersPerSecond z  = 3 [(units.min_meters_per_second_squared).value = 0.0];  // The error along the Z axis.
+    units.MetersPerSecond x  = 1 [(units.min_meters_per_second_squared).value = 0.0, (grpc.nullable) = true];  // The error along the X axis.
+    units.MetersPerSecond y  = 2 [(units.min_meters_per_second_squared).value = 0.0, (grpc.nullable) = true];  // The error along the Y axis.
+    units.MetersPerSecond z  = 3 [(units.min_meters_per_second_squared).value = 0.0, (grpc.nullable) = true];  // The error along the Z axis.
   }
 }

@@ -1,0 +1,19 @@
+// Copyright 2018-2020 AirMap, Inc.  All rights reserved.
+
+syntax = "proto3";
+
+package measurements;
+
+// DOP models Dilution of Precision
+message DOP {
+
+    // Horizontal models a horizontal dilution of precision (HDOP)
+    message Horizontal {
+        double value = 1;
+    }
+
+    // Vertical models a vertical dilution of precision (VDOP)
+    message Vertical {
+        double value = 1;
+    }
+}
