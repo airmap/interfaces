@@ -28,7 +28,10 @@ function connectProvider(token) {
   client.on('data', function (response) {
     switch (response.details) {
       case "ack":
-        console.log('received ack from collector: ', response.ack)
+        console.log('received acknowledgement (ACK) from collector: ', response.ack)
+        break
+      case "nack":
+        console.log('WARNING: received negative acknowledgement (NACK) from collector: ', response.nack)
         break
       case "status":
         console.log('received status from collector: ', response.status.level, response.status.message)
