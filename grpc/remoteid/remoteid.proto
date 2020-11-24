@@ -11,92 +11,112 @@ package remoteid;
 
 option go_package = "github.com/airmap/interfaces/src/go/remoteid";
 
-// RemoteID service exposes methods for the remote identification of aerial operations.
+// RemoteID service exposes methods for the remote identification of aerial
+// operations.
 service RemoteID {
-    // EXPERIMENTAL: API subject to change
-    // MonitorArea monitors a given area for active operations.
-    rpc MonitorArea (MonitorAreaParameters) returns (stream MonitorAreaResponse);
+  // EXPERIMENTAL: API subject to change
+  // MonitorArea monitors a given area for active operations.
+  rpc MonitorArea(MonitorAreaParameters) returns (stream MonitorAreaResponse);
 }
 
-// MonitorAreaParameters bundles parameters used in the MonitorOperationsArea rpc.
+// MonitorAreaParameters bundles parameters used in the MonitorOperationsArea
+// rpc.
 message MonitorAreaParameters {
-    geo.BoundingBox area_of_interest = 1; // The area of interest to monitor. *Diagonal span must not exceed 3.6km*
+  geo.BoundingBox area_of_interest = 1; // The area of interest to monitor.
+                                        // *Diagonal span must not exceed 3.6km*
 }
 
 message MonitorAreaResponse {
-    // details is a discriminated union of response types
+  // details is a discriminated union of response types
+  oneof details {
+    Added added = 1;     // Operation entered the area and was added to list of
+                         // active operations.
+    Updated updated = 2; // Operation in the monitored area was updated.
+    Removed removed = 3; // Operation exited the area and was removed from the
+                         // list of active operations.
+    Clustered clustered = 4; // Collection of operations that are in near proximity to each other.
+  }
+
+  // Added models an operation that has entered the monitored area.
+  message Added {
+    Operation operation = 1; // New operation that has entered the area.
+    repeated geo.Position4D positions =
+        2; // Batch of recent positions for the aircraft.
+  }
+
+  // Updated models an operation that has been updated in the monitored area.
+  message Updated {
+    // details is a discriminated union of update types
     oneof details {
-        Added added     = 1;  // Operation entered the area and was added to list of active operations.
-        Updated updated = 2;  // Operation in the monitored area was updated.
-        Removed removed = 3;  // Operation exited the area and was removed from the list of active operations.
+      Operation operation = 1;   // Operation that has been updated.
+      Operation.State state = 2; // State that has been updated.
     }
+  }
 
-    // Added models an operation that has entered the monitored area.
-    message Added {
-        Operation operation               = 1;  // New operation that has entered the area.
-        repeated geo.Position4D positions = 2;  // Batch of recent positions for the aircraft.
-    }
+  // Removed models an operation that has been removed from the monitored area.
+  message Removed {
+    ids.Operation id =
+        1; // Identifier for the operation that exited the monitored area.
+  }
 
-    // Updated models an operation that has been updated in the monitored area.
-    message Updated {
-        // details is a discriminated union of update types
-        oneof details {
-            Operation operation   = 1;  // Operation that has been updated.
-            Operation.State state = 2;  // State that has been updated.
-        }
-    }
-
-    // Removed models an operation that has been removed from the monitored area.
-    message Removed {
-        ids.Operation id = 1;  // Identifier for the operation that exited the monitored area.
-    }
+  // Clustered models a collection of multiple operation that are in near
+  // proximity to each other. If a cluster contains only one operation, the
+  // center of the cluster represents an obfuscated position and not the actual
+  // position of the operation.
+  message Clustered { repeated Cluster clusters = 1; }
 }
 
 // Operation models an aerial operation in a given area.
 message Operation {
-    ids.Operation id     = 1;  // Unique id for the operation.
-    Operator operator    = 2;  // Operator responsible for the operation.
-    Aircraft aircraft    = 3;  // Aircraft performing the operation.
-    geo.Polygon geometry = 4;  // Geographic operating area.
-    string purpose       = 5;  // Description of the operation's purpose.
-    bool simulated       = 6;  // Operation is simulated without a physical aircraft.
+  ids.Operation id = 1;     // Unique id for the operation.
+  Operator operator = 2;    // Operator responsible for the operation.
+  Aircraft aircraft = 3;    // Aircraft performing the operation.
+  geo.Polygon geometry = 4; // Geographic operating area.
+  string purpose = 5;       // Description of the operation's purpose.
+  bool simulated = 6; // Operation is simulated without a physical aircraft.
 
-    // State models an operation's current state
-    message State {
-        ids.Operation id                        = 1;  // The operation the state is associated with.
-        google.protobuf.Timestamp timestamp     = 2;  // Time of applicability.
-        measurements.Position.Absolute position = 3;  // Location of the aircraft.
-        measurements.Velocity.Polar velocity    = 4;  // Velocity of the aircraft.
-    }
+  // State models an operation's current state
+  message State {
+    ids.Operation id = 1; // The operation the state is associated with.
+    google.protobuf.Timestamp timestamp = 2;     // Time of applicability.
+    measurements.Position.Absolute position = 3; // Location of the aircraft.
+    measurements.Velocity.Polar velocity = 4;    // Velocity of the aircraft.
+  }
+}
+
+message Cluster {
+  ids.Cluster id = 1;       // Unique id for the cluster
+  geo.Polygon geometry = 1; // Geographic area that is covered by the cluster, i.e. all operations that are combined.
+  int32 number_of_operations = 3; // Number of operations that are combined in this cluster
 }
 
 // Operator models the operator of an aircraft
 message Operator {
-    ids.Operator id           = 1;  // Unique identifier of the operator
-    geo.Coordinate2D location = 2;  // Location of the operator
+  ids.Operator id = 1;           // Unique identifier of the operator
+  geo.Coordinate2D location = 2; // Location of the operator
 }
 
 // Aircraft models the vehicle performing an operation.
 message Aircraft {
-    Type type           = 1;  // Type of aircraft.
-    string serial       = 4;  // Manufacturer-assigned serial number of the aircraft.
-    string registration = 5;  // CAA-issued aircraft registration.
+  Type type = 1;     // Type of aircraft.
+  string serial = 4; // Manufacturer-assigned serial number of the aircraft.
+  string registration = 5; // CAA-issued aircraft registration.
 
-    enum Type {
-        UNKNOWN                = 0;
-        AIRPLANE               = 1;
-        ROTORCRAFT             = 2;
-        GYROPLANE              = 3;
-        VTOL                   = 4;
-        ORNITHOPTER            = 5;
-        GLIDER                 = 6;
-        KITE                   = 7;
-        FREE_BALOON            = 8;
-        CAPTIVE_BALLOON        = 9;
-        AIRSHIP                = 10;
-        FREE_FALL_OR_PARACHUTE = 11;
-        ROCKET                 = 12;
-        GROUND_OBSTACLE        = 13;
-        OTHER                  = 14;
-    }
+  enum Type {
+    UNKNOWN = 0;
+    AIRPLANE = 1;
+    ROTORCRAFT = 2;
+    GYROPLANE = 3;
+    VTOL = 4;
+    ORNITHOPTER = 5;
+    GLIDER = 6;
+    KITE = 7;
+    FREE_BALOON = 8;
+    CAPTIVE_BALLOON = 9;
+    AIRSHIP = 10;
+    FREE_FALL_OR_PARACHUTE = 11;
+    ROCKET = 12;
+    GROUND_OBSTACLE = 13;
+    OTHER = 14;
+  }
 }

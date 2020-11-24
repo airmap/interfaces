@@ -8,20 +8,25 @@ option go_package = "github.com/airmap/interfaces/src/go/ids";
 
 // Operator models the unique id of an operator.
 message Operator {
-  string as_string = 1;  // The textual representation of the id.
+  string as_string = 1; // The textual representation of the id.
 }
 
 // Operation models the unique id of an operation.
 message Operation {
-  string as_string = 1;  // The textual representation of the id.
+  string as_string = 1; // The textual representation of the id.
 }
 
 // USS models the unique id of a UTM Service Supplier (USS)
 message USS {
-  string as_string = 1;  // The textual representation of the id.
+  string as_string = 1; // The textual representation of the id.
 }
 
 // Tracker models the unique id of a tracker.
 message Tracker {
-  string as_string = 1;  // The textual representation of the id.
+  string as_string = 1; // The textual representation of the id.
+}
+
+// Cluster models the unique id of a cluster
+message Cluster {
+  string as_string = 1; // The textual representation of the id
 }
