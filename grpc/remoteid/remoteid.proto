@@ -86,7 +86,7 @@ message Operation {
 
 message Cluster {
   ids.Cluster id = 1;       // Unique id for the cluster
-  geo.Polygon geometry = 1; // Geographic area that is covered by the cluster, i.e. all operations that are combined.
+  geo.Polygon geometry = 2; // Geographic area that is covered by the cluster, i.e. all operations that are combined.
   int32 number_of_operations = 3; // Number of operations that are combined in this cluster
 }
 
