@@ -1,0 +1,111 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+service AssetService {
+    rpc GetAsset (GetAssetRequest) returns (GetAssetResponse);
+    rpc GetAssets (GetAssetsRequest) returns (GetAssetsResponse);
+}
+
+message GetAssetRequest {
+    string id = 1;
+}
+
+message GetAssetResponse {
+    Asset asset = 1;
+}
+
+message GetAssetsRequest {
+    message QueryFilter {
+        enum Operator {
+            OPERATOR_EQUAL = 0;
+            OPERATOR_NOT_EQUAL = 1;
+            OPERATOR_GREATER_THAN_OR_EQUAL = 2;
+            OPERATOR_GREATER_THAN = 3;
+            OPERATOR_LESS_THAN_OR_EQUAL = 4;
+            OPERATOR_LESS_THAN = 5;
+        }
+        enum Conjunction {
+            CONJUNCTION_AND = 0;
+            CONJUNCTION_OR = 1;
+        }
+        enum Field {
+           FIELD_TYPE = 0;
+           FIELD_STATUS = 1;
+           FIELD_DATE_CREATED = 2;
+           FIELD_DATE_MODIFIED = 3;
+           FIELD_IS_PRIMARY = 4;
+           FIELD_ORIGIN_ORDER = 5;
+           FIELD_CONCEPT = 6;
+           FIELD_ASSET_COLLECTION = 7;
+        }
+        Field field = 1;
+        string value = 2;
+        Operator operator = 3;
+        Conjunction conjunction = 4;
+    };
+    int32 limit = 1;
+    int32 offset = 2;
+    repeated QueryFilter filters = 3;
+}
+
+message GetAssetsResponse {
+    repeated Asset assets = 1;
+    // Do we want to represent the overall count here?
+    // more records boolean?
+}
+
+message Asset {
+    message Type {
+        int32 id = 1;
+        string summary = 2;
+    }
+    enum Status {
+        ASSETSTATUS_UNKNOWN = 0;
+        ASSETSTATUS_PENDING = 1;
+        ASSETSTATUS_PROCESSING = 2;
+        ASSETSTATUS_COMPLETE = 3;
+        ASSETSTATUS_USER_REJECTED = 4;
+        ASSETSTATUS_FAILED = 5;
+        ASSETSTATUS_ABORTED = 6;
+        ASSETSTATUS_SYSTEM_EXCEPTION = 7;
+        ASSETSTATUS_INDEXING = 8;
+    }
+    string id = 1;
+    Type type = 2;
+    Status status = 3;
+    bool is_primary = 4;
+    google.protobuf.Timestamp date_created = 5;
+    google.protobuf.Timestamp date_modified = 6;
+    AssetMetadata metadata  = 7;
+    string origin_order_id = 8;
+    string object_path = 9;
+}
+
+message AssetMetadata {
+    message BarometricPressure {
+        enum PressureUnit {
+            UNKNOWN = 0;
+            HPA = 1;
+        }
+        float value = 1;
+        PressureUnit unit = 2;
+    }
+    message Tiles {
+        message TileLevel {
+            ImageDimensions full = 1;
+            ImageDimensions tile = 2;
+        }
+        repeated TileLevel levels = 1;
+    }
+    BarometricPressure barometric_pressure = 1;
+    ImageDimensions input = 2;
+    int32 num_objects = 3;
+    float sum_raw_file_sizes_mb = 4;
+    Tiles tiles = 5;
+}
+
+message ImageDimensions {
+    int32 height = 1; 
+    int32 width = 2; 
+}
